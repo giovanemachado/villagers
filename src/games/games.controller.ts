@@ -5,8 +5,8 @@ import { GamesService } from './games.service';
 export class GamesController {
   constructor(private readonly gamesService: GamesService) {}
 
-  @Get()
-  helloWorld() {
-    return {};
+  @Get('/map')
+  getMap() {
+    return this.gamesService.getMap();
   }
 }
