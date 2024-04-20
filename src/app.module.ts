@@ -4,6 +4,7 @@ import { UnitsModule } from './units/units.module';
 import { MatchesModule } from './matches/matches.module';
 import { MapsModule } from './maps/maps.module';
 import { ConfigModule } from '@nestjs/config';
+import { DataAccessModule } from './data-access/data-access.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { ConfigModule } from '@nestjs/config';
     UnitsModule,
     MatchesModule,
     MapsModule,
+    DataAccessModule,
   ],
   controllers: [],
   providers: [],
