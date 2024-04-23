@@ -17,266 +17,259 @@
         [
             {
                 "id": "square-0",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             },
             {
                 "id": "square-1",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             },
             {
                 "id": "square-2",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             },
             {
                 "id": "square-3",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             },
             {
                 "id": "square-4",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             }
         ],
         [
             {
                 "id": "square-10",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             },
             {
                 "id": "square-11",
                 "type": "grass",
-                "unitIds": [
-                    "castle"
-                ]
+                "unit": {
+                    "id": "castle-0",
+                    "class": "castle",
+                    "category": "initial-map"
+                }
             },
             {
                 "id": "square-12",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             },
             {
                 "id": "square-13",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             },
             {
                 "id": "square-14",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             }
         ],
         [
             {
                 "id": "square-20",
                 "type": "grass",
-                "unitIds": []
+                "unit": {
+                    "id": "wall-1",
+                    "class": "wall",
+                    "category": "initial-map"
+                }
             },
             {
                 "id": "square-21",
                 "type": "grass",
-                "unitIds": []
+                "unit": {
+                    "id": "wall-2",
+                    "class": "wall",
+                    "category": "initial-map"
+                }
             },
             {
                 "id": "square-22",
                 "type": "grass",
-                "unitIds": [
-                    "gate"
-                ]
+                "unit": {
+                    "id": "gate-3",
+                    "class": "gate",
+                    "category": "initial-map"
+                }
             },
             {
                 "id": "square-23",
                 "type": "grass",
-                "unitIds": []
+                "unit": {
+                    "id": "wall-4",
+                    "class": "wall",
+                    "category": "initial-map"
+                }
             },
             {
                 "id": "square-24",
                 "type": "grass",
-                "unitIds": [
-                    "gate"
-                ]
-            },
-            {
-                "id": "square-25",
-                "type": "grass",
-                "unitIds": []
+                "unit": {
+                    "id": "gate-5",
+                    "class": "gate",
+                    "category": "initial-map"
+                }
             }
         ],
         [
             {
                 "id": "square-30",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             },
             {
                 "id": "square-31",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             },
             {
                 "id": "square-32",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             },
             {
                 "id": "square-33",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             },
             {
                 "id": "square-34",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             }
         ],
         [
             {
                 "id": "square-40",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             },
             {
                 "id": "square-41",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             },
             {
                 "id": "square-42",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             },
             {
                 "id": "square-43",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             },
             {
                 "id": "square-44",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             }
         ],
         [
             {
                 "id": "square-50",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             },
             {
                 "id": "square-51",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             },
             {
                 "id": "square-52",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             },
             {
                 "id": "square-53",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             },
             {
                 "id": "square-54",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             }
         ],
         [
             {
                 "id": "square-60",
                 "type": "grass",
-                "unitIds": []
+                "unit": {
+                    "id": "wall-6",
+                    "class": "wall",
+                    "category": "initial-map"
+                }
             },
             {
                 "id": "square-61",
                 "type": "grass",
-                "unitIds": []
+                "unit": {
+                    "id": "wall-7",
+                    "class": "wall",
+                    "category": "initial-map"
+                }
             },
             {
                 "id": "square-62",
                 "type": "grass",
-                "unitIds": [
-                    "gate"
-                ]
+                "unit": {
+                    "id": "gate-8",
+                    "class": "gate",
+                    "category": "initial-map"
+                }
             },
             {
                 "id": "square-63",
                 "type": "grass",
-                "unitIds": []
+                "unit": {
+                    "id": "wall-9",
+                    "class": "wall",
+                    "category": "initial-map"
+                }
             },
             {
                 "id": "square-64",
                 "type": "grass",
-                "unitIds": [
-                    "gate"
-                ]
-            },
-            {
-                "id": "square-65",
-                "type": "grass",
-                "unitIds": []
+                "unit": {
+                    "id": "gate-10",
+                    "class": "gate",
+                    "category": "initial-map"
+                }
             }
         ],
         [
             {
                 "id": "square-70",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             },
             {
                 "id": "square-71",
                 "type": "grass",
-                "unitIds": [
-                    "castle"
-                ]
+                "unit": {
+                    "id": "castle-11",
+                    "class": "castle",
+                    "category": "initial-map"
+                }
             },
             {
                 "id": "square-72",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             },
             {
                 "id": "square-73",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             },
             {
                 "id": "square-74",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             }
         ],
         [
             {
                 "id": "square-80",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             },
             {
                 "id": "square-81",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             },
             {
                 "id": "square-82",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             },
             {
                 "id": "square-83",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             },
             {
                 "id": "square-84",
-                "type": "grass",
-                "unitIds": []
+                "type": "grass"
             }
         ]
     ]

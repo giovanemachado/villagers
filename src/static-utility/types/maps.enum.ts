@@ -1,3 +1,3 @@
 export enum MAPS {
-  INITIAL = 'initial_map',
+  INITIAL = 'initial-map',
 }

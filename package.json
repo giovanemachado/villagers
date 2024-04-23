@@ -18,7 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "generate-map": "npx ts-node ./src/static-utility/generate-map.ts"
+    "generate-map": "npx ts-node ./dist/static-utility/generate-map.js"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

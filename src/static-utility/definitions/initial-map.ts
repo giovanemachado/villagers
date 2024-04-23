@@ -1,14 +1,18 @@
 import { SquareDefinitionData } from 'src/static-utility/types/square-data-definition.type';
-import { UNITS } from 'src/units/types/units.enum';
+import { UNIT_CLASS } from 'src/units/types/unit-data.type';
 
 const defaultSquare: SquareDefinitionData = {};
 
 const castleSquare: SquareDefinitionData = {
-  unitDefinitionIds: [UNITS.CASTLE],
+  unitDefinitionClass: UNIT_CLASS.CASTLE,
 };
 
 const gateSquare: SquareDefinitionData = {
-  unitDefinitionIds: [UNITS.GATE],
+  unitDefinitionClass: UNIT_CLASS.GATE,
+};
+
+const wallSquare: SquareDefinitionData = {
+  unitDefinitionClass: UNIT_CLASS.WALL,
 };
 
 const defaultRow: SquareDefinitionData[] = [
@@ -28,10 +32,10 @@ const castleRow: SquareDefinitionData[] = [
 ];
 
 const gatesRow: SquareDefinitionData[] = [
-  defaultSquare,
-  defaultSquare,
+  wallSquare,
+  wallSquare,
   gateSquare,
-  defaultSquare,
+  wallSquare,
   gateSquare,
 ];
 
