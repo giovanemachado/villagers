@@ -3,16 +3,20 @@ import { UNIT_CLASS } from 'src/units/types/unit-data.type';
 
 const defaultSquare: SquareDefinitionData = {};
 
-const castleSquare: SquareDefinitionData = {
+const castleInSquare: SquareDefinitionData = {
   unitDefinitionClass: UNIT_CLASS.CASTLE,
 };
 
-const gateSquare: SquareDefinitionData = {
+const gateInSquare: SquareDefinitionData = {
   unitDefinitionClass: UNIT_CLASS.GATE,
 };
 
-const wallSquare: SquareDefinitionData = {
+const wallInSquare: SquareDefinitionData = {
   unitDefinitionClass: UNIT_CLASS.WALL,
+};
+
+const spearInSquare: SquareDefinitionData = {
+  unitDefinitionClass: UNIT_CLASS.SPEARMAN,
 };
 
 const defaultRow: SquareDefinitionData[] = [
@@ -24,19 +28,19 @@ const defaultRow: SquareDefinitionData[] = [
 ];
 
 const castleRow: SquareDefinitionData[] = [
-  defaultSquare,
-  castleSquare,
-  defaultSquare,
+  spearInSquare,
+  castleInSquare,
+  spearInSquare,
   defaultSquare,
   defaultSquare,
 ];
 
 const gatesRow: SquareDefinitionData[] = [
-  wallSquare,
-  wallSquare,
-  gateSquare,
-  wallSquare,
-  gateSquare,
+  wallInSquare,
+  wallInSquare,
+  gateInSquare,
+  wallInSquare,
+  gateInSquare,
 ];
 
 export const initial_map_definition: SquareDefinitionData[][] = [

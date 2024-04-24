@@ -1,6 +1,6 @@
 export enum UNIT_CATEGORY {
-  MILITARY = 'initial-map',
-  STRUCTURE = 'initial-map',
+  MILITARY = 'military',
+  STRUCTURE = 'structure',
 }
 
 export enum UNIT_CLASS {

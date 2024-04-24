@@ -39,20 +39,30 @@
         [
             {
                 "id": "square-10",
-                "type": "grass"
+                "type": "grass",
+                "unit": {
+                    "id": "spearman-0",
+                    "class": "spearman",
+                    "category": "military"
+                }
             },
             {
                 "id": "square-11",
                 "type": "grass",
                 "unit": {
-                    "id": "castle-0",
+                    "id": "castle-1",
                     "class": "castle",
-                    "category": "initial-map"
+                    "category": "structure"
                 }
             },
             {
                 "id": "square-12",
-                "type": "grass"
+                "type": "grass",
+                "unit": {
+                    "id": "spearman-2",
+                    "class": "spearman",
+                    "category": "military"
+                }
             },
             {
                 "id": "square-13",
@@ -68,45 +78,45 @@
                 "id": "square-20",
                 "type": "grass",
                 "unit": {
-                    "id": "wall-1",
+                    "id": "wall-3",
                     "class": "wall",
-                    "category": "initial-map"
+                    "category": "structure"
                 }
             },
             {
                 "id": "square-21",
                 "type": "grass",
                 "unit": {
-                    "id": "wall-2",
+                    "id": "wall-4",
                     "class": "wall",
-                    "category": "initial-map"
+                    "category": "structure"
                 }
             },
             {
                 "id": "square-22",
                 "type": "grass",
                 "unit": {
-                    "id": "gate-3",
+                    "id": "gate-5",
                     "class": "gate",
-                    "category": "initial-map"
+                    "category": "structure"
                 }
             },
             {
                 "id": "square-23",
                 "type": "grass",
                 "unit": {
-                    "id": "wall-4",
+                    "id": "wall-6",
                     "class": "wall",
-                    "category": "initial-map"
+                    "category": "structure"
                 }
             },
             {
                 "id": "square-24",
                 "type": "grass",
                 "unit": {
-                    "id": "gate-5",
+                    "id": "gate-7",
                     "class": "gate",
-                    "category": "initial-map"
+                    "category": "structure"
                 }
             }
         ],
@@ -181,65 +191,75 @@
                 "id": "square-60",
                 "type": "grass",
                 "unit": {
-                    "id": "wall-6",
+                    "id": "wall-8",
                     "class": "wall",
-                    "category": "initial-map"
+                    "category": "structure"
                 }
             },
             {
                 "id": "square-61",
                 "type": "grass",
                 "unit": {
-                    "id": "wall-7",
+                    "id": "wall-9",
                     "class": "wall",
-                    "category": "initial-map"
+                    "category": "structure"
                 }
             },
             {
                 "id": "square-62",
                 "type": "grass",
                 "unit": {
-                    "id": "gate-8",
+                    "id": "gate-10",
                     "class": "gate",
-                    "category": "initial-map"
+                    "category": "structure"
                 }
             },
             {
                 "id": "square-63",
                 "type": "grass",
                 "unit": {
-                    "id": "wall-9",
+                    "id": "wall-11",
                     "class": "wall",
-                    "category": "initial-map"
+                    "category": "structure"
                 }
             },
             {
                 "id": "square-64",
                 "type": "grass",
                 "unit": {
-                    "id": "gate-10",
+                    "id": "gate-12",
                     "class": "gate",
-                    "category": "initial-map"
+                    "category": "structure"
                 }
             }
         ],
         [
             {
                 "id": "square-70",
-                "type": "grass"
+                "type": "grass",
+                "unit": {
+                    "id": "spearman-13",
+                    "class": "spearman",
+                    "category": "military"
+                }
             },
             {
                 "id": "square-71",
                 "type": "grass",
                 "unit": {
-                    "id": "castle-11",
+                    "id": "castle-14",
                     "class": "castle",
-                    "category": "initial-map"
+                    "category": "structure"
                 }
             },
             {
                 "id": "square-72",
-                "type": "grass"
+                "type": "grass",
+                "unit": {
+                    "id": "spearman-15",
+                    "class": "spearman",
+                    "category": "military"
+                }
             },
             {
                 "id": "square-73",
