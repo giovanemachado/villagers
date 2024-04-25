@@ -9,6 +9,9 @@ import {
   UNIT_CLASS,
   UnitData,
 } from 'src/units/types/unit-data.type';
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from 'src/app.module';
+import { UnitsService } from 'src/units/units.service';
 
 const mapDefinitions = [MAPS.INITIAL];
 let inputMapDefinition = '';
@@ -16,6 +19,7 @@ const squareIdTag = 'square-';
 const address = './static_data/maps/map';
 const format = 'json';
 let unitCount = 0;
+let squareCount = 0;
 
 process.argv.forEach(function (val, index) {
   if (index == 2) {
@@ -33,48 +37,18 @@ if (
   process.exit();
 }
 
-const createUnit = (unitDefinition: UNIT_CLASS): UnitData => {
-  let unitTag: UNIT_CLASS = UNIT_CLASS.ARCHER;
-  let unitCategory: UNIT_CATEGORY = UNIT_CATEGORY.MILITARY;
-
-  switch (unitDefinition) {
-    case UNIT_CLASS.ARCHER:
-      unitTag = UNIT_CLASS.ARCHER;
-      unitCategory = UNIT_CATEGORY.MILITARY;
-      break;
-    case UNIT_CLASS.HORSEMAN:
-      unitTag = UNIT_CLASS.HORSEMAN;
-      unitCategory = UNIT_CATEGORY.MILITARY;
-      break;
-    case UNIT_CLASS.SPEARMAN:
-      unitTag = UNIT_CLASS.SPEARMAN;
-      unitCategory = UNIT_CATEGORY.MILITARY;
-      break;
-    case UNIT_CLASS.CASTLE:
-      unitTag = UNIT_CLASS.CASTLE;
-      unitCategory = UNIT_CATEGORY.STRUCTURE;
-      break;
-    case UNIT_CLASS.WALL:
-      unitTag = UNIT_CLASS.WALL;
-      unitCategory = UNIT_CATEGORY.STRUCTURE;
-      break;
-    case UNIT_CLASS.GATE:
-      unitTag = UNIT_CLASS.GATE;
-      unitCategory = UNIT_CATEGORY.STRUCTURE;
-      break;
-  }
-
-  let unit: UnitData = {
-    id: `${unitTag}-${unitCount}`,
-    class: unitTag,
-    category: unitCategory,
-  };
-
+const generateUnitId = (unitTag: UNIT_CLASS) => {
+  const unitId = `${unitTag}-${unitCount}`;
   unitCount++;
-  return unit;
+  return unitId;
+};
+const generateSquareId = () => {
+  const squareId = squareIdTag + squareCount;
+  squareCount++;
+  return squareId;
 };
 
-const generateMap = (inputMapDefinition: string) => {
+const generateMap = (inputMapDefinition: string, unitService: UnitsService) => {
   let map_definition: SquareDefinitionData[][] | null = null;
 
   switch (inputMapDefinition) {
@@ -98,13 +72,16 @@ const generateMap = (inputMapDefinition: string) => {
     let squares: SquareData[] = [];
 
     rows_definition.map((row_definition, indexRow) => {
-      let id = squareIdTag + (indexRows * 10 + indexRow);
+      let id = generateSquareId();
       let type = row_definition.type ? row_definition.type : SQUARE_TYPES.GRASS;
 
       let unit: UnitData | undefined = undefined;
 
       if (row_definition.unitDefinitionClass) {
-        unit = createUnit(row_definition.unitDefinitionClass);
+        unit = unitService.generateStaticUnit(
+          row_definition.unitDefinitionClass,
+        );
+        unit.id = generateUnitId(unit.class);
       }
 
       squares.push({ id, type, unit });
@@ -116,9 +93,64 @@ const generateMap = (inputMapDefinition: string) => {
   return rows;
 };
 
-let result = generateMap(inputMapDefinition);
+const showStructure = (generatedMap: SquareData[][]): string => {
+  let rowsData = `
+  
+  `;
 
-fs.writeFileSync(
-  `${address}-${new Date().getTime()}.${format}`,
-  JSON.stringify(result),
-);
+  generatedMap.forEach((row) => {
+    let squareData = '';
+
+    row.forEach((square) => {
+      let unit = '';
+
+      if (square.unit) {
+        unit = square.unit.class;
+      }
+
+      squareData += ` [${unit}] `;
+    });
+
+    rowsData += `
+      ${squareData}
+    `;
+  });
+
+  return rowsData;
+};
+
+async function bootstrap() {
+  const app = await NestFactory.createApplicationContext(AppModule);
+
+  const unitService = app.get(UnitsService);
+
+  const generatedMap = generateMap(inputMapDefinition, unitService);
+
+  const fileName = `${address}-${new Date().getTime()}.${format}`;
+
+  fs.writeFileSync(fileName, JSON.stringify(generatedMap));
+
+  // fs.appendFileSync(fileName, showStructure(generatedMap));
+
+  await app.close();
+}
+
+bootstrap();
+
+// []  []  []  []  []
+
+// [spearman]  [castle]  [spearman]  []  []
+
+// [wall]  [wall]  [gate]  [wall]  [gate]
+
+// []  []  []  []  []
+
+// []  []  []  []  []
+
+// []  []  []  []  []
+
+// [wall]  [wall]  [gate]  [wall]  [gate]
+
+// [spearman]  [castle]  [spearman]  []  []
+
+// []  []  []  []  []
