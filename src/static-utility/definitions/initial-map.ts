@@ -1,5 +1,5 @@
 import { SquareDefinitionData } from 'src/static-utility/types/square-data-definition.type';
-import { UNIT_CLASS } from 'src/units/types/unit-data.type';
+import { UNIT_CLASS } from 'src/units/dto/unit-data.dto';
 
 const defaultSquare: SquareDefinitionData = {};
 

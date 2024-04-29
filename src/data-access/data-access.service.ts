@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { MapData } from 'src/maps/types/map-data.type';
-import { readFile, readdir } from 'fs/promises';
+import { MapData } from 'src/maps/dto/map-data.dto';
+import { readFile } from 'fs/promises';
 
 @Injectable()
 export class DataAccessService {
@@ -11,7 +11,7 @@ export class DataAccessService {
   }
 
   private async readFile(file: string) {
-    let fileData = JSON.parse(
+    const fileData = JSON.parse(
       await readFile(`${this.staticDataPath}/${file}`, 'utf8'),
     );
     return fileData;

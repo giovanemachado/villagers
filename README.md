@@ -23,15 +23,19 @@ $ yarn run start:dev
 $ yarn run start:prod
 ```
 
-## Test
+## Generate maps
 
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+# Generate map by definition (initial-map is a definition)
+$ yarn g-map initial-map
 ```
+
+## Generate type schema
+
+```bash
+# It gets data from open api and build a file in ./src/open-api/schema.ts, this can be copy and paste into castle_age
+$ yarn g-schema
+```
+
+Notes:
+https://github.com/drwpow/openapi-typescript/tree/main/packages/openapi-typescript

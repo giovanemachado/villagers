@@ -1,0 +1,104 @@
+openapi: 3.0.0
+paths:
+  /games/map:
+    get:
+      operationId: getMap
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MapData"
+  /games/turns:
+    get:
+      operationId: getTurn
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: number
+    post:
+      operationId: updateTurn
+      parameters: []
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: number
+info:
+  title: Villagers
+  description: Villagers is the backend for Castle Age.
+  version: 1.0.0
+  contact: {}
+tags: []
+servers: []
+components:
+  schemas:
+    UnitMovement:
+      type: object
+      properties:
+        distance:
+          type: number
+      required:
+        - distance
+    UnitData:
+      type: object
+      properties:
+        id:
+          type: string
+        category:
+          type: string
+          enum:
+            - military
+            - structure
+        class:
+          type: string
+          enum:
+            - castle
+            - gate
+            - archer
+            - spearman
+            - horseman
+            - wall
+        movement:
+          $ref: "#/components/schemas/UnitMovement"
+      required:
+        - id
+        - category
+        - class
+    SquareData:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        unit:
+          $ref: "#/components/schemas/UnitData"
+      required:
+        - id
+        - type
+    MapData:
+      type: object
+      properties:
+        units:
+          type: array
+          items:
+            $ref: "#/components/schemas/UnitData"
+        rows:
+          type: array
+          items:
+            required: true
+            type: array
+            items:
+              $ref: "#/components/schemas/SquareData"
+      required:
+        - units
+        - rows

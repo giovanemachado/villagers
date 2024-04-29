@@ -12,13 +12,13 @@ export enum UNIT_CLASS {
   WALL = 'wall',
 }
 
-export type UnitMovement = {
+export class UnitMovement {
   distance: number;
-};
+}
 
-export type UnitData = {
+export class UnitData {
   id: string;
   category: UNIT_CATEGORY;
   class: UNIT_CLASS;
   movement?: UnitMovement;
-};
+}

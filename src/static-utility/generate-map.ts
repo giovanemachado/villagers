@@ -1,14 +1,10 @@
-import { SquareData } from 'src/maps/types/square-data.type';
+import { SquareData } from 'src/maps/dto/square-data.dto';
 import * as fs from 'fs';
 import { initial_map_definition } from './definitions/initial-map';
 import { SquareDefinitionData } from './types/square-data-definition.type';
 import { SQUARE_TYPES } from './types/square-types.enum';
 import { MAPS } from './types/maps.enum';
-import {
-  UNIT_CATEGORY,
-  UNIT_CLASS,
-  UnitData,
-} from 'src/units/types/unit-data.type';
+import { UNIT_CLASS, UnitData } from 'src/units/dto/unit-data.dto';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from 'src/app.module';
 import { UnitsService } from 'src/units/units.service';
@@ -66,14 +62,16 @@ const generateMap = (inputMapDefinition: string, unitService: UnitsService) => {
     process.exit();
   }
 
-  let rows: SquareData[][] = [];
+  const rows: SquareData[][] = [];
 
-  map_definition.map((rows_definition, indexRows) => {
-    let squares: SquareData[] = [];
+  map_definition.map((rows_definition) => {
+    const squares: SquareData[] = [];
 
-    rows_definition.map((row_definition, indexRow) => {
-      let id = generateSquareId();
-      let type = row_definition.type ? row_definition.type : SQUARE_TYPES.GRASS;
+    rows_definition.map((row_definition) => {
+      const id = generateSquareId();
+      const type = row_definition.type
+        ? row_definition.type
+        : SQUARE_TYPES.GRASS;
 
       let unit: UnitData | undefined = undefined;
 
@@ -137,6 +135,7 @@ async function bootstrap() {
 
 bootstrap();
 
+// Example from showStructure()
 // []  []  []  []  []
 
 // [spearman]  [castle]  [spearman]  []  []

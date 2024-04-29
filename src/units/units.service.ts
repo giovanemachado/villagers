@@ -4,7 +4,7 @@ import {
   UNIT_CLASS,
   UnitData,
   UnitMovement,
-} from './types/unit-data.type';
+} from './dto/unit-data.dto';
 
 @Injectable()
 export class UnitsService {
