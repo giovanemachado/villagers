@@ -1,7 +1,11 @@
+import { UnitData } from 'src/units/dto/unit-data.dto';
 import { SquareData } from './square-data.dto';
-import { UnitData } from '../../units/dto/unit-data.dto';
+
+export class GeneratedMap {
+  rows: SquareData[][];
+  units: UnitData[];
+}
 
 export class MapData {
-  units: UnitData[];
   rows: SquareData[][];
 }

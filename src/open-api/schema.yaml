@@ -1,16 +1,5 @@
 openapi: 3.0.0
 paths:
-  /games/map:
-    get:
-      operationId: getMap
-      parameters: []
-      responses:
-        "200":
-          description: ""
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/MapData"
   /games/turns:
     get:
       operationId: getTurn
@@ -32,6 +21,17 @@ paths:
             application/json:
               schema:
                 type: number
+  /games/initial-load:
+    get:
+      operationId: getInitialGameState
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameState"
 info:
   title: Villagers
   description: Villagers is the backend for Castle Age.
@@ -46,8 +46,11 @@ components:
       properties:
         distance:
           type: number
+        localization:
+          type: string
       required:
         - distance
+        - localization
     UnitData:
       type: object
       properties:
@@ -69,10 +72,21 @@ components:
             - wall
         movement:
           $ref: "#/components/schemas/UnitMovement"
+        movementInTurn:
+          type: object
+          properties:
+            turn:
+              required: true
+              type: number
+            moved:
+              required: true
+              type: boolean
       required:
         - id
         - category
         - class
+        - movement
+        - movementInTurn
     SquareData:
       type: object
       properties:
@@ -80,18 +94,12 @@ components:
           type: string
         type:
           type: string
-        unit:
-          $ref: "#/components/schemas/UnitData"
       required:
         - id
         - type
     MapData:
       type: object
       properties:
-        units:
-          type: array
-          items:
-            $ref: "#/components/schemas/UnitData"
         rows:
           type: array
           items:
@@ -100,5 +108,19 @@ components:
             items:
               $ref: "#/components/schemas/SquareData"
       required:
-        - units
         - rows
+    GameState:
+      type: object
+      properties:
+        turns:
+          type: number
+        units:
+          type: array
+          items:
+            $ref: "#/components/schemas/UnitData"
+        gameMap:
+          $ref: "#/components/schemas/MapData"
+      required:
+        - turns
+        - units
+        - gameMap

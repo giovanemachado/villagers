@@ -1,18 +1,4 @@
 {
-    "units": [
-        {
-            "id": "card-1"
-        },
-        {
-            "id": "card-2"
-        },
-        {
-            "id": "card-3"
-        },
-        {
-            "id": "card-4"
-        }
-    ],
     "rows": [
         [
             {
@@ -38,31 +24,38 @@
         ],
         [
             {
+                "id": "square-5",
+                "type": "grass"
+            },
+            {
+                "id": "square-6",
+                "type": "grass"
+            },
+            {
+                "id": "square-7",
+                "type": "grass"
+            },
+            {
+                "id": "square-8",
+                "type": "grass"
+            },
+            {
+                "id": "square-9",
+                "type": "grass"
+            }
+        ],
+        [
+            {
                 "id": "square-10",
-                "type": "grass",
-                "unit": {
-                    "id": "spearman-0",
-                    "class": "spearman",
-                    "category": "military"
-                }
+                "type": "grass"
             },
             {
                 "id": "square-11",
-                "type": "grass",
-                "unit": {
-                    "id": "castle-1",
-                    "class": "castle",
-                    "category": "structure"
-                }
+                "type": "grass"
             },
             {
                 "id": "square-12",
-                "type": "grass",
-                "unit": {
-                    "id": "spearman-2",
-                    "class": "spearman",
-                    "category": "military"
-                }
+                "type": "grass"
             },
             {
                 "id": "square-13",
@@ -75,49 +68,68 @@
         ],
         [
             {
+                "id": "square-15",
+                "type": "grass"
+            },
+            {
+                "id": "square-16",
+                "type": "grass"
+            },
+            {
+                "id": "square-17",
+                "type": "grass"
+            },
+            {
+                "id": "square-18",
+                "type": "grass"
+            },
+            {
+                "id": "square-19",
+                "type": "grass"
+            }
+        ],
+        [
+            {
                 "id": "square-20",
-                "type": "grass",
-                "unit": {
-                    "id": "wall-3",
-                    "class": "wall",
-                    "category": "structure"
-                }
+                "type": "grass"
             },
             {
                 "id": "square-21",
-                "type": "grass",
-                "unit": {
-                    "id": "wall-4",
-                    "class": "wall",
-                    "category": "structure"
-                }
+                "type": "grass"
             },
             {
                 "id": "square-22",
-                "type": "grass",
-                "unit": {
-                    "id": "gate-5",
-                    "class": "gate",
-                    "category": "structure"
-                }
+                "type": "grass"
             },
             {
                 "id": "square-23",
-                "type": "grass",
-                "unit": {
-                    "id": "wall-6",
-                    "class": "wall",
-                    "category": "structure"
-                }
+                "type": "grass"
             },
             {
                 "id": "square-24",
-                "type": "grass",
-                "unit": {
-                    "id": "gate-7",
-                    "class": "gate",
-                    "category": "structure"
-                }
+                "type": "grass"
+            }
+        ],
+        [
+            {
+                "id": "square-25",
+                "type": "grass"
+            },
+            {
+                "id": "square-26",
+                "type": "grass"
+            },
+            {
+                "id": "square-27",
+                "type": "grass"
+            },
+            {
+                "id": "square-28",
+                "type": "grass"
+            },
+            {
+                "id": "square-29",
+                "type": "grass"
             }
         ],
         [
@@ -144,6 +156,28 @@
         ],
         [
             {
+                "id": "square-35",
+                "type": "grass"
+            },
+            {
+                "id": "square-36",
+                "type": "grass"
+            },
+            {
+                "id": "square-37",
+                "type": "grass"
+            },
+            {
+                "id": "square-38",
+                "type": "grass"
+            },
+            {
+                "id": "square-39",
+                "type": "grass"
+            }
+        ],
+        [
+            {
                 "id": "square-40",
                 "type": "grass"
             },
@@ -163,134 +197,216 @@
                 "id": "square-44",
                 "type": "grass"
             }
-        ],
-        [
-            {
-                "id": "square-50",
-                "type": "grass"
-            },
-            {
-                "id": "square-51",
-                "type": "grass"
-            },
-            {
-                "id": "square-52",
-                "type": "grass"
-            },
-            {
-                "id": "square-53",
-                "type": "grass"
-            },
-            {
-                "id": "square-54",
-                "type": "grass"
-            }
-        ],
-        [
-            {
-                "id": "square-60",
-                "type": "grass",
-                "unit": {
-                    "id": "wall-8",
-                    "class": "wall",
-                    "category": "structure"
-                }
-            },
-            {
-                "id": "square-61",
-                "type": "grass",
-                "unit": {
-                    "id": "wall-9",
-                    "class": "wall",
-                    "category": "structure"
-                }
-            },
-            {
-                "id": "square-62",
-                "type": "grass",
-                "unit": {
-                    "id": "gate-10",
-                    "class": "gate",
-                    "category": "structure"
-                }
-            },
-            {
-                "id": "square-63",
-                "type": "grass",
-                "unit": {
-                    "id": "wall-11",
-                    "class": "wall",
-                    "category": "structure"
-                }
-            },
-            {
-                "id": "square-64",
-                "type": "grass",
-                "unit": {
-                    "id": "gate-12",
-                    "class": "gate",
-                    "category": "structure"
-                }
-            }
-        ],
-        [
-            {
-                "id": "square-70",
-                "type": "grass",
-                "unit": {
-                    "id": "spearman-13",
-                    "class": "spearman",
-                    "category": "military"
-                }
-            },
-            {
-                "id": "square-71",
-                "type": "grass",
-                "unit": {
-                    "id": "castle-14",
-                    "class": "castle",
-                    "category": "structure"
-                }
-            },
-            {
-                "id": "square-72",
-                "type": "grass",
-                "unit": {
-                    "id": "spearman-15",
-                    "class": "spearman",
-                    "category": "military"
-                }
-            },
-            {
-                "id": "square-73",
-                "type": "grass"
-            },
-            {
-                "id": "square-74",
-                "type": "grass"
-            }
-        ],
-        [
-            {
-                "id": "square-80",
-                "type": "grass"
-            },
-            {
-                "id": "square-81",
-                "type": "grass"
-            },
-            {
-                "id": "square-82",
-                "type": "grass"
-            },
-            {
-                "id": "square-83",
-                "type": "grass"
-            },
-            {
-                "id": "square-84",
-                "type": "grass"
-            }
         ]
+    ],
+    "units": [
+        {
+            "id": "spearman-0",
+            "class": "spearman",
+            "category": "military",
+            "movement": {
+                "distance": 1,
+                "localization": "square-5"
+            },
+            "movementInTurn": {
+                "turn": 0,
+                "moved": false
+            }
+        },
+        {
+            "id": "castle-1",
+            "class": "castle",
+            "category": "structure",
+            "movement": {
+                "distance": 0,
+                "localization": "square-6"
+            },
+            "movementInTurn": {
+                "turn": 0,
+                "moved": false
+            }
+        },
+        {
+            "id": "spearman-2",
+            "class": "spearman",
+            "category": "military",
+            "movement": {
+                "distance": 1,
+                "localization": "square-7"
+            },
+            "movementInTurn": {
+                "turn": 0,
+                "moved": false
+            }
+        },
+        {
+            "id": "wall-3",
+            "class": "wall",
+            "category": "structure",
+            "movement": {
+                "distance": 0,
+                "localization": "square-10"
+            },
+            "movementInTurn": {
+                "turn": 0,
+                "moved": false
+            }
+        },
+        {
+            "id": "wall-4",
+            "class": "wall",
+            "category": "structure",
+            "movement": {
+                "distance": 0,
+                "localization": "square-11"
+            },
+            "movementInTurn": {
+                "turn": 0,
+                "moved": false
+            }
+        },
+        {
+            "id": "gate-5",
+            "class": "gate",
+            "category": "structure",
+            "movement": {
+                "distance": 0,
+                "localization": "square-12"
+            },
+            "movementInTurn": {
+                "turn": 0,
+                "moved": false
+            }
+        },
+        {
+            "id": "wall-6",
+            "class": "wall",
+            "category": "structure",
+            "movement": {
+                "distance": 0,
+                "localization": "square-13"
+            },
+            "movementInTurn": {
+                "turn": 0,
+                "moved": false
+            }
+        },
+        {
+            "id": "gate-7",
+            "class": "gate",
+            "category": "structure",
+            "movement": {
+                "distance": 0,
+                "localization": "square-14"
+            },
+            "movementInTurn": {
+                "turn": 0,
+                "moved": false
+            }
+        },
+        {
+            "id": "wall-8",
+            "class": "wall",
+            "category": "structure",
+            "movement": {
+                "distance": 0,
+                "localization": "square-30"
+            },
+            "movementInTurn": {
+                "turn": 0,
+                "moved": false
+            }
+        },
+        {
+            "id": "wall-9",
+            "class": "wall",
+            "category": "structure",
+            "movement": {
+                "distance": 0,
+                "localization": "square-31"
+            },
+            "movementInTurn": {
+                "turn": 0,
+                "moved": false
+            }
+        },
+        {
+            "id": "gate-10",
+            "class": "gate",
+            "category": "structure",
+            "movement": {
+                "distance": 0,
+                "localization": "square-32"
+            },
+            "movementInTurn": {
+                "turn": 0,
+                "moved": false
+            }
+        },
+        {
+            "id": "wall-11",
+            "class": "wall",
+            "category": "structure",
+            "movement": {
+                "distance": 0,
+                "localization": "square-33"
+            },
+            "movementInTurn": {
+                "turn": 0,
+                "moved": false
+            }
+        },
+        {
+            "id": "gate-12",
+            "class": "gate",
+            "category": "structure",
+            "movement": {
+                "distance": 0,
+                "localization": "square-34"
+            },
+            "movementInTurn": {
+                "turn": 0,
+                "moved": false
+            }
+        },
+        {
+            "id": "spearman-13",
+            "class": "spearman",
+            "category": "military",
+            "movement": {
+                "distance": 1,
+                "localization": "square-35"
+            },
+            "movementInTurn": {
+                "turn": 0,
+                "moved": false
+            }
+        },
+        {
+            "id": "castle-14",
+            "class": "castle",
+            "category": "structure",
+            "movement": {
+                "distance": 0,
+                "localization": "square-36"
+            },
+            "movementInTurn": {
+                "turn": 0,
+                "moved": false
+            }
+        },
+        {
+            "id": "spearman-15",
+            "class": "spearman",
+            "category": "military",
+            "movement": {
+                "distance": 1,
+                "localization": "square-37"
+            },
+            "movementInTurn": {
+                "turn": 0,
+                "moved": false
+            }
+        }
     ]
 }

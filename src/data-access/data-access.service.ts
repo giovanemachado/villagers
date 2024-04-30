@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { MapData } from 'src/maps/dto/map-data.dto';
+import { GeneratedMap, MapData } from 'src/maps/dto/map-data.dto';
 import { readFile } from 'fs/promises';
 
 @Injectable()
 export class DataAccessService {
   private readonly staticDataPath = 'static_data';
 
-  async getStaticResource(folder: string, fileName: string): Promise<MapData> {
+  async getStaticResource(
+    folder: string,
+    fileName: string,
+  ): Promise<GeneratedMap> {
     return await this.readFile(`${folder}/${fileName}`);
   }
 

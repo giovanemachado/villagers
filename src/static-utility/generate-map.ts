@@ -63,6 +63,7 @@ const generateMap = (inputMapDefinition: string, unitService: UnitsService) => {
   }
 
   const rows: SquareData[][] = [];
+  const units: UnitData[] = [];
 
   map_definition.map((rows_definition) => {
     const squares: SquareData[] = [];
@@ -80,15 +81,18 @@ const generateMap = (inputMapDefinition: string, unitService: UnitsService) => {
           row_definition.unitDefinitionClass,
         );
         unit.id = generateUnitId(unit.class);
+        unit.movement.localization = id;
+
+        units.push(unit);
       }
 
-      squares.push({ id, type, unit });
+      squares.push({ id, type });
     });
 
     rows.push(squares);
   });
 
-  return rows;
+  return { rows, units };
 };
 
 const showStructure = (generatedMap: SquareData[][]): string => {
@@ -102,9 +106,9 @@ const showStructure = (generatedMap: SquareData[][]): string => {
     row.forEach((square) => {
       let unit = '';
 
-      if (square.unit) {
-        unit = square.unit.class;
-      }
+      // if (square.unit) {
+      //   unit = square.unit.class;
+      // }
 
       squareData += ` [${unit}] `;
     });
@@ -122,11 +126,12 @@ async function bootstrap() {
 
   const unitService = app.get(UnitsService);
 
-  const generatedMap = generateMap(inputMapDefinition, unitService);
+  const { units, rows } = generateMap(inputMapDefinition, unitService);
 
   const fileName = `${address}-${new Date().getTime()}.${format}`;
 
-  fs.writeFileSync(fileName, JSON.stringify(generatedMap));
+  fs.writeFileSync(fileName, JSON.stringify(rows));
+  fs.appendFileSync(fileName, '\n' + JSON.stringify(units));
 
   // fs.appendFileSync(fileName, showStructure(generatedMap));
 

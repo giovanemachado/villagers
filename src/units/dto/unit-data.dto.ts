@@ -14,11 +14,16 @@ export enum UNIT_CLASS {
 
 export class UnitMovement {
   distance: number;
+  localization: string;
 }
 
 export class UnitData {
   id: string;
   category: UNIT_CATEGORY;
   class: UNIT_CLASS;
-  movement?: UnitMovement;
+  movement: UnitMovement;
+  movementInTurn: {
+    turn: number;
+    moved: boolean;
+  };
 }

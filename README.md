@@ -33,6 +33,9 @@ $ yarn g-map initial-map
 ## Generate type schema
 
 ```bash
+# It triggers cli to build the new schema.yaml
+$ yarn start
+
 # It gets data from open api and build a file in ./src/open-api/schema.ts, this can be copy and paste into castle_age
 $ yarn g-schema
 ```
