@@ -1,32 +1,28 @@
 openapi: 3.0.0
 paths:
-  /games/turns:
-    get:
-      operationId: getTurn
-      parameters: []
-      responses:
-        "200":
-          description: ""
-          content:
-            application/json:
-              schema:
-                type: number
-    post:
-      operationId: updateTurn
-      parameters: []
-      responses:
-        "201":
-          description: ""
-          content:
-            application/json:
-              schema:
-                type: number
   /games/initial-load:
     get:
       operationId: getInitialGameState
       parameters: []
       responses:
         "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameState"
+  /games/{gameId}/state:
+    post:
+      operationId: updateTurn
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GameState"
+      responses:
+        "201":
           description: ""
           content:
             application/json:
@@ -112,6 +108,8 @@ components:
     GameState:
       type: object
       properties:
+        gameId:
+          type: string
         turns:
           type: number
         units:
@@ -121,6 +119,7 @@ components:
         gameMap:
           $ref: "#/components/schemas/MapData"
       required:
+        - gameId
         - turns
         - units
         - gameMap

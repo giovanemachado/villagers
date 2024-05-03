@@ -11,7 +11,7 @@ import { UnitsService } from 'src/units/units.service';
 
 const mapDefinitions = [MAPS.INITIAL];
 let inputMapDefinition = '';
-const squareIdTag = 'square-';
+const squareIdTag = 'square';
 const address = './static_data/maps/map';
 const format = 'json';
 let unitCount = 0;
@@ -38,8 +38,8 @@ const generateUnitId = (unitTag: UNIT_CLASS) => {
   unitCount++;
   return unitId;
 };
-const generateSquareId = () => {
-  const squareId = squareIdTag + squareCount;
+const generateSquareId = (row: number) => {
+  const squareId = `${squareIdTag}_${row}-${squareCount}`;
   squareCount++;
   return squareId;
 };
@@ -65,11 +65,12 @@ const generateMap = (inputMapDefinition: string, unitService: UnitsService) => {
   const rows: SquareData[][] = [];
   const units: UnitData[] = [];
 
-  map_definition.map((rows_definition) => {
+  map_definition.map((rows_definition, rows_index) => {
     const squares: SquareData[] = [];
+    squareCount = 0;
 
     rows_definition.map((row_definition) => {
-      const id = generateSquareId();
+      const id = generateSquareId(rows_index);
       const type = row_definition.type
         ? row_definition.type
         : SQUARE_TYPES.GRASS;
@@ -106,10 +107,6 @@ const showStructure = (generatedMap: SquareData[][]): string => {
     row.forEach((square) => {
       let unit = '';
 
-      // if (square.unit) {
-      //   unit = square.unit.class;
-      // }
-
       squareData += ` [${unit}] `;
     });
 
@@ -130,10 +127,7 @@ async function bootstrap() {
 
   const fileName = `${address}-${new Date().getTime()}.${format}`;
 
-  fs.writeFileSync(fileName, JSON.stringify(rows));
-  fs.appendFileSync(fileName, '\n' + JSON.stringify(units));
-
-  // fs.appendFileSync(fileName, showStructure(generatedMap));
+  fs.writeFileSync(fileName, JSON.stringify({ rows, units }));
 
   await app.close();
 }

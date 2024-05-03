@@ -2,199 +2,199 @@
     "rows": [
         [
             {
-                "id": "square-0",
+                "id": "square_0-0",
                 "type": "grass"
             },
             {
-                "id": "square-1",
+                "id": "square_0-1",
                 "type": "grass"
             },
             {
-                "id": "square-2",
+                "id": "square_0-2",
                 "type": "grass"
             },
             {
-                "id": "square-3",
+                "id": "square_0-3",
                 "type": "grass"
             },
             {
-                "id": "square-4",
+                "id": "square_0-4",
                 "type": "grass"
             }
         ],
         [
             {
-                "id": "square-5",
+                "id": "square_1-0",
                 "type": "grass"
             },
             {
-                "id": "square-6",
+                "id": "square_1-1",
                 "type": "grass"
             },
             {
-                "id": "square-7",
+                "id": "square_1-2",
                 "type": "grass"
             },
             {
-                "id": "square-8",
+                "id": "square_1-3",
                 "type": "grass"
             },
             {
-                "id": "square-9",
+                "id": "square_1-4",
                 "type": "grass"
             }
         ],
         [
             {
-                "id": "square-10",
+                "id": "square_2-0",
                 "type": "grass"
             },
             {
-                "id": "square-11",
+                "id": "square_2-1",
                 "type": "grass"
             },
             {
-                "id": "square-12",
+                "id": "square_2-2",
                 "type": "grass"
             },
             {
-                "id": "square-13",
+                "id": "square_2-3",
                 "type": "grass"
             },
             {
-                "id": "square-14",
+                "id": "square_2-4",
                 "type": "grass"
             }
         ],
         [
             {
-                "id": "square-15",
+                "id": "square_3-0",
                 "type": "grass"
             },
             {
-                "id": "square-16",
+                "id": "square_3-1",
                 "type": "grass"
             },
             {
-                "id": "square-17",
+                "id": "square_3-2",
                 "type": "grass"
             },
             {
-                "id": "square-18",
+                "id": "square_3-3",
                 "type": "grass"
             },
             {
-                "id": "square-19",
+                "id": "square_3-4",
                 "type": "grass"
             }
         ],
         [
             {
-                "id": "square-20",
+                "id": "square_4-0",
                 "type": "grass"
             },
             {
-                "id": "square-21",
+                "id": "square_4-1",
                 "type": "grass"
             },
             {
-                "id": "square-22",
+                "id": "square_4-2",
                 "type": "grass"
             },
             {
-                "id": "square-23",
+                "id": "square_4-3",
                 "type": "grass"
             },
             {
-                "id": "square-24",
+                "id": "square_4-4",
                 "type": "grass"
             }
         ],
         [
             {
-                "id": "square-25",
+                "id": "square_5-0",
                 "type": "grass"
             },
             {
-                "id": "square-26",
+                "id": "square_5-1",
                 "type": "grass"
             },
             {
-                "id": "square-27",
+                "id": "square_5-2",
                 "type": "grass"
             },
             {
-                "id": "square-28",
+                "id": "square_5-3",
                 "type": "grass"
             },
             {
-                "id": "square-29",
+                "id": "square_5-4",
                 "type": "grass"
             }
         ],
         [
             {
-                "id": "square-30",
+                "id": "square_6-0",
                 "type": "grass"
             },
             {
-                "id": "square-31",
+                "id": "square_6-1",
                 "type": "grass"
             },
             {
-                "id": "square-32",
+                "id": "square_6-2",
                 "type": "grass"
             },
             {
-                "id": "square-33",
+                "id": "square_6-3",
                 "type": "grass"
             },
             {
-                "id": "square-34",
+                "id": "square_6-4",
                 "type": "grass"
             }
         ],
         [
             {
-                "id": "square-35",
+                "id": "square_7-0",
                 "type": "grass"
             },
             {
-                "id": "square-36",
+                "id": "square_7-1",
                 "type": "grass"
             },
             {
-                "id": "square-37",
+                "id": "square_7-2",
                 "type": "grass"
             },
             {
-                "id": "square-38",
+                "id": "square_7-3",
                 "type": "grass"
             },
             {
-                "id": "square-39",
+                "id": "square_7-4",
                 "type": "grass"
             }
         ],
         [
             {
-                "id": "square-40",
+                "id": "square_8-0",
                 "type": "grass"
             },
             {
-                "id": "square-41",
+                "id": "square_8-1",
                 "type": "grass"
             },
             {
-                "id": "square-42",
+                "id": "square_8-2",
                 "type": "grass"
             },
             {
-                "id": "square-43",
+                "id": "square_8-3",
                 "type": "grass"
             },
             {
-                "id": "square-44",
+                "id": "square_8-4",
                 "type": "grass"
             }
         ]
@@ -206,7 +206,7 @@
             "category": "military",
             "movement": {
                 "distance": 1,
-                "localization": "square-5"
+                "localization": "square_1-0"
             },
             "movementInTurn": {
                 "turn": 0,
@@ -219,7 +219,7 @@
             "category": "structure",
             "movement": {
                 "distance": 0,
-                "localization": "square-6"
+                "localization": "square_1-1"
             },
             "movementInTurn": {
                 "turn": 0,
@@ -232,7 +232,7 @@
             "category": "military",
             "movement": {
                 "distance": 1,
-                "localization": "square-7"
+                "localization": "square_1-2"
             },
             "movementInTurn": {
                 "turn": 0,
@@ -245,7 +245,7 @@
             "category": "structure",
             "movement": {
                 "distance": 0,
-                "localization": "square-10"
+                "localization": "square_2-0"
             },
             "movementInTurn": {
                 "turn": 0,
@@ -258,7 +258,7 @@
             "category": "structure",
             "movement": {
                 "distance": 0,
-                "localization": "square-11"
+                "localization": "square_2-1"
             },
             "movementInTurn": {
                 "turn": 0,
@@ -271,7 +271,7 @@
             "category": "structure",
             "movement": {
                 "distance": 0,
-                "localization": "square-12"
+                "localization": "square_2-2"
             },
             "movementInTurn": {
                 "turn": 0,
@@ -284,7 +284,7 @@
             "category": "structure",
             "movement": {
                 "distance": 0,
-                "localization": "square-13"
+                "localization": "square_2-3"
             },
             "movementInTurn": {
                 "turn": 0,
@@ -297,7 +297,7 @@
             "category": "structure",
             "movement": {
                 "distance": 0,
-                "localization": "square-14"
+                "localization": "square_2-4"
             },
             "movementInTurn": {
                 "turn": 0,
@@ -310,7 +310,7 @@
             "category": "structure",
             "movement": {
                 "distance": 0,
-                "localization": "square-30"
+                "localization": "square_6-0"
             },
             "movementInTurn": {
                 "turn": 0,
@@ -323,7 +323,7 @@
             "category": "structure",
             "movement": {
                 "distance": 0,
-                "localization": "square-31"
+                "localization": "square_6-1"
             },
             "movementInTurn": {
                 "turn": 0,
@@ -336,7 +336,7 @@
             "category": "structure",
             "movement": {
                 "distance": 0,
-                "localization": "square-32"
+                "localization": "square_6-2"
             },
             "movementInTurn": {
                 "turn": 0,
@@ -349,7 +349,7 @@
             "category": "structure",
             "movement": {
                 "distance": 0,
-                "localization": "square-33"
+                "localization": "square_6-3"
             },
             "movementInTurn": {
                 "turn": 0,
@@ -362,7 +362,7 @@
             "category": "structure",
             "movement": {
                 "distance": 0,
-                "localization": "square-34"
+                "localization": "square_6-4"
             },
             "movementInTurn": {
                 "turn": 0,
@@ -375,7 +375,7 @@
             "category": "military",
             "movement": {
                 "distance": 1,
-                "localization": "square-35"
+                "localization": "square_7-0"
             },
             "movementInTurn": {
                 "turn": 0,
@@ -388,7 +388,7 @@
             "category": "structure",
             "movement": {
                 "distance": 0,
-                "localization": "square-36"
+                "localization": "square_7-1"
             },
             "movementInTurn": {
                 "turn": 0,
@@ -401,7 +401,7 @@
             "category": "military",
             "movement": {
                 "distance": 1,
-                "localization": "square-37"
+                "localization": "square_7-2"
             },
             "movementInTurn": {
                 "turn": 0,

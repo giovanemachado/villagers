@@ -4,12 +4,11 @@
  */
 
 export interface paths {
-  '/games/turns': {
-    get: operations['getTurn'];
-    post: operations['updateTurn'];
-  };
   '/games/initial-load': {
     get: operations['getInitialGameState'];
+  };
+  '/games/{gameId}/state': {
+    post: operations['updateTurn'];
   };
 }
 
@@ -41,6 +40,7 @@ export interface components {
       rows: components['schemas']['SquareData'][][];
     };
     GameState: {
+      gameId: string;
       turns: number;
       units: components['schemas']['UnitData'][];
       gameMap: components['schemas']['MapData'];
@@ -58,27 +58,23 @@ export type $defs = Record<string, never>;
 export type external = Record<string, never>;
 
 export interface operations {
-  getTurn: {
+  getInitialGameState: {
     responses: {
       200: {
         content: {
-          'application/json': number;
+          'application/json': components['schemas']['GameState'];
         };
       };
     };
   };
   updateTurn: {
-    responses: {
-      201: {
-        content: {
-          'application/json': number;
-        };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['GameState'];
       };
     };
-  };
-  getInitialGameState: {
     responses: {
-      200: {
+      201: {
         content: {
           'application/json': components['schemas']['GameState'];
         };
