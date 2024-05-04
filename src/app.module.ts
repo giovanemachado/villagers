@@ -7,6 +7,9 @@ import { ConfigModule } from '@nestjs/config';
 import { DataAccessModule } from './data-access/data-access.module';
 import { MoneyModule } from './money/money.module';
 import { PlayersModule } from './players/players.module';
+import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './auth/auth.guard';
 
 @Module({
   imports: [
@@ -18,8 +21,13 @@ import { PlayersModule } from './players/players.module';
     DataAccessModule,
     MoneyModule,
     PlayersModule,
+    AuthModule,
   ],
-  controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule {}
