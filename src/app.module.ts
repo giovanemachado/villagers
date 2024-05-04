@@ -5,6 +5,8 @@ import { MatchesModule } from './matches/matches.module';
 import { MapsModule } from './maps/maps.module';
 import { ConfigModule } from '@nestjs/config';
 import { DataAccessModule } from './data-access/data-access.module';
+import { MoneyModule } from './money/money.module';
+import { PlayersModule } from './players/players.module';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { DataAccessModule } from './data-access/data-access.module';
     MatchesModule,
     MapsModule,
     DataAccessModule,
+    MoneyModule,
+    PlayersModule,
   ],
   controllers: [],
   providers: [],

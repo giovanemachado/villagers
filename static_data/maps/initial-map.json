@@ -203,6 +203,7 @@
         {
             "id": "spearman-0",
             "class": "spearman",
+            "playerId": "2",
             "category": "military",
             "movement": {
                 "distance": 1,
@@ -216,6 +217,7 @@
         {
             "id": "castle-1",
             "class": "castle",
+            "playerId": "2",
             "category": "structure",
             "movement": {
                 "distance": 0,
@@ -229,6 +231,7 @@
         {
             "id": "spearman-2",
             "class": "spearman",
+            "playerId": "2",
             "category": "military",
             "movement": {
                 "distance": 1,
@@ -242,6 +245,7 @@
         {
             "id": "wall-3",
             "class": "wall",
+            "playerId": "2",
             "category": "structure",
             "movement": {
                 "distance": 0,
@@ -255,6 +259,7 @@
         {
             "id": "wall-4",
             "class": "wall",
+            "playerId": "2",
             "category": "structure",
             "movement": {
                 "distance": 0,
@@ -268,6 +273,7 @@
         {
             "id": "gate-5",
             "class": "gate",
+            "playerId": "2",
             "category": "structure",
             "movement": {
                 "distance": 0,
@@ -281,6 +287,7 @@
         {
             "id": "wall-6",
             "class": "wall",
+            "playerId": "2",
             "category": "structure",
             "movement": {
                 "distance": 0,
@@ -294,6 +301,7 @@
         {
             "id": "gate-7",
             "class": "gate",
+            "playerId": "2",
             "category": "structure",
             "movement": {
                 "distance": 0,
@@ -307,6 +315,7 @@
         {
             "id": "wall-8",
             "class": "wall",
+            "playerId": "2",
             "category": "structure",
             "movement": {
                 "distance": 0,
@@ -320,6 +329,7 @@
         {
             "id": "wall-9",
             "class": "wall",
+            "playerId": "2",
             "category": "structure",
             "movement": {
                 "distance": 0,
@@ -333,6 +343,7 @@
         {
             "id": "gate-10",
             "class": "gate",
+            "playerId": "2",
             "category": "structure",
             "movement": {
                 "distance": 0,
@@ -346,6 +357,7 @@
         {
             "id": "wall-11",
             "class": "wall",
+            "playerId": "2",
             "category": "structure",
             "movement": {
                 "distance": 0,
@@ -359,6 +371,7 @@
         {
             "id": "gate-12",
             "class": "gate",
+            "playerId": "2",
             "category": "structure",
             "movement": {
                 "distance": 0,
@@ -372,6 +385,7 @@
         {
             "id": "spearman-13",
             "class": "spearman",
+            "playerId": "2",
             "category": "military",
             "movement": {
                 "distance": 1,
@@ -385,6 +399,7 @@
         {
             "id": "castle-14",
             "class": "castle",
+            "playerId": "2",
             "category": "structure",
             "movement": {
                 "distance": 0,
@@ -398,6 +413,7 @@
         {
             "id": "spearman-15",
             "class": "spearman",
+            "playerId": "2",
             "category": "military",
             "movement": {
                 "distance": 1,

@@ -14,13 +14,20 @@ export class GamesController {
   @Post(':gameId/state/')
   updateTurn(
     @Param() { gameId }: { gameId: string },
-    @Body() { turns, units, gameMap }: GameState,
+    @Body()
+    {
+      playerIds,
+      units,
+      money,
+      turns,
+    }: Pick<GameState, 'playerIds' | 'units' | 'money' | 'turns'>,
   ) {
     return this.gamesService.updateGameState({
+      playerIds,
       gameId,
-      turns,
+      money,
       units,
-      gameMap,
+      turns,
     });
   }
 }

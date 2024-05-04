@@ -20,6 +20,7 @@ export class UnitMovement {
 export class UnitData {
   id: string;
   category: UNIT_CATEGORY;
+  playerId: string;
   class: UNIT_CLASS;
   movement: UnitMovement;
   movementInTurn: {

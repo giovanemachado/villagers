@@ -45,12 +45,36 @@ const gatesRow: SquareDefinitionData[] = [
 
 export const initial_map_definition: SquareDefinitionData[][] = [
   defaultRow,
-  castleRow,
-  gatesRow,
+  castleRow.map((square) => {
+    if (square.unitDefinitionClass) {
+      square.playerId = '1';
+    }
+
+    return square;
+  }),
+  gatesRow.map((square) => {
+    if (square.unitDefinitionClass) {
+      square.playerId = '1';
+    }
+
+    return square;
+  }),
   defaultRow,
   defaultRow,
   defaultRow,
-  gatesRow,
-  castleRow,
+  gatesRow.map((square) => {
+    if (square.unitDefinitionClass) {
+      square.playerId = '2';
+    }
+
+    return square;
+  }),
+  castleRow.map((square) => {
+    if (square.unitDefinitionClass) {
+      square.playerId = '2';
+    }
+
+    return square;
+  }),
   defaultRow,
 ];

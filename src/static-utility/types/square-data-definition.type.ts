@@ -5,4 +5,5 @@ export type SquareDefinitionData = {
   id?: string;
   type?: SQUARE_TYPES;
   unitDefinitionClass?: UNIT_CLASS;
+  playerId?: string;
 };

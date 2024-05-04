@@ -38,6 +38,7 @@ const generateUnitId = (unitTag: UNIT_CLASS) => {
   unitCount++;
   return unitId;
 };
+
 const generateSquareId = (row: number) => {
   const squareId = `${squareIdTag}_${row}-${squareCount}`;
   squareCount++;
@@ -83,6 +84,7 @@ const generateMap = (inputMapDefinition: string, unitService: UnitsService) => {
         );
         unit.id = generateUnitId(unit.class);
         unit.movement.localization = id;
+        unit.playerId = row_definition.playerId ?? '';
 
         units.push(unit);
       }

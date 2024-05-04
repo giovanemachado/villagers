@@ -16,6 +16,10 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
+    MoneyData: {
+      playerId: string;
+      value: number;
+    };
     UnitMovement: {
       distance: number;
       localization: string;
@@ -24,6 +28,7 @@ export interface components {
       id: string;
       /** @enum {string} */
       category: 'military' | 'structure';
+      playerId: string;
       /** @enum {string} */
       class: 'castle' | 'gate' | 'archer' | 'spearman' | 'horseman' | 'wall';
       movement: components['schemas']['UnitMovement'];
@@ -41,6 +46,8 @@ export interface components {
     };
     GameState: {
       gameId: string;
+      playerIds: string[];
+      money: components['schemas']['MoneyData'][];
       turns: number;
       units: components['schemas']['UnitData'][];
       gameMap: components['schemas']['MapData'];
@@ -68,15 +75,10 @@ export interface operations {
     };
   };
   updateTurn: {
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['GameState'];
-      };
-    };
     responses: {
       201: {
         content: {
-          'application/json': components['schemas']['GameState'];
+          'application/json': Record<string, never>;
         };
       };
     };

@@ -49,6 +49,7 @@ export class UnitsService {
     return {
       id: '',
       class: unitTag,
+      playerId: '',
       category: unitCategory,
       movement: unitMovement,
       movementInTurn: {
@@ -56,5 +57,17 @@ export class UnitsService {
         moved: false,
       },
     };
+  }
+
+  setUnitsToPlayers(units: UnitData[], playerIds: string[]) {
+    units.forEach((unit) => {
+      if (unit.playerId === 'A') {
+        unit.playerId = playerIds[0];
+      } else if (unit.playerId === 'B') {
+        unit.playerId = playerIds[1];
+      }
+    });
+
+    return units;
   }
 }
