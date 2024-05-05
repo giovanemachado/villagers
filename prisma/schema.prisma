@@ -15,10 +15,11 @@ model Player {
 }
 
 model Match {
-  id        Int      @id @default(autoincrement())
-  code      String   @unique
-  active    Boolean  @default(true)
-  players   Player[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              Int      @id @default(autoincrement())
+  code            String   @unique
+  active          Boolean  @default(true)
+  numberOfPlayers Int      @default(2)
+  players         Player[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }

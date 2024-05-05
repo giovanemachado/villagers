@@ -42,9 +42,37 @@ export class MatchesService {
 
   async enterInMatch(player: PlayerData, code: string): Promise<MatchData> {
     try {
+      const match = await this.prismaService.match.findUnique({
+        where: { code },
+        include: {
+          players: {
+            select: {
+              id: true,
+              username: true,
+            },
+          },
+        },
+      });
+
+      if (!match) {
+        throw 'Non existent Match.';
+      }
+
+      if (!match.active) {
+        throw 'Match is inactive.';
+      }
+
+      if (match.players.length >= match.numberOfPlayers) {
+        throw 'Match is full.';
+      }
+
+      if (match.players.map((player) => player.id).includes(player.id)) {
+        throw 'Player is already in this room.';
+      }
+
       const result = await this.prismaService.match.update({
         where: {
-          code: code,
+          code,
         },
         data: {
           players: {
