@@ -1,5 +1,27 @@
 openapi: 3.0.0
 paths:
+  /games/match:
+    post:
+      operationId: createMatch
+      parameters: []
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MatchData"
+  /games/enter-match/{code}:
+    post:
+      operationId: enterInMatch
+      parameters: []
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MatchData"
   /games/initial-load:
     get:
       operationId: getInitialGameState
@@ -38,6 +60,35 @@ tags: []
 servers: []
 components:
   schemas:
+    PlayerData:
+      type: object
+      properties: {}
+    MatchData:
+      type: object
+      properties:
+        id:
+          type: number
+        code:
+          type: string
+        players:
+          type: array
+          items:
+            $ref: "#/components/schemas/PlayerData"
+        active:
+          type: boolean
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+        - id
+        - code
+        - players
+        - active
+        - createdAt
+        - updatedAt
     MoneyData:
       type: object
       properties:

@@ -1,28 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-
-export type User = any;
+import { PlayerDataCreate } from './dto/player-create.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class PlayersService {
-  constructor(private configService: ConfigService) {}
+  constructor(private prismaService: PrismaService) {}
 
-  // temporary users
-  private readonly accounts = [
-    {
-      userId: 1,
-      username: 'player1',
-      password: this.configService.get('PASS1'),
-    },
-    {
-      userId: 2,
-      username: 'player2',
-      password: this.configService.get('PASS2'),
-    },
-  ];
+  async findPlayer(
+    playerWhereUniqueInput: Prisma.PlayerWhereUniqueInput,
+  ): Promise<PlayerDataCreate | null> {
+    const player = await this.prismaService.player.findUnique({
+      where: playerWhereUniqueInput,
+    });
 
-  async findOne(username: string): Promise<User | undefined> {
-    return this.accounts.find((user) => user.username === username);
+    return player;
   }
 
   getPlayerIds(): string[] {

@@ -32,6 +32,9 @@ $ yarn g-map initial-map
 
 ## Generate type schema
 
+schema.yaml is updated by any yarn start command. This is done by Nest JS CLI + Swagger plugin (OpenAPI plugin). The data convertion done in
+schema.ts uses https://github.com/drwpow/openapi-typescript/tree/main/packages/openapi-typescript
+
 ```bash
 # It triggers cli to build the new schema.yaml
 $ yarn start
@@ -40,5 +43,13 @@ $ yarn start
 $ yarn g-schema
 ```
 
-Notes:
-https://github.com/drwpow/openapi-typescript/tree/main/packages/openapi-typescript
+### Tricks
+
+You can grab player id and username this way in any controller
+
+```ts
+@Post('/any-route')
+anyMethod(@Req() { player }: { player: PlayerData }) {
+    console.log(player.id, player.username)
+}
+```

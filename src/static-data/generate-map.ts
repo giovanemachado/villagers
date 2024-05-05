@@ -12,7 +12,7 @@ import { UnitsService } from 'src/units/units.service';
 const mapDefinitions = [MAPS.INITIAL];
 let inputMapDefinition = '';
 const squareIdTag = 'square';
-const address = './static_data/maps/map';
+const address = './src/static_data/maps/map';
 const format = 'json';
 let unitCount = 0;
 let squareCount = 0;

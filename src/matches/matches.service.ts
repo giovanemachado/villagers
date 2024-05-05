@@ -1,28 +1,72 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMatchDto } from './dto/create-match.dto';
-import { UpdateMatchDto } from './dto/update-match.dto';
+import { MatchDataCreate } from './dto/match-create.dto';
+import { MatchData } from './dto/match-data.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { PlayerData } from 'src/players/dto/player-data.dto';
 
 @Injectable()
 export class MatchesService {
-  create(createMatchDto: CreateMatchDto) {
-    createMatchDto;
-    return 'This action adds a new match';
+  constructor(private prismaService: PrismaService) {}
+
+  async createMatch(matchCreate: MatchDataCreate): Promise<MatchData> {
+    try {
+      const match = await this.prismaService.match.create({
+        data: {
+          ...matchCreate,
+          players: {
+            connect: {
+              id: matchCreate.players[0].id,
+            },
+          },
+        },
+        include: {
+          players: {
+            select: {
+              id: true,
+              username: true,
+            },
+          },
+        },
+      });
+
+      if (!match) {
+        throw 'No match';
+      }
+
+      return match;
+    } catch (error) {
+      console.log(error);
+      throw 'Match create failed';
+    }
   }
 
-  findAll() {
-    return `This action returns all matches`;
-  }
+  async enterInMatch(player: PlayerData, code: string): Promise<MatchData> {
+    try {
+      const result = await this.prismaService.match.update({
+        where: {
+          code: code,
+        },
+        data: {
+          players: {
+            connect: {
+              id: player.id,
+            },
+          },
+        },
+        include: {
+          players: {
+            select: {
+              id: true,
+              username: true,
+            },
+          },
+        },
+      });
 
-  findOne(id: number) {
-    return `This action returns a #${id} match`;
-  }
-
-  update(id: number, updateMatchDto: UpdateMatchDto) {
-    updateMatchDto;
-    return `This action updates a #${id} match`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} match`;
+      return result;
+    } catch (error) {
+      console.log(error);
+      throw 'Match update failed';
+    }
   }
 }

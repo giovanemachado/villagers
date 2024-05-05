@@ -4,12 +4,13 @@ import { UnitsModule } from './units/units.module';
 import { MatchesModule } from './matches/matches.module';
 import { MapsModule } from './maps/maps.module';
 import { ConfigModule } from '@nestjs/config';
-import { DataAccessModule } from './data-access/data-access.module';
+import { PrismaModule } from './prisma/prisma.module';
 import { MoneyModule } from './money/money.module';
 import { PlayersModule } from './players/players.module';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.guard';
+import { StaticDataModule } from './static-data/static-data.module';
 
 @Module({
   imports: [
@@ -18,10 +19,11 @@ import { AuthGuard } from './auth/auth.guard';
     UnitsModule,
     MatchesModule,
     MapsModule,
-    DataAccessModule,
+    PrismaModule,
     MoneyModule,
     PlayersModule,
     AuthModule,
+    StaticDataModule,
   ],
   providers: [
     {

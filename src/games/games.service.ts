@@ -1,22 +1,42 @@
 import { Injectable } from '@nestjs/common';
-import { DataAccessService } from 'src/data-access/data-access.service';
 import { GeneratedMap, MapData } from 'src/maps/dto/map-data.dto';
 import { GameState } from './dto/game-state.dto';
 import { MoneyService } from 'src/money/money.service';
 import { PlayersService } from 'src/players/players.service';
 import { UnitsService } from 'src/units/units.service';
+import { PlayerData } from 'src/players/dto/player-data.dto';
+import { MatchData } from 'src/matches/dto/match-data.dto';
+import { StaticDataService } from 'src/static-data/static-data.service';
+import { MatchesService } from 'src/matches/matches.service';
 
 @Injectable()
 export class GamesService {
   constructor(
-    private readonly dataAcessService: DataAccessService,
+    private readonly staticDataService: StaticDataService,
+    private readonly matchesService: MatchesService,
     private readonly moneyService: MoneyService,
     private readonly playersService: PlayersService,
     private readonly unitsService: UnitsService,
   ) {}
 
+  async createMatch(player: PlayerData): Promise<MatchData> {
+    const match = await this.matchesService.createMatch({
+      // this is not really random and doesnt make sure we are getting unique values.
+      code: '' + Math.floor(100000 + Math.random() * 900000),
+      players: [player],
+    });
+
+    return match;
+  }
+
+  async enterInMatch(player: PlayerData, code: string): Promise<MatchData> {
+    const match = await this.matchesService.enterInMatch(player, code);
+
+    return match;
+  }
+
   async getMap(): Promise<GeneratedMap> {
-    return await this.dataAcessService.getStaticResource(
+    return await this.staticDataService.getStaticResource(
       'maps',
       'initial-map.json',
     );
