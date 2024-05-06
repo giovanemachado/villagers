@@ -4,11 +4,20 @@
  */
 
 export interface paths {
+  '/games/match': {
+    post: operations['createMatch'];
+  };
+  '/games/enter-match/{code}': {
+    post: operations['enterInMatch'];
+  };
   '/games/initial-load': {
     get: operations['getInitialGameState'];
   };
   '/games/{gameId}/state': {
     post: operations['updateTurn'];
+  };
+  '/auth/login': {
+    post: operations['signIn'];
   };
 }
 
@@ -16,6 +25,17 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
+    PlayerData: Record<string, never>;
+    MatchData: {
+      id: number;
+      code: string;
+      players: components['schemas']['PlayerData'][];
+      active: boolean;
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      updatedAt: string;
+    };
     MoneyData: {
       playerId: string;
       value: number;
@@ -65,6 +85,24 @@ export type $defs = Record<string, never>;
 export type external = Record<string, never>;
 
 export interface operations {
+  createMatch: {
+    responses: {
+      201: {
+        content: {
+          'application/json': components['schemas']['MatchData'];
+        };
+      };
+    };
+  };
+  enterInMatch: {
+    responses: {
+      201: {
+        content: {
+          'application/json': components['schemas']['MatchData'];
+        };
+      };
+    };
+  };
   getInitialGameState: {
     responses: {
       200: {
@@ -80,6 +118,13 @@ export interface operations {
         content: {
           'application/json': Record<string, never>;
         };
+      };
+    };
+  };
+  signIn: {
+    responses: {
+      200: {
+        content: never;
       };
     };
   };

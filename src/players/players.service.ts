@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PlayerDataCreate } from './dto/player-create.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Prisma } from '@prisma/client';
@@ -10,11 +10,15 @@ export class PlayersService {
   async findPlayer(
     playerWhereUniqueInput: Prisma.PlayerWhereUniqueInput,
   ): Promise<PlayerDataCreate | null> {
-    const player = await this.prismaService.player.findUnique({
-      where: playerWhereUniqueInput,
-    });
+    try {
+      const player = await this.prismaService.player.findUnique({
+        where: playerWhereUniqueInput,
+      });
 
-    return player;
+      return player;
+    } catch (error) {
+      throw new UnauthorizedException();
+    }
   }
 
   getPlayerIds(): string[] {

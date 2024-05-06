@@ -49,7 +49,7 @@ paths:
       operationId: signIn
       parameters: []
       responses:
-        "200":
+        "201":
           description: ""
 info:
   title: Villagers

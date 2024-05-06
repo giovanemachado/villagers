@@ -20,7 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "g-map": "npx ts-node ./dist/static-data/generate-map.js",
     "g-schema": "npx openapi-typescript ./src/open-api/schema.yaml -o ./src/open-api/schema.ts && yarn g-enum",
-    "g-enum": "npx ts-node ./dist/open-api/add-enums-to-schema.js && eslint --fix \"./src/open-api/schema.ts\""
+    "g-enum": "npx ts-node ./src/open-api/add-enums-to-schema.ts && eslint --fix \"./src/open-api/schema.ts\""
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
