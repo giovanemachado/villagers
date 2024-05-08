@@ -123,7 +123,7 @@ export interface operations {
   };
   signIn: {
     responses: {
-      200: {
+      201: {
         content: never;
       };
     };

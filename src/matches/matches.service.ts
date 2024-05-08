@@ -3,10 +3,15 @@ import { MatchDataCreate } from './dto/match-create.dto';
 import { MatchData } from './dto/match-data.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PlayerData } from 'src/players/dto/player-data.dto';
+import { EventsGateway } from 'src/events/events.gateway';
+import { EVENT_TYPES } from 'src/events/dto/event-data.dto';
 
 @Injectable()
 export class MatchesService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private eventsGateway: EventsGateway,
+  ) {}
 
   async createMatch(matchCreate: MatchDataCreate): Promise<MatchData> {
     try {
@@ -90,6 +95,10 @@ export class MatchesService {
           },
         },
       });
+
+      if (result.active) {
+        this.eventsGateway.emitEvent(EVENT_TYPES.MATCH_CREATED);
+      }
 
       return result;
     } catch (error) {

@@ -4,7 +4,7 @@ import { readFile } from 'fs/promises';
 
 @Injectable()
 export class StaticDataService {
-  private readonly staticDataPath = 'src/static_data';
+  private readonly staticDataPath = 'src/static-data';
 
   async getStaticResource(
     folder: string,
