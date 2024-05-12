@@ -10,7 +10,7 @@ datasource db {
 model Player {
   id       Int     @id @default(autoincrement())
   username String  @unique
-  password String
+  passwordHash String
   matches  Match[]
 }
 

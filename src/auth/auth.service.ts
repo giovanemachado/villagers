@@ -12,15 +12,23 @@ export class AuthService {
 
   async signIn(
     username: string,
-    pass: string,
+    password: string,
   ): Promise<{ access_token: string }> {
     const player: PlayerDataCreate | null =
       await this.playersService.findPlayer({
         username,
       });
-
-    if (player?.password !== pass) {
+     
+    if (!player) {
       throw new UnauthorizedException();
+    }
+    
+    var bcrypt = require('bcryptjs');
+
+    const res = await bcrypt.compare(password, player.passwordHash);
+
+    if (!res) {
+      throw new UnauthorizedException('...');
     }
 
     const payload = { id: player.id, username: player.username };
