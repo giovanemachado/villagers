@@ -16,20 +16,16 @@ export interface paths {
   '/games/{gameId}/state': {
     post: operations['updateTurn'];
   };
-  '/auth/login': {
-    post: operations['signIn'];
-  };
 }
 
 export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
-    PlayerData: Record<string, never>;
     MatchData: {
       id: number;
       code: string;
-      players: components['schemas']['PlayerData'][];
+      players: string[];
       active: boolean;
       /** Format: date-time */
       createdAt: string;
@@ -118,13 +114,6 @@ export interface operations {
         content: {
           'application/json': Record<string, never>;
         };
-      };
-    };
-  };
-  signIn: {
-    responses: {
-      201: {
-        content: never;
       };
     };
   };

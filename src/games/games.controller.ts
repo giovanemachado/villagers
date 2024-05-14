@@ -1,23 +1,22 @@
 import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
 import { GamesService } from './games.service';
 import { GameState } from './dto/game-state.dto';
-import { PlayerData } from 'src/players/dto/player-data.dto';
 
 @Controller('games')
 export class GamesController {
   constructor(private readonly gamesService: GamesService) {}
 
   @Post('/match')
-  createMatch(@Req() { player }: { player: PlayerData }) {
-    return this.gamesService.createMatch(player);
+  createMatch(@Req() { player }: { player: { id: string } }) {
+    return this.gamesService.createMatch(player.id);
   }
 
   @Post('/enter-match/:code')
   enterInMatch(
-    @Req() { player }: { player: PlayerData },
+    @Req() { player }: { player: { id: string } },
     @Param() { code }: { code: string },
   ) {
-    return this.gamesService.enterInMatch(player, code);
+    return this.gamesService.enterInMatch(player.id, code);
   }
 
   @Get('/initial-load')

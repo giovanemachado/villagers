@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { GeneratedMap, MapData } from 'src/maps/dto/map-data.dto';
+import { GeneratedMap } from 'src/maps/dto/map-data.dto';
 import { GameState } from './dto/game-state.dto';
 import { MoneyService } from 'src/money/money.service';
-import { PlayersService } from 'src/players/players.service';
 import { UnitsService } from 'src/units/units.service';
-import { PlayerData } from 'src/players/dto/player-data.dto';
 import { MatchData } from 'src/matches/dto/match-data.dto';
 import { StaticDataService } from 'src/static-data/static-data.service';
 import { MatchesService } from 'src/matches/matches.service';
@@ -15,22 +13,21 @@ export class GamesService {
     private readonly staticDataService: StaticDataService,
     private readonly matchesService: MatchesService,
     private readonly moneyService: MoneyService,
-    private readonly playersService: PlayersService,
     private readonly unitsService: UnitsService,
   ) {}
 
-  async createMatch(player: PlayerData): Promise<MatchData> {
+  async createMatch(playerId: string): Promise<MatchData> {
     const match = await this.matchesService.createMatch({
       // this is not really random and doesnt make sure we are getting unique values.
       code: '' + Math.floor(100000 + Math.random() * 900000),
-      players: [player],
+      players: [playerId],
     });
 
     return match;
   }
 
-  async enterInMatch(player: PlayerData, code: string): Promise<MatchData> {
-    const match = await this.matchesService.enterInMatch(player, code);
+  async enterInMatch(playerId: string, code: string): Promise<MatchData> {
+    const match = await this.matchesService.enterInMatch(playerId, code);
 
     return match;
   }
@@ -81,13 +78,12 @@ export class GamesService {
   async generateNewGame(): Promise<
     Pick<GameState, 'gameId' | 'playerIds' | 'money'>
   > {
-    const playerIds = this.playersService.getPlayerIds();
     return Promise.resolve({
       gameId: `gameId-${new Date().getTime()}`,
-      playerIds: playerIds,
+      playerIds: [],
       money: this.moneyService.getMoney(0, [
-        { playerId: playerIds[0], value: 0 },
-        { playerId: playerIds[1], value: 0 },
+        { playerId: '1', value: 0 },
+        { playerId: '2', value: 0 },
       ]),
     });
   }

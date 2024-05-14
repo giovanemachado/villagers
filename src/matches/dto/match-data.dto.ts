@@ -1,9 +1,7 @@
-import { PlayerData } from 'src/players/dto/player-data.dto';
-
 export class MatchData {
   id: number;
   code: string;
-  players: PlayerData[];
+  players: string[];
   active: boolean;
   createdAt: Date;
   updatedAt: Date;

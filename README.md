@@ -23,6 +23,30 @@ $ yarn run start:dev
 $ yarn run start:prod
 ```
 
+### Other scripts
+
+```bash
+# call generate-map.js to build maps from definitions (see details in Generate maps section)
+$ yarn g-map
+
+# generates the schema.yaml file (see details in Generate type schema section)
+$ yarn g-schema
+
+# generates enums to our schema file (see details in Generate type schema section)
+$ yarn g-enum
+
+# prisma alias for generating types
+$ yarn p-generate
+
+# prisma alias for model changes
+$ yarn p-migrate
+
+
+# prisma alias for seeding
+$ yarn p-seed
+
+```
+
 ## Generate maps
 
 ```bash
@@ -45,7 +69,7 @@ $ yarn g-schema
 
 ### Tricks
 
-You can grab player id and username this way in any controller
+You can grab player id (from payload) this way in any controller
 
 ```ts
 @Post('/any-route')

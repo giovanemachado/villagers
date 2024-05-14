@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { MatchDataCreate } from './dto/match-create.dto';
 import { MatchData } from './dto/match-data.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { PlayerData } from 'src/players/dto/player-data.dto';
 import { EventsGateway } from 'src/events/events.gateway';
 import { EVENT_TYPES } from 'src/events/dto/event-data.dto';
 
@@ -18,19 +17,6 @@ export class MatchesService {
       const match = await this.prismaService.match.create({
         data: {
           ...matchCreate,
-          players: {
-            connect: {
-              id: matchCreate.players[0].id,
-            },
-          },
-        },
-        include: {
-          players: {
-            select: {
-              id: true,
-              username: true,
-            },
-          },
         },
       });
 
@@ -45,18 +31,10 @@ export class MatchesService {
     }
   }
 
-  async enterInMatch(player: PlayerData, code: string): Promise<MatchData> {
+  async enterInMatch(playerId: string, code: string): Promise<MatchData> {
     try {
       const match = await this.prismaService.match.findUnique({
         where: { code },
-        include: {
-          players: {
-            select: {
-              id: true,
-              username: true,
-            },
-          },
-        },
       });
 
       if (!match) {
@@ -71,7 +49,7 @@ export class MatchesService {
         throw 'Match is full.';
       }
 
-      if (match.players.map((player) => player.id).includes(player.id)) {
+      if (match.players.includes(playerId)) {
         throw 'Player is already in this room.';
       }
 
@@ -81,17 +59,7 @@ export class MatchesService {
         },
         data: {
           players: {
-            connect: {
-              id: player.id,
-            },
-          },
-        },
-        include: {
-          players: {
-            select: {
-              id: true,
-              username: true,
-            },
+            push: playerId,
           },
         },
       });

@@ -44,13 +44,6 @@ paths:
             application/json:
               schema:
                 type: object
-  /auth/login:
-    post:
-      operationId: signIn
-      parameters: []
-      responses:
-        "201":
-          description: ""
 info:
   title: Villagers
   description: Villagers is the backend for Castle Age.
@@ -60,9 +53,6 @@ tags: []
 servers: []
 components:
   schemas:
-    PlayerData:
-      type: object
-      properties: {}
     MatchData:
       type: object
       properties:
@@ -73,7 +63,7 @@ components:
         players:
           type: array
           items:
-            $ref: "#/components/schemas/PlayerData"
+            type: string
         active:
           type: boolean
         createdAt:
