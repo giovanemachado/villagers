@@ -10,11 +10,14 @@ export interface paths {
   '/games/enter-match/{code}': {
     post: operations['enterInMatch'];
   };
-  '/games/initial-load': {
+  '/games/initial-load/{code}': {
     get: operations['getInitialGameState'];
   };
-  '/games/{gameId}/state': {
+  '/games/{code}/state': {
     post: operations['updateTurn'];
+  };
+  '/games/initial-map/{code}': {
+    get: operations['getInitialMap'];
   };
 }
 
@@ -53,20 +56,18 @@ export interface components {
         moved?: boolean;
       };
     };
+    GameState: {
+      money: components['schemas']['MoneyData'][];
+      turns: number;
+      units: components['schemas']['UnitData'][];
+      match: components['schemas']['MatchData'];
+    };
     SquareData: {
       id: string;
       type: string;
     };
     MapData: {
       rows: components['schemas']['SquareData'][][];
-    };
-    GameState: {
-      gameId: string;
-      playerIds: string[];
-      money: components['schemas']['MoneyData'][];
-      turns: number;
-      units: components['schemas']['UnitData'][];
-      gameMap: components['schemas']['MapData'];
     };
   };
   responses: never;
@@ -109,10 +110,24 @@ export interface operations {
     };
   };
   updateTurn: {
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['GameState'];
+      };
+    };
     responses: {
       201: {
         content: {
           'application/json': Record<string, never>;
+        };
+      };
+    };
+  };
+  getInitialMap: {
+    responses: {
+      200: {
+        content: {
+          'application/json': components['schemas']['MapData'];
         };
       };
     };

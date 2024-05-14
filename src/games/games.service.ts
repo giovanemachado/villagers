@@ -6,6 +6,7 @@ import { UnitsService } from 'src/units/units.service';
 import { MatchData } from 'src/matches/dto/match-data.dto';
 import { StaticDataService } from 'src/static-data/static-data.service';
 import { MatchesService } from 'src/matches/matches.service';
+import { INITIAL_TURN } from 'src/static-data/definitions/constants';
 
 @Injectable()
 export class GamesService {
@@ -15,6 +16,10 @@ export class GamesService {
     private readonly moneyService: MoneyService,
     private readonly unitsService: UnitsService,
   ) {}
+
+  async getValidMatch(code: string): Promise<MatchData> {
+    return this.matchesService.getValidMatch(code);
+  }
 
   async createMatch(playerId: string): Promise<MatchData> {
     const match = await this.matchesService.createMatch({
@@ -40,6 +45,7 @@ export class GamesService {
   }
 
   async updateGameState(
+    code: string,
     state: Partial<GameState>,
   ): Promise<Partial<GameState>> {
     if (!state.units || !state.turns || !state.money) {
@@ -55,36 +61,25 @@ export class GamesService {
     };
   }
 
-  async getInitialGameState(): Promise<GameState> {
-    const { playerIds, gameId, money } = await this.generateNewGame();
-    const { rows, units } = await this.getMap();
+  async getInitialGameState(code: string): Promise<GameState> {
+    const match = await this.getValidMatch(code);
+    const { units } = await this.getMap();
 
     const unitsPerPlayer = this.unitsService.setUnitsToPlayers(
       units,
-      playerIds,
+      match.players,
     );
 
-    return {
-      playerIds,
-      gameId,
-      turns: 1,
-      money,
-      units: unitsPerPlayer,
-      gameMap: { rows },
-    };
-  }
+    console.log('tomar no cu ?', unitsPerPlayer);
 
-  // temporary stub. It will return a valid game id to differenciate matches
-  async generateNewGame(): Promise<
-    Pick<GameState, 'gameId' | 'playerIds' | 'money'>
-  > {
-    return Promise.resolve({
-      gameId: `gameId-${new Date().getTime()}`,
-      playerIds: [],
-      money: this.moneyService.getMoney(0, [
-        { playerId: '1', value: 0 },
-        { playerId: '2', value: 0 },
+    return {
+      turns: INITIAL_TURN,
+      money: this.moneyService.getMoney(INITIAL_TURN, [
+        { playerId: match.players[0], value: 0 },
+        { playerId: match.players[1], value: 0 },
       ]),
-    });
+      units: unitsPerPlayer,
+      match,
+    };
   }
 }

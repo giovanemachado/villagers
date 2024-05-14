@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
 import { GamesService } from './games.service';
 import { GameState } from './dto/game-state.dto';
+import { MapData } from 'src/maps/dto/map-data.dto';
 
 @Controller('games')
 export class GamesController {
@@ -19,28 +20,28 @@ export class GamesController {
     return this.gamesService.enterInMatch(player.id, code);
   }
 
-  @Get('/initial-load')
-  getInitialGameState(): Promise<GameState> {
-    return this.gamesService.getInitialGameState();
+  @Get('/initial-load/:code')
+  getInitialGameState(@Param() { code }: { code: string }): Promise<GameState> {
+    return this.gamesService.getInitialGameState(code);
   }
 
-  @Post(':gameId/state/')
+  @Post(':code/state/')
   updateTurn(
-    @Param() { gameId }: { gameId: string },
+    @Param() { code }: { code: string },
     @Body()
-    {
-      playerIds,
-      units,
-      money,
-      turns,
-    }: Pick<GameState, 'playerIds' | 'units' | 'money' | 'turns'>,
+    { units, money, turns }: GameState,
   ) {
-    return this.gamesService.updateGameState({
-      playerIds,
-      gameId,
+    return this.gamesService.updateGameState(code, {
       money,
       units,
       turns,
     });
+  }
+
+  @Get('/initial-map/:code')
+  getInitialMap(@Param() { code }: { code: string }): Promise<MapData> {
+    // TODO use match info to get a map
+    code;
+    return this.gamesService.getMap();
   }
 }

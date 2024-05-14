@@ -74,6 +74,6 @@ You can grab player id (from payload) this way in any controller
 ```ts
 @Post('/any-route')
 anyMethod(@Req() { player }: { player: PlayerData }) {
-    console.log(player.id, player.username)
+    console.log(player.id)
 }
 ```

@@ -1,428 +1,197 @@
 {
-    "rows": [
-        [
-            {
-                "id": "square_0-0",
-                "type": "grass"
-            },
-            {
-                "id": "square_0-1",
-                "type": "grass"
-            },
-            {
-                "id": "square_0-2",
-                "type": "grass"
-            },
-            {
-                "id": "square_0-3",
-                "type": "grass"
-            },
-            {
-                "id": "square_0-4",
-                "type": "grass"
-            }
-        ],
-        [
-            {
-                "id": "square_1-0",
-                "type": "grass"
-            },
-            {
-                "id": "square_1-1",
-                "type": "grass"
-            },
-            {
-                "id": "square_1-2",
-                "type": "grass"
-            },
-            {
-                "id": "square_1-3",
-                "type": "grass"
-            },
-            {
-                "id": "square_1-4",
-                "type": "grass"
-            }
-        ],
-        [
-            {
-                "id": "square_2-0",
-                "type": "grass"
-            },
-            {
-                "id": "square_2-1",
-                "type": "grass"
-            },
-            {
-                "id": "square_2-2",
-                "type": "grass"
-            },
-            {
-                "id": "square_2-3",
-                "type": "grass"
-            },
-            {
-                "id": "square_2-4",
-                "type": "grass"
-            }
-        ],
-        [
-            {
-                "id": "square_3-0",
-                "type": "grass"
-            },
-            {
-                "id": "square_3-1",
-                "type": "grass"
-            },
-            {
-                "id": "square_3-2",
-                "type": "grass"
-            },
-            {
-                "id": "square_3-3",
-                "type": "grass"
-            },
-            {
-                "id": "square_3-4",
-                "type": "grass"
-            }
-        ],
-        [
-            {
-                "id": "square_4-0",
-                "type": "grass"
-            },
-            {
-                "id": "square_4-1",
-                "type": "grass"
-            },
-            {
-                "id": "square_4-2",
-                "type": "grass"
-            },
-            {
-                "id": "square_4-3",
-                "type": "grass"
-            },
-            {
-                "id": "square_4-4",
-                "type": "grass"
-            }
-        ],
-        [
-            {
-                "id": "square_5-0",
-                "type": "grass"
-            },
-            {
-                "id": "square_5-1",
-                "type": "grass"
-            },
-            {
-                "id": "square_5-2",
-                "type": "grass"
-            },
-            {
-                "id": "square_5-3",
-                "type": "grass"
-            },
-            {
-                "id": "square_5-4",
-                "type": "grass"
-            }
-        ],
-        [
-            {
-                "id": "square_6-0",
-                "type": "grass"
-            },
-            {
-                "id": "square_6-1",
-                "type": "grass"
-            },
-            {
-                "id": "square_6-2",
-                "type": "grass"
-            },
-            {
-                "id": "square_6-3",
-                "type": "grass"
-            },
-            {
-                "id": "square_6-4",
-                "type": "grass"
-            }
-        ],
-        [
-            {
-                "id": "square_7-0",
-                "type": "grass"
-            },
-            {
-                "id": "square_7-1",
-                "type": "grass"
-            },
-            {
-                "id": "square_7-2",
-                "type": "grass"
-            },
-            {
-                "id": "square_7-3",
-                "type": "grass"
-            },
-            {
-                "id": "square_7-4",
-                "type": "grass"
-            }
-        ],
-        [
-            {
-                "id": "square_8-0",
-                "type": "grass"
-            },
-            {
-                "id": "square_8-1",
-                "type": "grass"
-            },
-            {
-                "id": "square_8-2",
-                "type": "grass"
-            },
-            {
-                "id": "square_8-3",
-                "type": "grass"
-            },
-            {
-                "id": "square_8-4",
-                "type": "grass"
-            }
-        ]
+  "rows": [
+    [
+      { "id": "square_0-0", "type": "grass" },
+      { "id": "square_0-1", "type": "grass" },
+      { "id": "square_0-2", "type": "grass" },
+      { "id": "square_0-3", "type": "grass" },
+      { "id": "square_0-4", "type": "grass" }
     ],
-    "units": [
-        {
-            "id": "spearman-0",
-            "class": "spearman",
-            "playerId": "2",
-            "category": "military",
-            "movement": {
-                "distance": 1,
-                "localization": "square_1-0"
-            },
-            "movementInTurn": {
-                "turn": 0,
-                "moved": false
-            }
-        },
-        {
-            "id": "castle-1",
-            "class": "castle",
-            "playerId": "2",
-            "category": "structure",
-            "movement": {
-                "distance": 0,
-                "localization": "square_1-1"
-            },
-            "movementInTurn": {
-                "turn": 0,
-                "moved": false
-            }
-        },
-        {
-            "id": "spearman-2",
-            "class": "spearman",
-            "playerId": "2",
-            "category": "military",
-            "movement": {
-                "distance": 1,
-                "localization": "square_1-2"
-            },
-            "movementInTurn": {
-                "turn": 0,
-                "moved": false
-            }
-        },
-        {
-            "id": "wall-3",
-            "class": "wall",
-            "playerId": "2",
-            "category": "structure",
-            "movement": {
-                "distance": 0,
-                "localization": "square_2-0"
-            },
-            "movementInTurn": {
-                "turn": 0,
-                "moved": false
-            }
-        },
-        {
-            "id": "wall-4",
-            "class": "wall",
-            "playerId": "2",
-            "category": "structure",
-            "movement": {
-                "distance": 0,
-                "localization": "square_2-1"
-            },
-            "movementInTurn": {
-                "turn": 0,
-                "moved": false
-            }
-        },
-        {
-            "id": "gate-5",
-            "class": "gate",
-            "playerId": "2",
-            "category": "structure",
-            "movement": {
-                "distance": 0,
-                "localization": "square_2-2"
-            },
-            "movementInTurn": {
-                "turn": 0,
-                "moved": false
-            }
-        },
-        {
-            "id": "wall-6",
-            "class": "wall",
-            "playerId": "2",
-            "category": "structure",
-            "movement": {
-                "distance": 0,
-                "localization": "square_2-3"
-            },
-            "movementInTurn": {
-                "turn": 0,
-                "moved": false
-            }
-        },
-        {
-            "id": "gate-7",
-            "class": "gate",
-            "playerId": "2",
-            "category": "structure",
-            "movement": {
-                "distance": 0,
-                "localization": "square_2-4"
-            },
-            "movementInTurn": {
-                "turn": 0,
-                "moved": false
-            }
-        },
-        {
-            "id": "wall-8",
-            "class": "wall",
-            "playerId": "2",
-            "category": "structure",
-            "movement": {
-                "distance": 0,
-                "localization": "square_6-0"
-            },
-            "movementInTurn": {
-                "turn": 0,
-                "moved": false
-            }
-        },
-        {
-            "id": "wall-9",
-            "class": "wall",
-            "playerId": "2",
-            "category": "structure",
-            "movement": {
-                "distance": 0,
-                "localization": "square_6-1"
-            },
-            "movementInTurn": {
-                "turn": 0,
-                "moved": false
-            }
-        },
-        {
-            "id": "gate-10",
-            "class": "gate",
-            "playerId": "2",
-            "category": "structure",
-            "movement": {
-                "distance": 0,
-                "localization": "square_6-2"
-            },
-            "movementInTurn": {
-                "turn": 0,
-                "moved": false
-            }
-        },
-        {
-            "id": "wall-11",
-            "class": "wall",
-            "playerId": "2",
-            "category": "structure",
-            "movement": {
-                "distance": 0,
-                "localization": "square_6-3"
-            },
-            "movementInTurn": {
-                "turn": 0,
-                "moved": false
-            }
-        },
-        {
-            "id": "gate-12",
-            "class": "gate",
-            "playerId": "2",
-            "category": "structure",
-            "movement": {
-                "distance": 0,
-                "localization": "square_6-4"
-            },
-            "movementInTurn": {
-                "turn": 0,
-                "moved": false
-            }
-        },
-        {
-            "id": "spearman-13",
-            "class": "spearman",
-            "playerId": "2",
-            "category": "military",
-            "movement": {
-                "distance": 1,
-                "localization": "square_7-0"
-            },
-            "movementInTurn": {
-                "turn": 0,
-                "moved": false
-            }
-        },
-        {
-            "id": "castle-14",
-            "class": "castle",
-            "playerId": "2",
-            "category": "structure",
-            "movement": {
-                "distance": 0,
-                "localization": "square_7-1"
-            },
-            "movementInTurn": {
-                "turn": 0,
-                "moved": false
-            }
-        },
-        {
-            "id": "spearman-15",
-            "class": "spearman",
-            "playerId": "2",
-            "category": "military",
-            "movement": {
-                "distance": 1,
-                "localization": "square_7-2"
-            },
-            "movementInTurn": {
-                "turn": 0,
-                "moved": false
-            }
-        }
+    [
+      { "id": "square_1-0", "type": "grass" },
+      { "id": "square_1-1", "type": "grass" },
+      { "id": "square_1-2", "type": "grass" },
+      { "id": "square_1-3", "type": "grass" },
+      { "id": "square_1-4", "type": "grass" }
+    ],
+    [
+      { "id": "square_2-0", "type": "grass" },
+      { "id": "square_2-1", "type": "grass" },
+      { "id": "square_2-2", "type": "grass" },
+      { "id": "square_2-3", "type": "grass" },
+      { "id": "square_2-4", "type": "grass" }
+    ],
+    [
+      { "id": "square_3-0", "type": "grass" },
+      { "id": "square_3-1", "type": "grass" },
+      { "id": "square_3-2", "type": "grass" },
+      { "id": "square_3-3", "type": "grass" },
+      { "id": "square_3-4", "type": "grass" }
+    ],
+    [
+      { "id": "square_4-0", "type": "grass" },
+      { "id": "square_4-1", "type": "grass" },
+      { "id": "square_4-2", "type": "grass" },
+      { "id": "square_4-3", "type": "grass" },
+      { "id": "square_4-4", "type": "grass" }
+    ],
+    [
+      { "id": "square_5-0", "type": "grass" },
+      { "id": "square_5-1", "type": "grass" },
+      { "id": "square_5-2", "type": "grass" },
+      { "id": "square_5-3", "type": "grass" },
+      { "id": "square_5-4", "type": "grass" }
+    ],
+    [
+      { "id": "square_6-0", "type": "grass" },
+      { "id": "square_6-1", "type": "grass" },
+      { "id": "square_6-2", "type": "grass" },
+      { "id": "square_6-3", "type": "grass" },
+      { "id": "square_6-4", "type": "grass" }
+    ],
+    [
+      { "id": "square_7-0", "type": "grass" },
+      { "id": "square_7-1", "type": "grass" },
+      { "id": "square_7-2", "type": "grass" },
+      { "id": "square_7-3", "type": "grass" },
+      { "id": "square_7-4", "type": "grass" }
+    ],
+    [
+      { "id": "square_8-0", "type": "grass" },
+      { "id": "square_8-1", "type": "grass" },
+      { "id": "square_8-2", "type": "grass" },
+      { "id": "square_8-3", "type": "grass" },
+      { "id": "square_8-4", "type": "grass" }
     ]
+  ],
+  "units": [
+    {
+      "id": "spearman-0",
+      "class": "spearman",
+      "playerId": "b",
+      "category": "military",
+      "movement": { "distance": 1, "localization": "square_1-0" },
+      "movementInTurn": { "turn": 1, "moved": false }
+    },
+    {
+      "id": "castle-1",
+      "class": "castle",
+      "playerId": "b",
+      "category": "structure",
+      "movement": { "distance": 0, "localization": "square_1-1" },
+      "movementInTurn": { "turn": 1, "moved": false }
+    },
+    {
+      "id": "spearman-2",
+      "class": "spearman",
+      "playerId": "b",
+      "category": "military",
+      "movement": { "distance": 1, "localization": "square_1-2" },
+      "movementInTurn": { "turn": 1, "moved": false }
+    },
+    {
+      "id": "wall-3",
+      "class": "wall",
+      "playerId": "b",
+      "category": "structure",
+      "movement": { "distance": 0, "localization": "square_2-0" },
+      "movementInTurn": { "turn": 1, "moved": false }
+    },
+    {
+      "id": "wall-4",
+      "class": "wall",
+      "playerId": "b",
+      "category": "structure",
+      "movement": { "distance": 0, "localization": "square_2-1" },
+      "movementInTurn": { "turn": 1, "moved": false }
+    },
+    {
+      "id": "gate-5",
+      "class": "gate",
+      "playerId": "b",
+      "category": "structure",
+      "movement": { "distance": 0, "localization": "square_2-2" },
+      "movementInTurn": { "turn": 1, "moved": false }
+    },
+    {
+      "id": "wall-6",
+      "class": "wall",
+      "playerId": "b",
+      "category": "structure",
+      "movement": { "distance": 0, "localization": "square_2-3" },
+      "movementInTurn": { "turn": 1, "moved": false }
+    },
+    {
+      "id": "gate-7",
+      "class": "gate",
+      "playerId": "b",
+      "category": "structure",
+      "movement": { "distance": 0, "localization": "square_2-4" },
+      "movementInTurn": { "turn": 1, "moved": false }
+    },
+    {
+      "id": "wall-8",
+      "class": "wall",
+      "playerId": "b",
+      "category": "structure",
+      "movement": { "distance": 0, "localization": "square_6-0" },
+      "movementInTurn": { "turn": 1, "moved": false }
+    },
+    {
+      "id": "wall-9",
+      "class": "wall",
+      "playerId": "b",
+      "category": "structure",
+      "movement": { "distance": 0, "localization": "square_6-1" },
+      "movementInTurn": { "turn": 1, "moved": false }
+    },
+    {
+      "id": "gate-10",
+      "class": "gate",
+      "playerId": "b",
+      "category": "structure",
+      "movement": { "distance": 0, "localization": "square_6-2" },
+      "movementInTurn": { "turn": 1, "moved": false }
+    },
+    {
+      "id": "wall-11",
+      "class": "wall",
+      "playerId": "b",
+      "category": "structure",
+      "movement": { "distance": 0, "localization": "square_6-3" },
+      "movementInTurn": { "turn": 1, "moved": false }
+    },
+    {
+      "id": "gate-12",
+      "class": "gate",
+      "playerId": "b",
+      "category": "structure",
+      "movement": { "distance": 0, "localization": "square_6-4" },
+      "movementInTurn": { "turn": 1, "moved": false }
+    },
+    {
+      "id": "spearman-13",
+      "class": "spearman",
+      "playerId": "b",
+      "category": "military",
+      "movement": { "distance": 1, "localization": "square_7-0" },
+      "movementInTurn": { "turn": 1, "moved": false }
+    },
+    {
+      "id": "castle-14",
+      "class": "castle",
+      "playerId": "b",
+      "category": "structure",
+      "movement": { "distance": 0, "localization": "square_7-1" },
+      "movementInTurn": { "turn": 1, "moved": false }
+    },
+    {
+      "id": "spearman-15",
+      "class": "spearman",
+      "playerId": "b",
+      "category": "military",
+      "movement": { "distance": 1, "localization": "square_7-2" },
+      "movementInTurn": { "turn": 1, "moved": false }
+    }
+  ]
 }

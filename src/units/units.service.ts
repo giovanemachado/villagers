@@ -5,13 +5,17 @@ import {
   UnitData,
   UnitMovement,
 } from './dto/unit-data.dto';
+import {
+  INITIAL_TURN,
+  PLAYER_CODE,
+} from '../static-data/definitions/constants';
 
 @Injectable()
 export class UnitsService {
   generateStaticUnit(unitClass: UNIT_CLASS): UnitData {
     let unitTag: UNIT_CLASS = UNIT_CLASS.ARCHER;
     let unitCategory: UNIT_CATEGORY = UNIT_CATEGORY.MILITARY;
-    let unitMovement: UnitMovement = {
+    const unitMovement: UnitMovement = {
       distance: 1,
       localization: '',
     };
@@ -53,7 +57,7 @@ export class UnitsService {
       category: unitCategory,
       movement: unitMovement,
       movementInTurn: {
-        turn: 0,
+        turn: INITIAL_TURN,
         moved: false,
       },
     };
@@ -61,9 +65,9 @@ export class UnitsService {
 
   setUnitsToPlayers(units: UnitData[], playerIds: string[]) {
     units.forEach((unit) => {
-      if (unit.playerId === 'A') {
+      if (unit.playerId == PLAYER_CODE.A) {
         unit.playerId = playerIds[0];
-      } else if (unit.playerId === 'B') {
+      } else if (unit.playerId == PLAYER_CODE.B) {
         unit.playerId = playerIds[1];
       }
     });

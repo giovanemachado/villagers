@@ -12,6 +12,22 @@ export class MatchesService {
     private eventsGateway: EventsGateway,
   ) {}
 
+  async getValidMatch(code: string): Promise<MatchData> {
+    const match = await this.prismaService.match.findUnique({
+      where: { code },
+    });
+
+    if (!match) {
+      throw 'Non existent Match.';
+    }
+
+    if (!match.active) {
+      throw 'Match is inactive.';
+    }
+
+    return match;
+  }
+
   async createMatch(matchCreate: MatchDataCreate): Promise<MatchData> {
     try {
       const match = await this.prismaService.match.create({
@@ -33,25 +49,18 @@ export class MatchesService {
 
   async enterInMatch(playerId: string, code: string): Promise<MatchData> {
     try {
-      const match = await this.prismaService.match.findUnique({
-        where: { code },
-      });
+      const match = await this.getValidMatch(code);
 
-      if (!match) {
-        throw 'Non existent Match.';
-      }
+      // Temp
+      return match;
 
-      if (!match.active) {
-        throw 'Match is inactive.';
-      }
+      // if (match.players.length >= match.numberOfPlayers) {
+      //   throw 'Match is full.';
+      // }
 
-      if (match.players.length >= match.numberOfPlayers) {
-        throw 'Match is full.';
-      }
-
-      if (match.players.includes(playerId)) {
-        throw 'Player is already in this room.';
-      }
+      // if (match.players.includes(playerId)) {
+      //   throw 'Player is already in this room.';
+      // }
 
       const result = await this.prismaService.match.update({
         where: {
