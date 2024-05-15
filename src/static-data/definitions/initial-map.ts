@@ -44,39 +44,21 @@ const gatesRow: SquareDefinitionData[] = [
   gateInSquare,
 ];
 
-// problem here, array is not working properly (or it is, dunno, need to make sure its not a ref copy)
-const castleRowB = Array.from(
-  castleRow.map((square) => {
-    if (square.unitDefinitionClass) {
-      square.playerId = PLAYER_CODE.B;
-    }
-
-    return square;
-  }),
-);
-
-const castleRowA = Array.from(
-  castleRow.map((square) => {
-    if (square.unitDefinitionClass) {
-      square.playerId = PLAYER_CODE.A;
-    }
-
-    return square;
-  }),
-);
-
-console.log(castleRowA);
-console.log(castleRowB);
-
 export const initial_map_definition: SquareDefinitionData[][] = [
   defaultRow,
-  castleRowA,
+  castleRow.map((square) => {
+    if (square.unitDefinitionClass) {
+      square.playerId = PLAYER_CODE.A;
+    }
+
+    return { ...square };
+  }),
   gatesRow.map((square) => {
     if (square.unitDefinitionClass) {
       square.playerId = PLAYER_CODE.A;
     }
 
-    return square;
+    return { ...square };
   }),
   defaultRow,
   defaultRow,
@@ -86,8 +68,14 @@ export const initial_map_definition: SquareDefinitionData[][] = [
       square.playerId = PLAYER_CODE.B;
     }
 
-    return square;
+    return { ...square };
   }),
-  castleRowB,
+  castleRow.map((square) => {
+    if (square.unitDefinitionClass) {
+      square.playerId = PLAYER_CODE.B;
+    }
+
+    return { ...square };
+  }),
   defaultRow,
 ];

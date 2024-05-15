@@ -67,7 +67,6 @@ const generateMap = (inputMapDefinition: string, unitService: UnitsService) => {
   const rows: SquareData[][] = [];
   const units: UnitData[] = [];
 
-  console.log(map_definition);
   map_definition.map((rows_definition, rows_index) => {
     const squares: SquareData[] = [];
     squareCount = 0;
@@ -86,7 +85,6 @@ const generateMap = (inputMapDefinition: string, unitService: UnitsService) => {
         );
         unit.id = generateUnitId(unit.class);
         unit.movement.localization = id;
-        console.log('row_definition', row_definition);
         unit.playerId = row_definition.playerId ?? '';
 
         units.push(unit);

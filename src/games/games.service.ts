@@ -70,8 +70,6 @@ export class GamesService {
       match.players,
     );
 
-    console.log('tomar no cu ?', unitsPerPlayer);
-
     return {
       turns: INITIAL_TURN,
       money: this.moneyService.getMoney(INITIAL_TURN, [
