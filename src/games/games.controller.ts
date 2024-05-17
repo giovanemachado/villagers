@@ -25,7 +25,7 @@ export class GamesController {
     return this.gamesService.getInitialGameState(code);
   }
 
-  @Post(':code/state/')
+  @Post('/turn/:code')
   updateTurn(
     @Param() { code }: { code: string },
     @Body()

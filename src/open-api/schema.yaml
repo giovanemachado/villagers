@@ -33,7 +33,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GameState"
-  /games/{code}/state:
+  /games/turn/{code}:
     post:
       operationId: updateTurn
       parameters: []
