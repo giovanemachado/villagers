@@ -12,6 +12,6 @@ export class EventsGateway {
   server: Server;
 
   emitEvent(event: EVENT_TYPES, data?: EventData) {
-    this.server.emit(event, { data: '...' });
+    this.server.emit(event, { data });
   }
 }
