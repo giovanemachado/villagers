@@ -113,10 +113,13 @@ components:
           type: string
         playerId:
           type: string
+        movedInTurn:
+          type: boolean
       required:
         - id
         - localization
         - playerId
+        - movedInTurn
     MatchState:
       type: object
       properties:
@@ -178,11 +181,11 @@ components:
       properties:
         distance:
           type: number
-        localization:
+        initialLocalization:
           type: string
       required:
         - distance
-        - localization
+        - initialLocalization
     UnitData:
       type: object
       properties:
@@ -206,22 +209,12 @@ components:
             - wall
         movement:
           $ref: "#/components/schemas/UnitMovement"
-        movementInTurn:
-          type: object
-          properties:
-            turn:
-              required: true
-              type: number
-            moved:
-              required: true
-              type: boolean
       required:
         - id
         - category
         - playerId
         - class
         - movement
-        - movementInTurn
     GetMapResponse:
       type: object
       properties:

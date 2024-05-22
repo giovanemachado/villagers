@@ -56,7 +56,9 @@ export class MatchesService {
       const match = await this.getValidMatch(code);
 
       if (match.players.includes(playerId)) {
-        this.eventsGateway.emitEvent(EVENT_TYPES.ENTER_IN_MATCH);
+        this.eventsGateway.emitEvent(EVENT_TYPES.ENTER_IN_MATCH, {
+          matchCode: match.code,
+        });
         return match;
       }
 
@@ -79,7 +81,9 @@ export class MatchesService {
       });
 
       if (result.active) {
-        this.eventsGateway.emitEvent(EVENT_TYPES.ENTER_IN_MATCH);
+        this.eventsGateway.emitEvent(EVENT_TYPES.ENTER_IN_MATCH, {
+          matchCode: match.code,
+        });
       }
 
       return result;

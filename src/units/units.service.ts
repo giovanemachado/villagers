@@ -5,11 +5,7 @@ import {
   UnitData,
   UnitMovement,
 } from './dto/unit-data.dto';
-import {
-  INITIAL_TURN,
-  PLAYER_CODE,
-} from '../static-data/definitions/constants';
-// import { MatchStateUnitsMovement } from 'src/match-states/dto/match-state.dto';
+import { PLAYER_CODE } from '../static-data/definitions/constants';
 
 @Injectable()
 export class UnitsService {
@@ -18,7 +14,7 @@ export class UnitsService {
     let unitCategory: UNIT_CATEGORY = UNIT_CATEGORY.MILITARY;
     const unitMovement: UnitMovement = {
       distance: 1,
-      localization: '',
+      initialLocalization: '',
     };
 
     switch (unitClass) {
@@ -57,10 +53,6 @@ export class UnitsService {
       playerId: '',
       category: unitCategory,
       movement: unitMovement,
-      movementInTurn: {
-        turn: INITIAL_TURN,
-        moved: false,
-      },
     };
   }
 
@@ -75,22 +67,4 @@ export class UnitsService {
 
     return units;
   }
-
-  // getUnitsMovement(units: UnitData[], turn: number): MatchStateUnitsMovement[] {
-  //   if (turn === INITIAL_TURN) {
-  //     return [];
-  //   }
-
-  //   const unitsMovement: MatchStateUnitsMovement[] = [];
-
-  //   units.forEach((u) => {
-  //     unitsMovement.push({
-  //       id: u.id,
-  //       localization: u.movement.localization,
-  //       playerId: u.playerId,
-  //     });
-  //   });
-
-  //   return unitsMovement;
-  // }
 }

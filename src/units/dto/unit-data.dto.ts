@@ -14,7 +14,7 @@ export enum UNIT_CLASS {
 
 export class UnitMovement {
   distance: number;
-  localization: string;
+  initialLocalization: string;
 }
 
 export class UnitData {
@@ -23,8 +23,4 @@ export class UnitData {
   playerId: string;
   class: UNIT_CLASS;
   movement: UnitMovement;
-  movementInTurn: {
-    turn: number;
-    moved: boolean;
-  };
 }

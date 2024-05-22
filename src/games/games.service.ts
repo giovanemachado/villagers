@@ -108,11 +108,15 @@ export class GamesService {
     playerId: string,
     matchStateUpdate: MatchStateUpdate,
   ) {
-    this.matchStatesService.updateMatchState(code, playerId, matchStateUpdate);
+    return await this.matchStatesService.updateMatchState(
+      code,
+      playerId,
+      matchStateUpdate,
+    );
   }
 
   async getMatchActiveByPlayer(playerId: string): Promise<MatchData | null> {
-    const r = await this.prismaService.match.findFirst({
+    const match = await this.prismaService.match.findFirst({
       where: {
         players: {
           has: playerId,
@@ -121,8 +125,6 @@ export class GamesService {
       },
     });
 
-    console.log('haha', r);
-
-    return r;
+    return match;
   }
 }

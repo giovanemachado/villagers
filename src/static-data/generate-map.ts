@@ -84,7 +84,7 @@ const generateMap = (inputMapDefinition: string, unitService: UnitsService) => {
           row_definition.unitDefinitionClass,
         );
         unit.id = generateUnitId(unit.class);
-        unit.movement.localization = id;
+        unit.movement.initialLocalization = id;
         unit.playerId = row_definition.playerId ?? '';
 
         units.push(unit);

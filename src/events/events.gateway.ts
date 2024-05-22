@@ -1,6 +1,6 @@
 import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server } from 'socket.io';
-import { EVENT_TYPES, EventData } from './dto/event-data.dto';
+import { EVENT_TYPES } from './dto/event-data.dto';
 
 @WebSocketGateway({
   cors: {
@@ -11,7 +11,7 @@ export class EventsGateway {
   @WebSocketServer()
   server: Server;
 
-  emitEvent(event: EVENT_TYPES, data?: EventData) {
-    this.server.emit(event, { data });
+  emitEvent(event: EVENT_TYPES, data?: any) {
+    this.server.emit(event, { ...data });
   }
 }

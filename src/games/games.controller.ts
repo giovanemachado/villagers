@@ -59,7 +59,7 @@ export class GamesController {
     { unitsMovement, money, turns }: MatchStateUpdate,
     @Req() { player }: { player: { id: string } },
   ) {
-    await this.gamesService.updateMatchState(code, player.id, {
+    return await this.gamesService.updateMatchState(code, player.id, {
       money,
       unitsMovement,
       turns,

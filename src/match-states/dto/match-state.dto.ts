@@ -5,6 +5,7 @@ export class MatchStateUnitsMovement {
   id: string;
   localization: string;
   playerId: string;
+  movedInTurn: boolean;
 }
 
 export class MatchStatePlayerEndTurn {

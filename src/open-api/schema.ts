@@ -10,7 +10,7 @@ export interface paths {
   '/games/enter-match/{code}': {
     post: operations['enterInMatch'];
   };
-  '/games/initial-data/{code}': {
+  '/games/initial-data': {
     get: operations['getMap'];
   };
   '/games/match-state/{code}': {
@@ -45,6 +45,7 @@ export interface components {
       id: string;
       localization: string;
       playerId: string;
+      movedInTurn: boolean;
     };
     MatchState: {
       playersEndTurn: components['schemas']['MatchStatePlayerEndTurn'][];
@@ -68,7 +69,7 @@ export interface components {
     };
     UnitMovement: {
       distance: number;
-      localization: string;
+      initialLocalization: string;
     };
     UnitData: {
       id: string;
@@ -78,15 +79,12 @@ export interface components {
       /** @enum {string} */
       class: 'castle' | 'gate' | 'archer' | 'spearman' | 'horseman' | 'wall';
       movement: components['schemas']['UnitMovement'];
-      movementInTurn: {
-        turn?: number;
-        moved?: boolean;
-      };
     };
     GetMapResponse: {
       rows: components['schemas']['SquareData'][][];
       units: components['schemas']['UnitData'][];
       matchState: components['schemas']['MatchState'];
+      matchData: components['schemas']['MatchData'];
     };
     MatchStateUpdate: Record<string, never>;
   };

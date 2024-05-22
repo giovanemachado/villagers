@@ -1,5 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { MatchState, MatchStateUpdate } from './dto/match-state.dto';
+import {
+  MatchState,
+  MatchStateUnitsMovement,
+  MatchStateUpdate,
+} from './dto/match-state.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { MoneyService } from 'src/money/money.service';
 import { MatchesService } from 'src/matches/matches.service';
@@ -83,7 +87,7 @@ export class MatchStatesService {
     matchStateUpdate: MatchStateUpdate,
   ) {
     try {
-      const queryResult = await this.prismaService.match.findUnique({
+      const match = await this.prismaService.match.findUnique({
         // TODO usar match service
         where: { code },
         include: {
@@ -99,11 +103,11 @@ export class MatchStatesService {
         },
       });
 
-      if (!queryResult || !queryResult.matchState) {
+      if (!match || !match.matchState) {
         throw 'Cant update match state';
       }
 
-      const currentMatchState = queryResult.matchState as unknown as MatchState;
+      const currentMatchState = match.matchState as unknown as MatchState;
 
       if (
         currentMatchState.playersEndTurn.find((x) => x.playerId == playerId)
@@ -138,7 +142,7 @@ export class MatchStatesService {
         itShouldPassTurnForBothPlayers = true;
       }
 
-      await this.prismaService.matchState.update({
+      const matchState = await this.prismaService.matchState.update({
         where: {
           id: currentMatchState.id,
         },
@@ -149,7 +153,7 @@ export class MatchStatesService {
             currentMatchState,
             playerId,
             matchStateUpdate,
-          ),
+          ) as any,
           money: this.updateMoney(
             currentMatchState,
             playerId,
@@ -159,8 +163,13 @@ export class MatchStatesService {
       });
 
       if (itShouldPassTurnForBothPlayers) {
-        this.eventsGateway.emitEvent(EVENT_TYPES.BOTH_PLAYERS_ENDED_TURN);
+        this.eventsGateway.emitEvent(EVENT_TYPES.BOTH_PLAYERS_ENDED_TURN, {
+          matchCode: match.code,
+          matchState,
+        });
       }
+
+      return matchState;
     } catch (error) {
       console.log(error);
       throw new Error('Problem to update match state');
@@ -198,33 +207,33 @@ export class MatchStatesService {
     playerId: string,
     matchStateUpdate: MatchStateUpdate,
   ) {
-    return currentMatchState.unitsMovement.map(
-      (unitMovement: {
-        id: string;
-        localization: string;
-        playerId: string;
-      }) => {
-        const unitUpdated = matchStateUpdate.unitsMovement.find((unit) => {
-          if (unit.playerId != playerId) {
-            return false;
-          }
+    const unitsOfThisPlayer: MatchStateUnitsMovement[] = [];
+    const unitsToAdd: MatchStateUnitsMovement[] = [];
 
-          if (unit.id != unitMovement.id) {
-            return false;
-          }
+    matchStateUpdate.unitsMovement.forEach((unitToUpdate) => {
+      if (unitToUpdate.playerId != playerId) {
+        return;
+      }
 
-          return true;
-        });
+      unitsOfThisPlayer.push(unitToUpdate);
+    });
 
-        if (!unitUpdated) {
-          return unitMovement;
-        }
+    unitsOfThisPlayer.forEach((unitToUpdate) => {
+      const unitInState = currentMatchState.unitsMovement.find(
+        (u) => u.id == unitToUpdate.id,
+      );
 
-        unitMovement.localization = unitUpdated.localization;
+      if (!unitInState) {
+        unitsToAdd.push({ ...unitToUpdate, movedInTurn: false });
+        return;
+      }
 
-        return unitMovement;
-      },
-    );
+      unitInState.localization = unitToUpdate.localization;
+      // this is set to true on front, during the turn
+      unitInState.movedInTurn = false;
+    });
+
+    return [...currentMatchState.unitsMovement, ...unitsToAdd];
   }
 
   // TODO move logic to money service
