@@ -18,13 +18,9 @@ paths:
       responses:
         "201":
           description: ""
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/MatchData"
-  /games/initial-load/{code}:
+  /games/initial-data/{code}:
     get:
-      operationId: getInitialGameState
+      operationId: getMap
       parameters: []
       responses:
         "200":
@@ -32,35 +28,20 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GameState"
-  /games/turn/{code}:
+                type: object
+  /games/match-state/{code}:
     post:
-      operationId: updateTurn
+      operationId: updateMatchState
       parameters: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/GameState"
+              $ref: "#/components/schemas/MatchStateUpdate"
       responses:
         "201":
           description: ""
-          content:
-            application/json:
-              schema:
-                type: object
-  /games/initial-map/{code}:
-    get:
-      operationId: getInitialMap
-      parameters: []
-      responses:
-        "200":
-          description: ""
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/MapData"
 info:
   title: Villagers
   description: Villagers is the backend for Castle Age.
@@ -77,12 +58,14 @@ components:
           type: number
         code:
           type: string
+        active:
+          type: boolean
         players:
           type: array
           items:
             type: string
-        active:
-          type: boolean
+        numberOfPlayers:
+          type: number
         createdAt:
           format: date-time
           type: string
@@ -92,108 +75,11 @@ components:
       required:
         - id
         - code
-        - players
         - active
+        - players
+        - numberOfPlayers
         - createdAt
         - updatedAt
-    MoneyData:
+    MatchStateUpdate:
       type: object
-      properties:
-        playerId:
-          type: string
-        value:
-          type: number
-      required:
-        - playerId
-        - value
-    UnitMovement:
-      type: object
-      properties:
-        distance:
-          type: number
-        localization:
-          type: string
-      required:
-        - distance
-        - localization
-    UnitData:
-      type: object
-      properties:
-        id:
-          type: string
-        category:
-          type: string
-          enum:
-            - military
-            - structure
-        playerId:
-          type: string
-        class:
-          type: string
-          enum:
-            - castle
-            - gate
-            - archer
-            - spearman
-            - horseman
-            - wall
-        movement:
-          $ref: "#/components/schemas/UnitMovement"
-        movementInTurn:
-          type: object
-          properties:
-            turn:
-              required: true
-              type: number
-            moved:
-              required: true
-              type: boolean
-      required:
-        - id
-        - category
-        - playerId
-        - class
-        - movement
-        - movementInTurn
-    GameState:
-      type: object
-      properties:
-        money:
-          type: array
-          items:
-            $ref: "#/components/schemas/MoneyData"
-        turns:
-          type: number
-        units:
-          type: array
-          items:
-            $ref: "#/components/schemas/UnitData"
-        match:
-          $ref: "#/components/schemas/MatchData"
-      required:
-        - money
-        - turns
-        - units
-        - match
-    SquareData:
-      type: object
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-      required:
-        - id
-        - type
-    MapData:
-      type: object
-      properties:
-        rows:
-          type: array
-          items:
-            required: true
-            type: array
-            items:
-              $ref: "#/components/schemas/SquareData"
-      required:
-        - rows
+      properties: {}

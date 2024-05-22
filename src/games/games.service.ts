@@ -1,12 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { GeneratedMap } from 'src/maps/dto/map-data.dto';
-import { GameState } from './dto/game-state.dto';
+import {
+  MatchState,
+  MatchStateUpdate,
+} from '../match-states/dto/match-state.dto';
 import { MoneyService } from 'src/money/money.service';
 import { UnitsService } from 'src/units/units.service';
-import { MatchData } from 'src/matches/dto/match-data.dto';
 import { StaticDataService } from 'src/static-data/static-data.service';
 import { MatchesService } from 'src/matches/matches.service';
-import { INITIAL_TURN } from 'src/static-data/definitions/constants';
+import { MatchStatesService } from 'src/match-states/match-states.service';
+import { UnitData } from 'src/units/dto/unit-data.dto';
+import { SquareData } from 'src/maps/dto/square-data.dto';
+import { Match } from '@prisma/client';
+import { MatchData } from 'src/matches/dto/match-data.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class GamesService {
@@ -15,69 +21,93 @@ export class GamesService {
     private readonly matchesService: MatchesService,
     private readonly moneyService: MoneyService,
     private readonly unitsService: UnitsService,
+    private readonly matchStatesService: MatchStatesService,
+    private readonly prismaService: PrismaService,
   ) {}
 
-  async getValidMatch(code: string): Promise<MatchData> {
+  async getValidMatch(code: string): Promise<Match> {
     return this.matchesService.getValidMatch(code);
   }
 
   async createMatch(playerId: string): Promise<MatchData> {
-    const match = await this.matchesService.createMatch({
+    return await this.matchesService.createMatch({
       // this is not really random and doesnt make sure we are getting unique values.
       code: '' + Math.floor(100000 + Math.random() * 900000),
       players: [playerId],
     });
-
-    return match;
   }
 
-  async enterInMatch(playerId: string, code: string): Promise<MatchData> {
-    const match = await this.matchesService.enterInMatch(playerId, code);
+  async enterInMatch(
+    playerId: string,
+    code: string,
+  ): Promise<{ match: MatchData; matchState: MatchState }> {
+    const result = await this.prismaService.$transaction(
+      async (prismaTransaction) => {
+        const match = await this.matchesService.enterInMatch(
+          playerId,
+          code,
+          prismaTransaction,
+        );
+        const matchState = await this.matchStatesService.createMatchState(
+          code,
+          playerId,
+          prismaTransaction,
+        );
 
-    return match;
+        return {
+          match,
+          matchState: {
+            playersEndTurn: matchState.playersEndTurn,
+            money: matchState.money,
+            turns: matchState.turns,
+            unitsMovement: matchState.unitsMovement,
+          } as unknown as MatchState, // TODO create a mapper from prisma values to match state values. Do as a duck type thing
+        };
+      },
+    );
+    return result;
   }
 
-  async getMap(): Promise<GeneratedMap> {
-    return await this.staticDataService.getStaticResource(
+  async getMap(): Promise<SquareData[][]> {
+    const { rows } = await this.staticDataService.getStaticResource(
       'maps',
       'initial-map.json',
     );
+
+    return rows;
   }
 
-  async updateGameState(
-    code: string,
-    state: Partial<GameState>,
-  ): Promise<Partial<GameState>> {
-    if (!state.units || !state.turns || !state.money) {
-      throw 'Missing data to update game state';
-    }
-
-    state.units.map((unit) => (unit.movementInTurn.moved = false));
-    state.turns++;
-    state.money = this.moneyService.getMoney(state.turns, state.money);
-
-    return {
-      ...state,
-    };
-  }
-
-  async getInitialGameState(code: string): Promise<GameState> {
+  async getUnits(code: string): Promise<UnitData[]> {
     const match = await this.getValidMatch(code);
-    const { units } = await this.getMap();
+    const { units } = await this.staticDataService.getStaticResource(
+      'maps',
+      'initial-map.json',
+    );
 
     const unitsPerPlayer = this.unitsService.setUnitsToPlayers(
       units,
       match.players,
     );
 
-    return {
-      turns: INITIAL_TURN,
-      money: this.moneyService.getMoney(INITIAL_TURN, [
-        { playerId: match.players[0], value: 0 },
-        { playerId: match.players[1], value: 0 },
-      ]),
-      units: unitsPerPlayer,
-      match,
-    };
+    return unitsPerPlayer;
+  }
+
+  async getMatchState(code: string): Promise<MatchState> {
+    return (await this.matchStatesService.getMatchState(
+      code,
+    )) as unknown as MatchState;
+  }
+
+  async updateMatchState(
+    code: string,
+    playerId: string,
+    matchStateUpdate: MatchStateUpdate,
+  ) {
+    this.matchStatesService.updateMatchState(
+      false, // TODO
+      code,
+      playerId,
+      matchStateUpdate,
+    );
   }
 }

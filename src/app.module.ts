@@ -11,6 +11,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.guard';
 import { StaticDataModule } from './static-data/static-data.module';
 import { EventsModule } from './events/events.module';
+import { MatchStatesModule } from './match-states/match-states.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { EventsModule } from './events/events.module';
     AuthModule,
     StaticDataModule,
     EventsModule,
+    MatchStatesModule,
   ],
   providers: [
     {

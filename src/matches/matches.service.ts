@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { MatchDataCreate } from './dto/match-create.dto';
-import { MatchData } from './dto/match-data.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { EventsGateway } from 'src/events/events.gateway';
 import { EVENT_TYPES } from 'src/events/dto/event-data.dto';
+import { MatchData } from './dto/match-data.dto';
 
 @Injectable()
 export class MatchesService {
@@ -47,22 +47,26 @@ export class MatchesService {
     }
   }
 
-  async enterInMatch(playerId: string, code: string): Promise<MatchData> {
+  async enterInMatch(
+    playerId: string,
+    code: string,
+    prismaTransaction?: any,
+  ): Promise<MatchData> {
     try {
       const match = await this.getValidMatch(code);
 
-      // Temp
-      return match;
+      if (match.players.length >= match.numberOfPlayers) {
+        throw 'Match is full.';
+      }
 
-      // if (match.players.length >= match.numberOfPlayers) {
-      //   throw 'Match is full.';
-      // }
+      if (match.players.includes(playerId)) {
+        throw 'Player is already in this room.';
+      }
 
-      // if (match.players.includes(playerId)) {
-      //   throw 'Player is already in this room.';
-      // }
+      const prismaClient = prismaTransaction ?? this.prismaService;
 
-      const result = await this.prismaService.match.update({
+      // TODO: move this logic to match service
+      const result = await prismaClient.match.update({
         where: {
           code,
         },
@@ -74,7 +78,7 @@ export class MatchesService {
       });
 
       if (result.active) {
-        this.eventsGateway.emitEvent(EVENT_TYPES.MATCH_CREATED);
+        this.eventsGateway.emitEvent(EVENT_TYPES.ENTER_IN_MATCH);
       }
 
       return result;

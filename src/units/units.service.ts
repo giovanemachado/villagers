@@ -9,6 +9,7 @@ import {
   INITIAL_TURN,
   PLAYER_CODE,
 } from '../static-data/definitions/constants';
+// import { MatchStateUnitsMovement } from 'src/match-states/dto/match-state.dto';
 
 @Injectable()
 export class UnitsService {
@@ -74,4 +75,22 @@ export class UnitsService {
 
     return units;
   }
+
+  // getUnitsMovement(units: UnitData[], turn: number): MatchStateUnitsMovement[] {
+  //   if (turn === INITIAL_TURN) {
+  //     return [];
+  //   }
+
+  //   const unitsMovement: MatchStateUnitsMovement[] = [];
+
+  //   units.forEach((u) => {
+  //     unitsMovement.push({
+  //       id: u.id,
+  //       localization: u.movement.localization,
+  //       playerId: u.playerId,
+  //     });
+  //   });
+
+  //   return unitsMovement;
+  // }
 }

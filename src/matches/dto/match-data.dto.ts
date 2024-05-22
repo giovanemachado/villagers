@@ -1,8 +1,9 @@
 export class MatchData {
   id: number;
   code: string;
-  players: string[];
   active: boolean;
+  players: string[];
+  numberOfPlayers: number;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -1,47 +1,65 @@
 import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
 import { GamesService } from './games.service';
-import { GameState } from './dto/game-state.dto';
-import { MapData } from 'src/maps/dto/map-data.dto';
+import {
+  MatchState,
+  MatchStateUpdate,
+} from '../match-states/dto/match-state.dto';
+import { GeneratedMap } from 'src/maps/dto/map-data.dto';
+import { MatchData } from 'src/matches/dto/match-data.dto';
 
 @Controller('games')
 export class GamesController {
   constructor(private readonly gamesService: GamesService) {}
 
+  /**
+   * Create a new Match and MatchState
+   */
   @Post('/match')
-  createMatch(@Req() { player }: { player: { id: string } }) {
+  createMatch(
+    @Req() { player }: { player: { id: string } },
+  ): Promise<MatchData> {
     return this.gamesService.createMatch(player.id);
   }
 
+  /**
+   * Enter in a Match (player is registered in that Match)
+   */
   @Post('/enter-match/:code')
   enterInMatch(
     @Req() { player }: { player: { id: string } },
     @Param() { code }: { code: string },
-  ) {
+  ): Promise<{ match: MatchData; matchState: MatchState }> {
     return this.gamesService.enterInMatch(player.id, code);
   }
 
-  @Get('/initial-load/:code')
-  getInitialGameState(@Param() { code }: { code: string }): Promise<GameState> {
-    return this.gamesService.getInitialGameState(code);
+  /**
+   * Get initial data (map, units, and current match state)
+   */
+  @Get('/initial-data/:code')
+  async getMap(
+    @Param() { code }: { code: string },
+  ): Promise<GeneratedMap & { matchState: MatchState }> {
+    const rows = await this.gamesService.getMap();
+    const units = await this.gamesService.getUnits(code);
+    const matchState = await this.gamesService.getMatchState(code);
+
+    return { rows, units, matchState };
   }
 
-  @Post('/turn/:code')
-  updateTurn(
+  /**
+   * Update the MatchState, when passing the turn
+   */
+  @Post('/match-state/:code')
+  async updateMatchState(
     @Param() { code }: { code: string },
     @Body()
-    { units, money, turns }: GameState,
+    { unitsMovement, money, turns }: MatchStateUpdate,
+    @Req() { player }: { player: { id: string } },
   ) {
-    return this.gamesService.updateGameState(code, {
+    await this.gamesService.updateMatchState(code, player.id, {
       money,
-      units,
+      unitsMovement,
       turns,
     });
-  }
-
-  @Get('/initial-map/:code')
-  getInitialMap(@Param() { code }: { code: string }): Promise<MapData> {
-    // TODO use match info to get a map
-    code;
-    return this.gamesService.getMap();
   }
 }

@@ -1,5 +1,5 @@
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -16,4 +16,18 @@ model Match {
   numberOfPlayers Int      @default(2)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+
+  matchState MatchState?
+}
+
+model MatchState {
+  id            Int      @id @default(autoincrement())
+  turns         Int      @default(1)
+  money         Json[]
+  unitsMovement Json[]
+  playersEndTurn Json[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  match         Match    @relation(fields: [matchId], references: [id])
+  matchId       Int      @unique
 }
