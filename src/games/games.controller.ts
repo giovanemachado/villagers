@@ -1,11 +1,8 @@
 import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
 import { GamesService } from './games.service';
-import {
-  MatchState,
-  MatchStateUpdate,
-} from '../match-states/dto/match-state.dto';
-import { GeneratedMap } from 'src/maps/dto/map-data.dto';
+import { MatchStateUpdate } from '../match-states/dto/match-state.dto';
 import { MatchData } from 'src/matches/dto/match-data.dto';
+import { EnterInMatchResponse, GetMapResponse } from './dto/game-responses.dto';
 
 @Controller('games')
 export class GamesController {
@@ -28,22 +25,28 @@ export class GamesController {
   enterInMatch(
     @Req() { player }: { player: { id: string } },
     @Param() { code }: { code: string },
-  ): Promise<{ match: MatchData; matchState: MatchState }> {
+  ): Promise<EnterInMatchResponse> {
     return this.gamesService.enterInMatch(player.id, code);
   }
 
   /**
    * Get initial data (map, units, and current match state)
    */
-  @Get('/initial-data/:code')
+  @Get('/initial-data')
   async getMap(
-    @Param() { code }: { code: string },
-  ): Promise<GeneratedMap & { matchState: MatchState }> {
-    const rows = await this.gamesService.getMap();
-    const units = await this.gamesService.getUnits(code);
-    const matchState = await this.gamesService.getMatchState(code);
+    @Req() { player }: { player: { id: string } },
+  ): Promise<GetMapResponse> {
+    const match = await this.gamesService.getMatchActiveByPlayer(player.id);
 
-    return { rows, units, matchState };
+    if (!match) {
+      throw 'There is no active match';
+    }
+
+    const rows = await this.gamesService.getMap();
+    const units = await this.gamesService.getUnits(match.code);
+    const matchState = await this.gamesService.getMatchState(match.code);
+
+    return { rows, units, matchState, matchData: match };
   }
 
   /**

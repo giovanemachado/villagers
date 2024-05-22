@@ -18,7 +18,11 @@ paths:
       responses:
         "201":
           description: ""
-  /games/initial-data/{code}:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EnterInMatchResponse"
+  /games/initial-data:
     get:
       operationId: getMap
       parameters: []
@@ -28,7 +32,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                $ref: "#/components/schemas/GetMapResponse"
   /games/match-state/{code}:
     post:
       operationId: updateMatchState
@@ -80,6 +84,167 @@ components:
         - numberOfPlayers
         - createdAt
         - updatedAt
+    MatchStatePlayerEndTurn:
+      type: object
+      properties:
+        playerId:
+          type: string
+        endedTurn:
+          type: boolean
+      required:
+        - playerId
+        - endedTurn
+    MoneyData:
+      type: object
+      properties:
+        playerId:
+          type: string
+        value:
+          type: number
+      required:
+        - playerId
+        - value
+    MatchStateUnitsMovement:
+      type: object
+      properties:
+        id:
+          type: string
+        localization:
+          type: string
+        playerId:
+          type: string
+      required:
+        - id
+        - localization
+        - playerId
+    MatchState:
+      type: object
+      properties:
+        playersEndTurn:
+          type: array
+          items:
+            $ref: "#/components/schemas/MatchStatePlayerEndTurn"
+        money:
+          type: array
+          items:
+            $ref: "#/components/schemas/MoneyData"
+        turns:
+          type: number
+        unitsMovement:
+          type: array
+          items:
+            $ref: "#/components/schemas/MatchStateUnitsMovement"
+        id:
+          type: number
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+        matchId:
+          type: number
+      required:
+        - playersEndTurn
+        - money
+        - turns
+        - unitsMovement
+        - id
+        - createdAt
+        - updatedAt
+        - matchId
+    EnterInMatchResponse:
+      type: object
+      properties:
+        match:
+          $ref: "#/components/schemas/MatchData"
+        matchState:
+          $ref: "#/components/schemas/MatchState"
+      required:
+        - match
+        - matchState
+    SquareData:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+      required:
+        - id
+        - type
+    UnitMovement:
+      type: object
+      properties:
+        distance:
+          type: number
+        localization:
+          type: string
+      required:
+        - distance
+        - localization
+    UnitData:
+      type: object
+      properties:
+        id:
+          type: string
+        category:
+          type: string
+          enum:
+            - military
+            - structure
+        playerId:
+          type: string
+        class:
+          type: string
+          enum:
+            - castle
+            - gate
+            - archer
+            - spearman
+            - horseman
+            - wall
+        movement:
+          $ref: "#/components/schemas/UnitMovement"
+        movementInTurn:
+          type: object
+          properties:
+            turn:
+              required: true
+              type: number
+            moved:
+              required: true
+              type: boolean
+      required:
+        - id
+        - category
+        - playerId
+        - class
+        - movement
+        - movementInTurn
+    GetMapResponse:
+      type: object
+      properties:
+        rows:
+          type: array
+          items:
+            required: true
+            type: array
+            items:
+              $ref: "#/components/schemas/SquareData"
+        units:
+          type: array
+          items:
+            $ref: "#/components/schemas/UnitData"
+        matchState:
+          $ref: "#/components/schemas/MatchState"
+        matchData:
+          $ref: "#/components/schemas/MatchData"
+      required:
+        - rows
+        - units
+        - matchState
+        - matchData
     MatchStateUpdate:
       type: object
       properties: {}

@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { MatchState, MatchStateUpdate } from './dto/match-state.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UnitsService } from 'src/units/units.service';
 import { MoneyService } from 'src/money/money.service';
 import { MatchesService } from 'src/matches/matches.service';
 import { INITIAL_TURN } from 'src/static-data/definitions/constants';
@@ -12,7 +11,6 @@ import { EventsGateway } from 'src/events/events.gateway';
 export class MatchStatesService {
   constructor(
     private prismaService: PrismaService,
-    private unitsService: UnitsService,
     private moneyService: MoneyService,
     private matchService: MatchesService,
     private eventsGateway: EventsGateway,
@@ -34,6 +32,7 @@ export class MatchStatesService {
 
       return queryResult.matchState as unknown as MatchState;
     } catch (error) {
+      console.log(error);
       throw 'Something went wrong with getMatchState';
     }
   }
@@ -51,7 +50,11 @@ export class MatchStatesService {
 
     const matchState = await prismaClient.matchState.create({
       data: {
-        matchId: match.id,
+        match: {
+          connect: {
+            id: match.id,
+          },
+        },
         playersEndTurn: [
           {
             playerId: player1,
@@ -75,7 +78,6 @@ export class MatchStatesService {
   }
 
   async updateMatchState(
-    isEnterInMatch: boolean,
     code: string,
     playerId: string,
     matchStateUpdate: MatchStateUpdate,
@@ -102,6 +104,14 @@ export class MatchStatesService {
       }
 
       const currentMatchState = queryResult.matchState as unknown as MatchState;
+
+      if (
+        currentMatchState.playersEndTurn.find((x) => x.playerId == playerId)
+          ?.endedTurn == true
+      ) {
+        throw 'Player already passed the turn';
+      }
+
       let itShouldPassTurnForBothPlayers = false;
 
       let playersEndTurnUpdated = this.updatePlayerEndTurn(

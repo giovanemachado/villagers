@@ -5,7 +5,3 @@ export class GeneratedMap {
   rows: SquareData[][];
   units: UnitData[];
 }
-
-export class MapData {
-  rows: SquareData[][];
-}

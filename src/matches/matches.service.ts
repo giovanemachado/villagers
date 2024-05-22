@@ -55,12 +55,13 @@ export class MatchesService {
     try {
       const match = await this.getValidMatch(code);
 
-      if (match.players.length >= match.numberOfPlayers) {
-        throw 'Match is full.';
+      if (match.players.includes(playerId)) {
+        this.eventsGateway.emitEvent(EVENT_TYPES.ENTER_IN_MATCH);
+        return match;
       }
 
-      if (match.players.includes(playerId)) {
-        throw 'Player is already in this room.';
+      if (match.players.length >= match.numberOfPlayers) {
+        throw 'Match is full.';
       }
 
       const prismaClient = prismaTransaction ?? this.prismaService;

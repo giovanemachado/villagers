@@ -3,7 +3,6 @@ import {
   MatchState,
   MatchStateUpdate,
 } from '../match-states/dto/match-state.dto';
-import { MoneyService } from 'src/money/money.service';
 import { UnitsService } from 'src/units/units.service';
 import { StaticDataService } from 'src/static-data/static-data.service';
 import { MatchesService } from 'src/matches/matches.service';
@@ -19,7 +18,6 @@ export class GamesService {
   constructor(
     private readonly staticDataService: StaticDataService,
     private readonly matchesService: MatchesService,
-    private readonly moneyService: MoneyService,
     private readonly unitsService: UnitsService,
     private readonly matchStatesService: MatchStatesService,
     private readonly prismaService: PrismaService,
@@ -30,8 +28,14 @@ export class GamesService {
   }
 
   async createMatch(playerId: string): Promise<MatchData> {
+    const activeMatch = await this.getMatchActiveByPlayer(playerId);
+
+    if (activeMatch) {
+      return activeMatch;
+    }
+
     return await this.matchesService.createMatch({
-      // this is not really random and doesnt make sure we are getting unique values.
+      // TODO this is not really random and doesnt make sure we are getting unique values.
       code: '' + Math.floor(100000 + Math.random() * 900000),
       players: [playerId],
     });
@@ -48,6 +52,7 @@ export class GamesService {
           code,
           prismaTransaction,
         );
+
         const matchState = await this.matchStatesService.createMatchState(
           code,
           playerId,
@@ -103,11 +108,21 @@ export class GamesService {
     playerId: string,
     matchStateUpdate: MatchStateUpdate,
   ) {
-    this.matchStatesService.updateMatchState(
-      false, // TODO
-      code,
-      playerId,
-      matchStateUpdate,
-    );
+    this.matchStatesService.updateMatchState(code, playerId, matchStateUpdate);
+  }
+
+  async getMatchActiveByPlayer(playerId: string): Promise<MatchData | null> {
+    const r = await this.prismaService.match.findFirst({
+      where: {
+        players: {
+          has: playerId,
+        },
+        active: true,
+      },
+    });
+
+    console.log('haha', r);
+
+    return r;
   }
 }
