@@ -53,11 +53,15 @@ export class GamesService {
           prismaTransaction,
         );
 
-        const matchState = await this.matchStatesService.createMatchState(
-          code,
-          playerId,
-          prismaTransaction,
-        );
+        let matchState = await this.getMatchState(code);
+
+        if (!matchState) {
+          matchState = await this.matchStatesService.createMatchState(
+            code,
+            playerId,
+            prismaTransaction,
+          );
+        }
 
         return {
           match,
@@ -97,10 +101,8 @@ export class GamesService {
     return unitsPerPlayer;
   }
 
-  async getMatchState(code: string): Promise<MatchState> {
-    return (await this.matchStatesService.getMatchState(
-      code,
-    )) as unknown as MatchState;
+  async getMatchState(code: string): Promise<MatchState | null> {
+    return await this.matchStatesService.getMatchState(code);
   }
 
   async updateMatchState(
@@ -116,7 +118,7 @@ export class GamesService {
   }
 
   async getMatchActiveByPlayer(playerId: string): Promise<MatchData | null> {
-    const match = await this.prismaService.match.findFirst({
+    return await this.prismaService.match.findFirst({
       where: {
         players: {
           has: playerId,
@@ -124,7 +126,5 @@ export class GamesService {
         active: true,
       },
     });
-
-    return match;
   }
 }

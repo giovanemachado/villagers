@@ -59,6 +59,7 @@ export class MatchesService {
         this.eventsGateway.emitEvent(EVENT_TYPES.ENTER_IN_MATCH, {
           matchCode: match.code,
         });
+
         return match;
       }
 

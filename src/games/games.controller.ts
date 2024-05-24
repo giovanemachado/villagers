@@ -19,6 +19,16 @@ export class GamesController {
   }
 
   /**
+   * Check if there is a Match
+   */
+  @Get('/match')
+  getMatch(
+    @Req() { player }: { player: { id: string } },
+  ): Promise<MatchData | null> {
+    return this.gamesService.getMatchActiveByPlayer(player.id);
+  }
+
+  /**
    * Enter in a Match (player is registered in that Match)
    */
   @Post('/enter-match/:code')
@@ -45,6 +55,10 @@ export class GamesController {
     const rows = await this.gamesService.getMap();
     const units = await this.gamesService.getUnits(match.code);
     const matchState = await this.gamesService.getMatchState(match.code);
+
+    if (!matchState) {
+      throw 'There is no Match State';
+    }
 
     return { rows, units, matchState, matchData: match };
   }

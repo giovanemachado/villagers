@@ -11,6 +11,16 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/MatchData"
+    get:
+      operationId: getMatch
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
   /games/enter-match/{code}:
     post:
       operationId: enterInMatch

@@ -20,7 +20,7 @@ export class MatchStatesService {
     private eventsGateway: EventsGateway,
   ) {}
 
-  async getMatchState(code: string): Promise<MatchState> {
+  async getMatchState(code: string): Promise<MatchState | null> {
     try {
       // TODO usar match service
       const queryResult = await this.prismaService.match.findUnique({
@@ -31,10 +31,10 @@ export class MatchStatesService {
       });
 
       if (!queryResult || !queryResult.matchState) {
-        throw 'Match State not found';
+        return null;
       }
 
-      return queryResult.matchState as unknown as MatchState;
+      return queryResult?.matchState as unknown as MatchState;
     } catch (error) {
       console.log(error);
       throw 'Something went wrong with getMatchState';
