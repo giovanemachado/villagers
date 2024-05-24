@@ -20,7 +20,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                $ref: "#/components/schemas/MatchData"
   /games/enter-match/{code}:
     post:
       operationId: enterInMatch

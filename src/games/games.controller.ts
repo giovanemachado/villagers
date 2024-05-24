@@ -1,8 +1,18 @@
-import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { GamesService } from './games.service';
 import { MatchStateUpdate } from '../match-states/dto/match-state.dto';
 import { MatchData } from 'src/matches/dto/match-data.dto';
 import { EnterInMatchResponse, GetMapResponse } from './dto/game-responses.dto';
+import { Response } from 'express';
 
 @Controller('games')
 export class GamesController {
@@ -22,10 +32,19 @@ export class GamesController {
    * Check if there is a Match
    */
   @Get('/match')
-  getMatch(
+  async getMatch(
     @Req() { player }: { player: { id: string } },
-  ): Promise<MatchData | null> {
-    return this.gamesService.getMatchActiveByPlayer(player.id);
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const activeMatch = await this.gamesService.getMatchActiveByPlayer(
+      player.id,
+    );
+
+    if (activeMatch) {
+      return activeMatch;
+    }
+
+    res.status(HttpStatus.NO_CONTENT);
   }
 
   /**
