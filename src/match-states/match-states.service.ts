@@ -48,7 +48,7 @@ export class MatchStatesService {
   ): Promise<MatchState> {
     const match = await this.matchService.getValidMatch(matchCode);
     const player1 = match.players[0];
-    const player2 = playerId;
+    const player2 = match.players[1];
 
     const prismaClient = prismaTransaction ?? this.prismaService;
 
