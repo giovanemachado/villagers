@@ -41,13 +41,13 @@ export class GamesService {
     });
   }
 
-  async enterInMatch(
+  async joinMatch(
     playerId: string,
     code: string,
   ): Promise<{ match: MatchData; matchState: MatchState }> {
     const result = await this.prismaService.$transaction(
       async (prismaTransaction) => {
-        const match = await this.matchesService.enterInMatch(
+        const match = await this.matchesService.joinMatch(
           playerId,
           code,
           prismaTransaction,
@@ -75,6 +75,10 @@ export class GamesService {
       },
     );
     return result;
+  }
+
+  async finishMatch(id: string, code: string) {
+    await this.matchesService.finishMatch(code, id);
   }
 
   async getMap(): Promise<SquareData[][]> {

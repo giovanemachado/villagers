@@ -48,14 +48,14 @@ export class GamesController {
   }
 
   /**
-   * Enter in a Match (player is registered in that Match)
+   * Join a Match (player is registered in that Match)
    */
-  @Post('/enter-match/:code')
-  enterInMatch(
+  @Post('/join-match/:code')
+  joinMatch(
     @Req() { player }: { player: { id: string } },
     @Param() { code }: { code: string },
   ): Promise<EnterInMatchResponse> {
-    return this.gamesService.enterInMatch(player.id, code);
+    return this.gamesService.joinMatch(player.id, code);
   }
 
   /**
@@ -97,5 +97,16 @@ export class GamesController {
       unitsMovement,
       turns,
     });
+  }
+
+  /**
+   * Finish a Match
+   */
+  @Post('/finish-match/:code')
+  async finishMatch(
+    @Req() { player }: { player: { id: string } },
+    @Param() { code }: { code: string },
+  ) {
+    return this.gamesService.finishMatch(player.id, code);
   }
 }

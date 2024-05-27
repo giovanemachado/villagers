@@ -47,7 +47,7 @@ export class MatchesService {
     }
   }
 
-  async enterInMatch(
+  async joinMatch(
     playerId: string,
     code: string,
     prismaTransaction?: any,
@@ -56,7 +56,7 @@ export class MatchesService {
       const match = await this.getValidMatch(code);
 
       if (match.players.includes(playerId)) {
-        this.eventsGateway.emitEvent(EVENT_TYPES.ENTER_IN_MATCH, {
+        this.eventsGateway.emitEvent(EVENT_TYPES.JOIN_MATCH, {
           matchCode: match.code,
         });
 
@@ -82,7 +82,7 @@ export class MatchesService {
       });
 
       if (result.active) {
-        this.eventsGateway.emitEvent(EVENT_TYPES.ENTER_IN_MATCH, {
+        this.eventsGateway.emitEvent(EVENT_TYPES.JOIN_MATCH, {
           matchCode: match.code,
         });
       }
@@ -91,6 +91,36 @@ export class MatchesService {
     } catch (error) {
       console.log(error);
       throw 'Match update failed';
+    }
+  }
+
+  async finishMatch(code: string, playerId: string) {
+    try {
+      const match = await this.getValidMatch(code);
+
+      if (!match.players.includes(playerId)) {
+        throw 'Player is not in this Match.';
+      }
+
+      if (!match) {
+        throw 'No match';
+      }
+
+      await this.prismaService.match.update({
+        where: {
+          code: code,
+        },
+        data: {
+          active: false,
+        },
+      });
+
+      this.eventsGateway.emitEvent(EVENT_TYPES.FINISH_MATCH, {
+        matchCode: match.code,
+      });
+    } catch (error) {
+      console.log(error);
+      throw 'Match end failed';
     }
   }
 }

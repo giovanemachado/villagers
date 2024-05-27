@@ -21,9 +21,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/MatchData"
-  /games/enter-match/{code}:
+  /games/join-match/{code}:
     post:
-      operationId: enterInMatch
+      operationId: joinMatch
       parameters: []
       responses:
         "201":
@@ -53,6 +53,13 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/MatchStateUpdate"
+      responses:
+        "201":
+          description: ""
+  /games/finish-match/{code}:
+    post:
+      operationId: finishMatch
+      parameters: []
       responses:
         "201":
           description: ""
