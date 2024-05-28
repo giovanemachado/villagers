@@ -1,15 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import {
-  MatchState,
-  MatchStateUnitsMovement,
-  MatchStateUpdate,
-} from './dto/match-state.dto';
+import { MatchState, MatchStateUpdate } from './dto/match-state.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { MoneyService } from 'src/money/money.service';
 import { MatchesService } from 'src/matches/matches.service';
 import { INITIAL_TURN } from 'src/static-data/definitions/constants';
 import { EVENT_TYPES } from 'src/events/dto/event-data.dto';
 import { EventsGateway } from 'src/events/events.gateway';
+import { UnitsService } from 'src/units/units.service';
 
 @Injectable()
 export class MatchStatesService {
@@ -18,6 +15,7 @@ export class MatchStatesService {
     private moneyService: MoneyService,
     private matchService: MatchesService,
     private eventsGateway: EventsGateway,
+    private unitsService: UnitsService,
   ) {}
 
   async getMatchState(code: string): Promise<MatchState | null> {
@@ -42,11 +40,10 @@ export class MatchStatesService {
   }
 
   async createMatchState(
-    matchCode: string,
-    playerId: string,
+    code: string,
     prismaTransaction?: any,
   ): Promise<MatchState> {
-    const match = await this.matchService.getValidMatch(matchCode);
+    const match = await this.matchService.getValidMatch({ code });
     const player1 = match.players[0];
     const player2 = match.players[1];
 
@@ -87,9 +84,8 @@ export class MatchStatesService {
     matchStateUpdate: MatchStateUpdate,
   ) {
     try {
-      const match = await this.prismaService.match.findUnique({
-        // TODO usar match service
-        where: { code },
+      const match = await this.matchService.getValidMatch({
+        code,
         include: {
           matchState: {
             select: {
@@ -104,16 +100,17 @@ export class MatchStatesService {
       });
 
       if (!match || !match.matchState) {
-        throw 'Cant update match state';
+        throw `Can't find Match (id: ${match?.id}) or Match State`;
       }
 
       const currentMatchState = match.matchState as unknown as MatchState;
 
       if (
-        currentMatchState.playersEndTurn.find((x) => x.playerId == playerId)
-          ?.endedTurn == true
+        currentMatchState.playersEndTurn.find(
+          (playerEndTurn) => playerEndTurn.playerId == playerId,
+        )?.endedTurn == true
       ) {
-        throw 'Player already passed the turn';
+        throw 'Player already passed the turn.';
       }
 
       let itShouldPassTurnForBothPlayers = false;
@@ -149,7 +146,7 @@ export class MatchStatesService {
         data: {
           playersEndTurn: playersEndTurnUpdated,
           turns: turnsUpdated,
-          unitsMovement: this.updateUnitsMovement(
+          unitsMovement: this.unitsService.updateUnitsMovement(
             currentMatchState,
             playerId,
             matchStateUpdate,
@@ -199,41 +196,6 @@ export class MatchStatesService {
 
   updateTurns(currentMatchState: Pick<MatchState, 'turns'>) {
     return currentMatchState.turns + 1;
-  }
-
-  // TODO move logic to units service
-  updateUnitsMovement(
-    currentMatchState: Pick<MatchState, 'unitsMovement'>,
-    playerId: string,
-    matchStateUpdate: MatchStateUpdate,
-  ) {
-    const unitsOfThisPlayer: MatchStateUnitsMovement[] = [];
-    const unitsToAdd: MatchStateUnitsMovement[] = [];
-
-    matchStateUpdate.unitsMovement.forEach((unitToUpdate) => {
-      if (unitToUpdate.playerId != playerId) {
-        return;
-      }
-
-      unitsOfThisPlayer.push(unitToUpdate);
-    });
-
-    unitsOfThisPlayer.forEach((unitToUpdate) => {
-      const unitInState = currentMatchState.unitsMovement.find(
-        (u) => u.id == unitToUpdate.id,
-      );
-
-      if (!unitInState) {
-        unitsToAdd.push({ ...unitToUpdate, movedInTurn: false });
-        return;
-      }
-
-      unitInState.localization = unitToUpdate.localization;
-      // this is set to true on front, during the turn
-      unitInState.movedInTurn = false;
-    });
-
-    return [...currentMatchState.unitsMovement, ...unitsToAdd];
   }
 
   // TODO move logic to money service

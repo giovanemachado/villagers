@@ -5,7 +5,10 @@ import {
 } from '../match-states/dto/match-state.dto';
 import { UnitsService } from 'src/units/units.service';
 import { StaticDataService } from 'src/static-data/static-data.service';
-import { MatchesService } from 'src/matches/matches.service';
+import {
+  GetValidMatchParams,
+  MatchesService,
+} from 'src/matches/matches.service';
 import { MatchStatesService } from 'src/match-states/match-states.service';
 import { UnitData } from 'src/units/dto/unit-data.dto';
 import { SquareData } from 'src/maps/dto/square-data.dto';
@@ -16,19 +19,26 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class GamesService {
   constructor(
-    private readonly staticDataService: StaticDataService,
-    private readonly matchesService: MatchesService,
-    private readonly unitsService: UnitsService,
-    private readonly matchStatesService: MatchStatesService,
-    private readonly prismaService: PrismaService,
+    private staticDataService: StaticDataService,
+    private matchesService: MatchesService,
+    private unitsService: UnitsService,
+    private matchStatesService: MatchStatesService,
+    private prismaService: PrismaService,
   ) {}
 
-  async getValidMatch(code: string): Promise<Match> {
-    return this.matchesService.getValidMatch(code);
+  async getValidMatch({
+    code,
+    playerId,
+    active,
+  }: GetValidMatchParams): Promise<Match> {
+    return this.matchesService.getValidMatch({ code, playerId, active });
   }
 
   async createMatch(playerId: string): Promise<MatchData> {
-    const activeMatch = await this.getMatchActiveByPlayer(playerId);
+    const activeMatch = await this.getValidMatch({
+      playerId,
+      active: true,
+    });
 
     if (activeMatch) {
       return activeMatch;
@@ -58,7 +68,6 @@ export class GamesService {
         if (!matchState) {
           matchState = await this.matchStatesService.createMatchState(
             code,
-            playerId,
             prismaTransaction,
           );
         }
@@ -91,7 +100,7 @@ export class GamesService {
   }
 
   async getUnits(code: string): Promise<UnitData[]> {
-    const match = await this.getValidMatch(code);
+    const match = await this.getValidMatch({ code });
     const { units } = await this.staticDataService.getStaticResource(
       'maps',
       'initial-map.json',
@@ -119,16 +128,5 @@ export class GamesService {
       playerId,
       matchStateUpdate,
     );
-  }
-
-  async getMatchActiveByPlayer(playerId: string): Promise<MatchData | null> {
-    return await this.prismaService.match.findFirst({
-      where: {
-        players: {
-          has: playerId,
-        },
-        active: true,
-      },
-    });
   }
 }

@@ -6,6 +6,11 @@ import {
   UnitMovement,
 } from './dto/unit-data.dto';
 import { PLAYER_CODE } from '../static-data/definitions/constants';
+import {
+  MatchState,
+  MatchStateUnitsMovement,
+  MatchStateUpdate,
+} from 'src/match-states/dto/match-state.dto';
 
 @Injectable()
 export class UnitsService {
@@ -66,5 +71,39 @@ export class UnitsService {
     });
 
     return units;
+  }
+
+  updateUnitsMovement(
+    currentMatchState: Pick<MatchState, 'unitsMovement'>,
+    playerId: string,
+    matchStateUpdate: MatchStateUpdate,
+  ) {
+    const unitsOfThisPlayer: MatchStateUnitsMovement[] = [];
+    const unitsToAdd: MatchStateUnitsMovement[] = [];
+
+    matchStateUpdate.unitsMovement.forEach((unitToUpdate) => {
+      if (unitToUpdate.playerId != playerId) {
+        return;
+      }
+
+      unitsOfThisPlayer.push(unitToUpdate);
+    });
+
+    unitsOfThisPlayer.forEach((unitToUpdate) => {
+      const unitInState = currentMatchState.unitsMovement.find(
+        (u) => u.id == unitToUpdate.id,
+      );
+
+      if (!unitInState) {
+        unitsToAdd.push({ ...unitToUpdate, movedInTurn: false });
+        return;
+      }
+
+      unitInState.localization = unitToUpdate.localization;
+      // this is set to true on front, during the turn
+      unitInState.movedInTurn = false;
+    });
+
+    return [...currentMatchState.unitsMovement, ...unitsToAdd];
   }
 }

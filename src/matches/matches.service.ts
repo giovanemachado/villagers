@@ -5,6 +5,13 @@ import { EventsGateway } from 'src/events/events.gateway';
 import { EVENT_TYPES } from 'src/events/dto/event-data.dto';
 import { MatchData } from './dto/match-data.dto';
 
+export type GetValidMatchParams = {
+  code?: string;
+  active?: boolean;
+  playerId?: string;
+  include?: any;
+};
+
 @Injectable()
 export class MatchesService {
   constructor(
@@ -12,9 +19,21 @@ export class MatchesService {
     private eventsGateway: EventsGateway,
   ) {}
 
-  async getValidMatch(code: string): Promise<MatchData> {
-    const match = await this.prismaService.match.findUnique({
-      where: { code },
+  async getValidMatch({
+    code,
+    active,
+    playerId,
+    include,
+  }: GetValidMatchParams) {
+    const match = await this.prismaService.match.findFirst({
+      where: {
+        code,
+        active,
+        players: {
+          has: playerId,
+        },
+      },
+      include,
     });
 
     if (!match) {
@@ -53,7 +72,7 @@ export class MatchesService {
     prismaTransaction?: any,
   ): Promise<MatchData> {
     try {
-      const match = await this.getValidMatch(code);
+      const match = await this.getValidMatch({ code });
 
       if (match.players.includes(playerId)) {
         this.eventsGateway.emitEvent(EVENT_TYPES.JOIN_MATCH, {
@@ -96,7 +115,7 @@ export class MatchesService {
 
   async finishMatch(code: string, playerId: string) {
     try {
-      const match = await this.getValidMatch(code);
+      const match = await this.getValidMatch({ code });
 
       if (!match.players.includes(playerId)) {
         throw 'Player is not in this Match.';
