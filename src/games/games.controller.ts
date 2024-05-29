@@ -36,15 +36,16 @@ export class GamesController {
     @Req() { player }: { player: { id: string } },
     @Res({ passthrough: true }) res: Response,
   ) {
-    try {
-      const activeMatch = await this.gamesService.getValidMatch({
-        playerId: player.id,
-      });
+    const activeMatch = await this.gamesService.getMatch({
+      playerId: player.id,
+      active: true,
+    });
 
+    if (activeMatch) {
       return activeMatch;
-    } catch (error) {
-      res.status(HttpStatus.NO_CONTENT);
     }
+
+    res.status(HttpStatus.NO_CONTENT);
   }
 
   /**
@@ -65,9 +66,14 @@ export class GamesController {
   async getMap(
     @Req() { player }: { player: { id: string } },
   ): Promise<GetMapResponse> {
-    const match = await this.gamesService.getValidMatch({
+    const match = await this.gamesService.getMatch({
       playerId: player.id,
+      active: true,
     });
+
+    if (!match) {
+      throw 'No match';
+    }
 
     const rows = await this.gamesService.getMap();
     const units = await this.gamesService.getUnits(match.code);

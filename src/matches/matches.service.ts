@@ -19,30 +19,20 @@ export class MatchesService {
     private eventsGateway: EventsGateway,
   ) {}
 
-  async getValidMatch({
-    code,
-    active,
-    playerId,
-    include,
-  }: GetValidMatchParams) {
+  async getMatch({ code, active, playerId, include }: GetValidMatchParams) {
+    const whereOptions: any = {
+      code,
+      active,
+    };
+
+    if (playerId) {
+      whereOptions.players = { has: playerId };
+    }
+
     const match = await this.prismaService.match.findFirst({
-      where: {
-        code,
-        active,
-        players: {
-          has: playerId,
-        },
-      },
+      where: whereOptions,
       include,
     });
-
-    if (!match) {
-      throw 'Non existent Match.';
-    }
-
-    if (!match.active) {
-      throw 'Match is inactive.';
-    }
 
     return match;
   }
@@ -72,7 +62,11 @@ export class MatchesService {
     prismaTransaction?: any,
   ): Promise<MatchData> {
     try {
-      const match = await this.getValidMatch({ code });
+      const match = await this.getMatch({ code, active: true });
+
+      if (!match) {
+        throw 'No match';
+      }
 
       if (match.players.includes(playerId)) {
         this.eventsGateway.emitEvent(EVENT_TYPES.JOIN_MATCH, {
@@ -115,7 +109,11 @@ export class MatchesService {
 
   async finishMatch(code: string, playerId: string) {
     try {
-      const match = await this.getValidMatch({ code });
+      const match = await this.getMatch({ code, active: true });
+
+      if (!match) {
+        throw 'No Match';
+      }
 
       if (!match.players.includes(playerId)) {
         throw 'Player is not in this Match.';

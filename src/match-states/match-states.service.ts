@@ -43,7 +43,12 @@ export class MatchStatesService {
     code: string,
     prismaTransaction?: any,
   ): Promise<MatchState> {
-    const match = await this.matchService.getValidMatch({ code });
+    const match = await this.matchService.getMatch({ code, active: true });
+
+    if (!match) {
+      throw 'No Match';
+    }
+
     const player1 = match.players[0];
     const player2 = match.players[1];
 
@@ -84,8 +89,9 @@ export class MatchStatesService {
     matchStateUpdate: MatchStateUpdate,
   ) {
     try {
-      const match = await this.matchService.getValidMatch({
+      const match = await this.matchService.getMatch({
         code,
+        active: true,
         include: {
           matchState: {
             select: {
