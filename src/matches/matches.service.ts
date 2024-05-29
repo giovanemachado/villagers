@@ -1,9 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { MatchDataCreate } from './dto/match-create.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { EventsGateway } from 'src/events/events.gateway';
 import { EVENT_TYPES } from 'src/events/dto/event-data.dto';
 import { MatchData } from './dto/match-data.dto';
+import { ERROR_MESSAGE } from 'src/errors/messages';
 
 export type GetValidMatchParams = {
   code?: string;
@@ -46,13 +51,15 @@ export class MatchesService {
       });
 
       if (!match) {
-        throw 'No match';
+        throw new NotFoundException(ERROR_MESSAGE.matchNotFound);
       }
 
       return match;
     } catch (error) {
-      console.log(error);
-      throw 'Match create failed';
+      throw new UnprocessableEntityException(
+        ERROR_MESSAGE.createMatchFailed,
+        error,
+      );
     }
   }
 
@@ -65,7 +72,7 @@ export class MatchesService {
       const match = await this.getMatch({ code, active: true });
 
       if (!match) {
-        throw 'No match';
+        throw new NotFoundException(ERROR_MESSAGE.matchNotFound);
       }
 
       if (match.players.includes(playerId)) {
@@ -77,7 +84,7 @@ export class MatchesService {
       }
 
       if (match.players.length >= match.numberOfPlayers) {
-        throw 'Match is full.';
+        throw new UnprocessableEntityException(ERROR_MESSAGE.matchIsFull);
       }
 
       const prismaClient = prismaTransaction ?? this.prismaService;
@@ -102,8 +109,10 @@ export class MatchesService {
 
       return result;
     } catch (error) {
-      console.log(error);
-      throw 'Match update failed';
+      throw new UnprocessableEntityException(
+        ERROR_MESSAGE.updateMatchFailed,
+        error,
+      );
     }
   }
 
@@ -112,15 +121,11 @@ export class MatchesService {
       const match = await this.getMatch({ code, active: true });
 
       if (!match) {
-        throw 'No Match';
+        throw new NotFoundException(ERROR_MESSAGE.matchNotFound);
       }
 
       if (!match.players.includes(playerId)) {
-        throw 'Player is not in this Match.';
-      }
-
-      if (!match) {
-        throw 'No match';
+        throw new NotFoundException(ERROR_MESSAGE.playerNotFound);
       }
 
       await this.prismaService.match.update({
@@ -136,8 +141,10 @@ export class MatchesService {
         matchCode: match.code,
       });
     } catch (error) {
-      console.log(error);
-      throw 'Match end failed';
+      throw new UnprocessableEntityException(
+        ERROR_MESSAGE.updateMatchFailed,
+        error,
+      );
     }
   }
 }

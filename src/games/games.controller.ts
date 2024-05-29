@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   HttpStatus,
+  NotFoundException,
   Param,
   Post,
   Req,
@@ -13,6 +14,7 @@ import { MatchStateUpdate } from '../match-states/dto/match-state.dto';
 import { MatchData } from 'src/matches/dto/match-data.dto';
 import { EnterInMatchResponse, GetMapResponse } from './dto/game-responses.dto';
 import { Response } from 'express';
+import { ERROR_MESSAGE } from 'src/errors/messages';
 
 @Controller('games')
 export class GamesController {
@@ -72,7 +74,7 @@ export class GamesController {
     });
 
     if (!match) {
-      throw 'No match';
+      throw new NotFoundException(ERROR_MESSAGE.matchNotFound);
     }
 
     const rows = await this.gamesService.getMap();
@@ -80,7 +82,7 @@ export class GamesController {
     const matchState = await this.gamesService.getMatchState(match.code);
 
     if (!matchState) {
-      throw 'There is no Match State';
+      throw new NotFoundException(ERROR_MESSAGE.matchStateNotFound);
     }
 
     return { rows, units, matchState, matchData: match };

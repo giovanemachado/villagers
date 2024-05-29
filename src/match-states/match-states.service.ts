@@ -1,4 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { MatchState, MatchStateUpdate } from './dto/match-state.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { MoneyService } from 'src/money/money.service';
@@ -7,6 +12,7 @@ import { INITIAL_TURN } from 'src/static-data/definitions/constants';
 import { EVENT_TYPES } from 'src/events/dto/event-data.dto';
 import { EventsGateway } from 'src/events/events.gateway';
 import { UnitsService } from 'src/units/units.service';
+import { ERROR_MESSAGE } from 'src/errors/messages';
 
 @Injectable()
 export class MatchStatesService {
@@ -19,24 +25,19 @@ export class MatchStatesService {
   ) {}
 
   async getMatchState(code: string): Promise<MatchState | null> {
-    try {
-      // TODO usar match service
-      const queryResult = await this.prismaService.match.findUnique({
-        where: { code },
-        include: {
-          matchState: {},
-        },
-      });
+    // TODO usar match service
+    const queryResult = await this.prismaService.match.findUnique({
+      where: { code },
+      include: {
+        matchState: {},
+      },
+    });
 
-      if (!queryResult || !queryResult.matchState) {
-        return null;
-      }
-
-      return queryResult?.matchState as unknown as MatchState;
-    } catch (error) {
-      console.log(error);
-      throw 'Something went wrong with getMatchState';
+    if (!queryResult || !queryResult.matchState) {
+      return null;
     }
+
+    return queryResult?.matchState as unknown as MatchState;
   }
 
   async createMatchState(
@@ -46,7 +47,7 @@ export class MatchStatesService {
     const match = await this.matchService.getMatch({ code, active: true });
 
     if (!match) {
-      throw 'No Match';
+      throw new NotFoundException(ERROR_MESSAGE.matchNotFound);
     }
 
     const player1 = match.players[0];
@@ -106,7 +107,10 @@ export class MatchStatesService {
       });
 
       if (!match || !match.matchState) {
-        throw `Can't find Match (id: ${match?.id}) or Match State`;
+        throw new NotFoundException(
+          { matchId: match?.i },
+          ERROR_MESSAGE.matchOrMatchStateNotFound,
+        );
       }
 
       const currentMatchState = match.matchState as unknown as MatchState;
@@ -116,7 +120,7 @@ export class MatchStatesService {
           (playerEndTurn) => playerEndTurn.playerId == playerId,
         )?.endedTurn == true
       ) {
-        throw 'Player already passed the turn.';
+        throw new BadRequestException(ERROR_MESSAGE.playerAlreadyEndedTurn);
       }
 
       let itShouldPassTurnForBothPlayers = false;
@@ -174,8 +178,10 @@ export class MatchStatesService {
 
       return matchState;
     } catch (error) {
-      console.log(error);
-      throw new Error('Problem to update match state');
+      throw new UnprocessableEntityException(
+        ERROR_MESSAGE.updateMatchStateFailed,
+        error,
+      );
     }
   }
 

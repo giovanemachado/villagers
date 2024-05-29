@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import {
   MatchState,
   MatchStateUpdate,
@@ -14,6 +14,7 @@ import { UnitData } from 'src/units/dto/unit-data.dto';
 import { SquareData } from 'src/maps/dto/square-data.dto';
 import { MatchData } from 'src/matches/dto/match-data.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ERROR_MESSAGE } from 'src/errors/messages';
 
 @Injectable()
 export class GamesService {
@@ -102,7 +103,7 @@ export class GamesService {
     const match = await this.getMatch({ code, active: true });
 
     if (!match) {
-      throw 'No Match';
+      throw new NotFoundException(ERROR_MESSAGE.matchNotFound);
     }
 
     const { units } = await this.staticDataService.getStaticResource(
