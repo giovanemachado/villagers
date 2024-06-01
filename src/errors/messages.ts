@@ -8,4 +8,5 @@ export const ERROR_MESSAGE = {
   updateMatchFailed: 'Match update failed.',
   createMatchFailed: 'Match create failed.',
   matchIsFull: 'Match is full.',
+  noPlayersInMatch: 'A Player is missing to update Match State.',
 };

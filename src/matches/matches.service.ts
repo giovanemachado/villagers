@@ -90,7 +90,7 @@ export class MatchesService {
       const prismaClient = prismaTransaction ?? this.prismaService;
 
       // TODO: move this logic to match service
-      const result = await prismaClient.match.update({
+      const matchUpdated = await prismaClient.match.update({
         where: {
           code,
         },
@@ -101,13 +101,13 @@ export class MatchesService {
         },
       });
 
-      if (result.active) {
+      if (matchUpdated.active) {
         this.eventsGateway.emitEvent(EVENT_TYPES.JOIN_MATCH, {
           matchCode: match.code,
         });
       }
 
-      return result;
+      return matchUpdated;
     } catch (error) {
       throw new UnprocessableEntityException(
         ERROR_MESSAGE.updateMatchFailed,

@@ -67,7 +67,7 @@ export class GamesService {
 
         if (!matchState) {
           matchState = await this.matchStatesService.createMatchState(
-            code,
+            match,
             prismaTransaction,
           );
         }
@@ -83,6 +83,7 @@ export class GamesService {
         };
       },
     );
+
     return result;
   }
 

@@ -13,6 +13,7 @@ import { EVENT_TYPES } from 'src/events/dto/event-data.dto';
 import { EventsGateway } from 'src/events/events.gateway';
 import { UnitsService } from 'src/units/units.service';
 import { ERROR_MESSAGE } from 'src/errors/messages';
+import { MatchData } from 'src/matches/dto/match-data.dto';
 
 @Injectable()
 export class MatchStatesService {
@@ -41,17 +42,18 @@ export class MatchStatesService {
   }
 
   async createMatchState(
-    code: string,
+    match: MatchData,
     prismaTransaction?: any,
   ): Promise<MatchState> {
-    const match = await this.matchService.getMatch({ code, active: true });
-
-    if (!match) {
-      throw new NotFoundException(ERROR_MESSAGE.matchNotFound);
-    }
-
     const player1 = match.players[0];
     const player2 = match.players[1];
+
+    if (!player1 || !player2) {
+      throw new UnprocessableEntityException(
+        { players: [player1, player2] },
+        ERROR_MESSAGE.noPlayersInMatch,
+      );
+    }
 
     const prismaClient = prismaTransaction ?? this.prismaService;
 
@@ -74,7 +76,7 @@ export class MatchStatesService {
         ],
         money: this.moneyService.getMoney(INITIAL_TURN, [
           { playerId: player1, value: 0 },
-          { playerId: player1, value: 0 },
+          { playerId: player2, value: 0 },
         ]),
         unitsMovement: [],
         turns: INITIAL_TURN,
