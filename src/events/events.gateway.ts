@@ -12,7 +12,7 @@ export class EventsGateway {
   server: Server;
 
   emitEvent(event: EVENT_TYPES, data?: any) {
-    console.log('EVENT EMITTED: ', event, data);
+    console.log('EVENT EMITTED: ', event, JSON.stringify(data));
     this.server.emit(event, { ...data });
   }
 }

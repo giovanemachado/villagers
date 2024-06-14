@@ -5,16 +5,20 @@
 
 export interface paths {
   '/games/match': {
+    get: operations['getMatch'];
     post: operations['createMatch'];
   };
-  '/games/enter-match/{code}': {
-    post: operations['enterInMatch'];
+  '/games/join-match/{code}': {
+    post: operations['joinMatch'];
   };
   '/games/initial-data': {
     get: operations['getMap'];
   };
   '/games/match-state/{code}': {
     post: operations['updateMatchState'];
+  };
+  '/games/finish-match/{code}': {
+    post: operations['finishMatch'];
   };
 }
 
@@ -44,6 +48,7 @@ export interface components {
     MatchStateUnitsMovement: {
       id: string;
       localization: string;
+      previousLocalization: string;
       playerId: string;
       movedInTurn: boolean;
     };
@@ -100,6 +105,15 @@ export type $defs = Record<string, never>;
 export type external = Record<string, never>;
 
 export interface operations {
+  getMatch: {
+    responses: {
+      200: {
+        content: {
+          'application/json': Record<string, never>;
+        };
+      };
+    };
+  };
   createMatch: {
     responses: {
       201: {
@@ -109,7 +123,7 @@ export interface operations {
       };
     };
   };
-  enterInMatch: {
+  joinMatch: {
     responses: {
       201: {
         content: {
@@ -133,6 +147,13 @@ export interface operations {
         'application/json': components['schemas']['MatchStateUpdate'];
       };
     };
+    responses: {
+      201: {
+        content: never;
+      };
+    };
+  };
+  finishMatch: {
     responses: {
       201: {
         content: never;

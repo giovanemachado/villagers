@@ -30,8 +30,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
     };
 
     console.log('================= Error caught =================');
-    console.log('INFO: \n', responseBody);
-    console.log('\nEXCEPTION: \n', exception);
+    console.log('INFO: \n', JSON.stringify(responseBody, null, 2));
+    console.log('\nEXCEPTION: \n', JSON.stringify(exception, null, 2));
     console.log('================================================');
 
     httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);

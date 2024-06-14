@@ -4,6 +4,7 @@ import { MoneyData } from 'src/money/dto/money-data.dto';
 export class MatchStateUnitsMovement {
   id: string;
   localization: string;
+  previousLocalization: string;
   playerId: string;
   movedInTurn: boolean;
 }

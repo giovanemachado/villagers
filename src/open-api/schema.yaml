@@ -128,6 +128,8 @@ components:
           type: string
         localization:
           type: string
+        previousLocalization:
+          type: string
         playerId:
           type: string
         movedInTurn:
@@ -135,6 +137,7 @@ components:
       required:
         - id
         - localization
+        - previousLocalization
         - playerId
         - movedInTurn
     MatchState:

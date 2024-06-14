@@ -1111,9 +1111,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/testing@npm:^10.0.0":
-  version: 10.3.8
-  resolution: "@nestjs/testing@npm:10.3.8"
+"@nestjs/testing@npm:^10.3.9":
+  version: 10.3.9
+  resolution: "@nestjs/testing@npm:10.3.9"
   dependencies:
     tslib: "npm:2.6.2"
   peerDependencies:
@@ -1126,7 +1126,7 @@ __metadata:
       optional: true
     "@nestjs/platform-express":
       optional: true
-  checksum: 10c0/c08052ae0c3f55c4504e5912705f8530c403b9d4de046a370ac0644a307213e2866e159f578a6fa6c6a6a032941c8e065d89b49fc003107f6575e467d18b71d7
+  checksum: 10c0/99d16197eab852ee4bf1631d468f3a741aa1a24d7e70a52d3db46ddfb04d07ff83127fca0566798c5ece10ebfe0a27b033bc0fd96bbd2d4d76cf872d9ee5a785
   languageName: node
   linkType: hard
 
@@ -1620,6 +1620,13 @@ __metadata:
   dependencies:
     "@types/node": "npm:*"
   checksum: 10c0/c582b8420586f3b9550f7e34992cb32be300bc953636f3b087ed9c180ce7ea5c2e4b35090be2d57f0d3168cc3ca1074932907caa2afe09f4e9c84cf5c0daefa8
+  languageName: node
+  linkType: hard
+
+"@types/lodash@npm:^4":
+  version: 4.17.4
+  resolution: "@types/lodash@npm:4.17.4"
+  checksum: 10c0/0124c64cb9fe7a0f78b6777955abd05ef0d97844d49118652eae45f8fa57bfb7f5a7a9bccc0b5a84c0a6dc09631042e4590cb665acb9d58dfd5e6543c75341ec
   languageName: node
   linkType: hard
 
@@ -7821,13 +7828,14 @@ __metadata:
     "@nestjs/platform-socket.io": "npm:^10.3.8"
     "@nestjs/schematics": "npm:^10.0.0"
     "@nestjs/swagger": "npm:^7.3.1"
-    "@nestjs/testing": "npm:^10.0.0"
+    "@nestjs/testing": "npm:^10.3.9"
     "@nestjs/websockets": "npm:^10.3.8"
     "@prisma/client": "npm:^5.13.0"
     "@supabase/supabase-js": "npm:^2.43.4"
     "@types/bcryptjs": "npm:^2"
     "@types/express": "npm:^4.17.17"
     "@types/jest": "npm:^29.5.2"
+    "@types/lodash": "npm:^4"
     "@types/node": "npm:^20.3.1"
     "@types/supertest": "npm:^6.0.0"
     "@typescript-eslint/eslint-plugin": "npm:^6.0.0"
@@ -7836,6 +7844,7 @@ __metadata:
     eslint-config-prettier: "npm:^9.0.0"
     eslint-plugin-prettier: "npm:^5.0.0"
     jest: "npm:^29.5.0"
+    lodash: "npm:^4.17.21"
     openapi-typescript: "npm:^6.7.5"
     prettier: "npm:^3.1.0"
     prettier-eslint: "npm:^16.1.2"

@@ -78,7 +78,7 @@ export class GamesController {
     }
 
     const rows = await this.gamesService.getMap();
-    const units = await this.gamesService.getUnits(match.code);
+    const units = await this.gamesService.getUnits(match);
     const matchState = await this.gamesService.getMatchState(match.code);
 
     if (!matchState) {

@@ -89,7 +89,6 @@ export class MatchesService {
 
       const prismaClient = prismaTransaction ?? this.prismaService;
 
-      // TODO: move this logic to match service
       const matchUpdated = await prismaClient.match.update({
         where: {
           code,

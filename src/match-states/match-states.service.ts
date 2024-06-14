@@ -4,7 +4,12 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { MatchState, MatchStateUpdate } from './dto/match-state.dto';
+import {
+  MatchState,
+  MatchStatePlayerEndTurn,
+  MatchStateUnitsMovement,
+  MatchStateUpdate,
+} from './dto/match-state.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { MoneyService } from 'src/money/money.service';
 import { MatchesService } from 'src/matches/matches.service';
@@ -14,6 +19,9 @@ import { EventsGateway } from 'src/events/events.gateway';
 import { UnitsService } from 'src/units/units.service';
 import { ERROR_MESSAGE } from 'src/errors/messages';
 import { MatchData } from 'src/matches/dto/match-data.dto';
+import { MatchAndMatchState } from './types/match-and-match-state.type';
+import { convertToMatchAndMatchState } from './utils/convert-to-match-and-match-state';
+import { UnitData } from 'src/units/dto/unit-data.dto';
 
 @Injectable()
 export class MatchStatesService {
@@ -43,6 +51,7 @@ export class MatchStatesService {
 
   async createMatchState(
     match: MatchData,
+    units: UnitData[],
     prismaTransaction?: any,
   ): Promise<MatchState> {
     const player1 = match.players[0];
@@ -56,6 +65,18 @@ export class MatchStatesService {
     }
 
     const prismaClient = prismaTransaction ?? this.prismaService;
+
+    const unitsConverted: MatchStateUnitsMovement[] = units.map(
+      (u: UnitData) => {
+        return {
+          id: u.id,
+          localization: u.movement.initialLocalization,
+          previousLocalization: u.movement.initialLocalization,
+          playerId: u.playerId,
+          movedInTurn: false,
+        };
+      },
+    );
 
     const matchState = await prismaClient.matchState.create({
       data: {
@@ -78,7 +99,7 @@ export class MatchStatesService {
           { playerId: player1, value: 0 },
           { playerId: player2, value: 0 },
         ]),
-        unitsMovement: [],
+        unitsMovement: unitsConverted,
         turns: INITIAL_TURN,
       },
     });
@@ -92,30 +113,8 @@ export class MatchStatesService {
     matchStateUpdate: MatchStateUpdate,
   ) {
     try {
-      const match = await this.matchService.getMatch({
-        code,
-        active: true,
-        include: {
-          matchState: {
-            select: {
-              id: true,
-              turns: true,
-              playersEndTurn: true,
-              unitsMovement: true,
-              money: true,
-            },
-          },
-        },
-      });
-
-      if (!match || !match.matchState) {
-        throw new NotFoundException(
-          { matchId: match?.i },
-          ERROR_MESSAGE.matchOrMatchStateNotFound,
-        );
-      }
-
-      const currentMatchState = match.matchState as unknown as MatchState;
+      const match = await this.getMatch(code);
+      const currentMatchState = match.matchState;
 
       if (
         currentMatchState.playersEndTurn.find(
@@ -125,30 +124,22 @@ export class MatchStatesService {
         throw new BadRequestException(ERROR_MESSAGE.playerAlreadyEndedTurn);
       }
 
-      let itShouldPassTurnForBothPlayers = false;
-
-      let playersEndTurnUpdated = this.updatePlayerEndTurn(
+      let playersEndTurnUpdated = this.updateBothPlayersPlayerEndTurn(
         currentMatchState,
         playerId,
       );
 
-      let turnsUpdated = currentMatchState.turns;
+      const bothPlayersFinishedTurn = this.bothPlayersHaveFinishedTurn(
+        playersEndTurnUpdated,
+      );
 
-      if (
-        playersEndTurnUpdated.every(
-          (player: { playerId: string; endedTurn: boolean }) =>
-            player.endedTurn,
-        )
-      ) {
-        turnsUpdated = this.updateTurns(currentMatchState);
-
+      // Reset the turns, see updatePlayerEndTurn
+      if (bothPlayersFinishedTurn) {
         playersEndTurnUpdated = this.updatePlayerEndTurn(
           currentMatchState,
           playerId,
           true,
         );
-
-        itShouldPassTurnForBothPlayers = true;
       }
 
       const matchState = await this.prismaService.matchState.update({
@@ -157,12 +148,13 @@ export class MatchStatesService {
         },
         data: {
           playersEndTurn: playersEndTurnUpdated,
-          turns: turnsUpdated,
+          turns: this.updateTurns(currentMatchState, bothPlayersFinishedTurn),
           unitsMovement: this.unitsService.updateUnitsMovement(
             currentMatchState,
             playerId,
             matchStateUpdate,
-          ) as any,
+            match.players,
+          ) as any, // this receives a InputJsonValue[] from prisma
           money: this.updateMoney(
             currentMatchState,
             playerId,
@@ -171,7 +163,7 @@ export class MatchStatesService {
         },
       });
 
-      if (itShouldPassTurnForBothPlayers) {
+      if (bothPlayersFinishedTurn) {
         this.eventsGateway.emitEvent(EVENT_TYPES.BOTH_PLAYERS_ENDED_TURN, {
           matchCode: match.code,
           matchState,
@@ -187,13 +179,61 @@ export class MatchStatesService {
     }
   }
 
-  updatePlayerEndTurn(
+  private async getMatch(code: string): Promise<MatchAndMatchState> {
+    const match = await this.matchService.getMatch({
+      code,
+      active: true,
+      include: {
+        matchState: {
+          select: {
+            id: true,
+            turns: true,
+            playersEndTurn: true,
+            unitsMovement: true,
+            money: true,
+          },
+        },
+      },
+    });
+
+    if (!match || !match.matchState) {
+      throw new NotFoundException(
+        { matchId: match?.id },
+        ERROR_MESSAGE.matchOrMatchStateNotFound,
+      );
+    }
+
+    return convertToMatchAndMatchState(match);
+  }
+
+  private updateBothPlayersPlayerEndTurn(
+    currentMatchState: MatchState,
+    playerId: string,
+  ) {
+    const playersEndTurnUpdated = this.updatePlayerEndTurn(
+      currentMatchState,
+      playerId,
+    );
+
+    return playersEndTurnUpdated;
+  }
+
+  private bothPlayersHaveFinishedTurn = (
+    playersEndTurnUpdated: MatchStatePlayerEndTurn[],
+  ) => {
+    return playersEndTurnUpdated.every(
+      (player: { playerId: string; endedTurn: boolean }) => player.endedTurn,
+    );
+  };
+
+  private updatePlayerEndTurn(
     currentMatchState: Pick<MatchState, 'playersEndTurn'>,
     playerId: string,
     resetTurns?: boolean,
   ) {
     return currentMatchState.playersEndTurn.map(
       (player: { playerId: string; endedTurn: boolean }) => {
+        // Both players return to false, so we have a new round
         if (resetTurns) {
           player.endedTurn = false;
           return player;
@@ -208,12 +248,17 @@ export class MatchStatesService {
     );
   }
 
-  updateTurns(currentMatchState: Pick<MatchState, 'turns'>) {
-    return currentMatchState.turns + 1;
+  private updateTurns(
+    currentMatchState: MatchState,
+    bothPlayersFinishedTurn: boolean,
+  ) {
+    return bothPlayersFinishedTurn
+      ? currentMatchState.turns + 1
+      : currentMatchState.turns;
   }
 
   // TODO move logic to money service
-  updateMoney(
+  private updateMoney(
     currentMatchState: Pick<MatchState, 'money'>,
     playerId: string,
     matchStateUpdate: MatchStateUpdate,
