@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import {
   UNIT_CATEGORY,
   UNIT_CLASS,
@@ -165,6 +165,42 @@ export class UnitsService {
     unitsMovement: MatchStateUnitsMovement[],
     priorityPlayer: string,
   ): MatchStateUnitsMovement[] {
+    let safetyCounter = 0;
+
+    let unitsToReturn: MatchStateUnitsMovement[] = this.checkForUnitsToReturn(
+      unitsMovement,
+      priorityPlayer,
+    );
+
+    while (unitsToReturn.length > 0) {
+      // TODO not the greatest, hopefully I can come up with 2 thousand tests to this or a better safer implementation
+      safetyCounter++;
+      if (safetyCounter > 500) {
+        throw new InternalServerErrorException(
+          { unitsMovement },
+          'ERROR_MESSAGE.unitMovementUpdateIsStuck',
+        );
+      }
+      unitsMovement.forEach((unitMovement) => {
+        const unitToReturn = unitsToReturn.find(
+          (unitToReturn) => unitToReturn.id == unitMovement.id,
+        );
+
+        if (unitToReturn) {
+          unitMovement.localization = unitMovement.previousLocalization;
+        }
+      });
+
+      unitsToReturn = this.checkForUnitsToReturn(unitsMovement, priorityPlayer);
+    }
+
+    return unitsMovement;
+  }
+
+  private checkForUnitsToReturn(
+    unitsMovement: MatchStateUnitsMovement[],
+    priorityPlayer: string,
+  ): MatchStateUnitsMovement[] {
     const unitsByLocalization: { [key: string]: MatchStateUnitsMovement[] } =
       {};
     const allLocalizations: string[] = [];
@@ -197,16 +233,6 @@ export class UnitsService {
       });
     });
 
-    unitsMovement.forEach((unitMovement) => {
-      const unitToReturn = unitsToReturn.find(
-        (unitToReturn) => unitToReturn.id == unitMovement.id,
-      );
-
-      if (unitToReturn) {
-        unitMovement.localization = unitMovement.previousLocalization;
-      }
-    });
-
-    return unitsMovement;
+    return unitsToReturn;
   }
 }

@@ -475,9 +475,128 @@ describe('UnitsService', () => {
         ).toStrictEqual(resultPlayerB);
       });
 
-      it.todo(
-        'Player A move one unit to an ocuppied (by Bs units movement) position, and another to first units position (both need to go back)',
-      );
+      it('Player A move one unit to an ocuppied (by Bs units movement) position, and another to first units position (both need to go back)', () => {
+        const unitAXNewLocalization: MatchStateUnitsMovement = {
+          ...unitAX,
+          localization: 'localization-10',
+          movedInTurn: true,
+        };
+
+        const unitAYNewLocalization: MatchStateUnitsMovement = {
+          ...unitAY,
+          localization: 'localization-1',
+          movedInTurn: true,
+        };
+
+        const unitAZNewLocalization: MatchStateUnitsMovement = {
+          ...unitAZ,
+          localization: 'localization-3',
+          movedInTurn: true,
+        };
+
+        const resultPlayerA: MatchStateUnitsMovement[] = [
+          {
+            ...unitAXNewLocalization,
+            localization: 'localization-10',
+            previousLocalization: 'localization-1',
+            movedInTurn: false,
+          },
+          {
+            ...unitAYNewLocalization,
+            localization: 'localization-1',
+            previousLocalization: 'localization-3',
+            movedInTurn: false,
+          },
+          {
+            ...unitAZNewLocalization,
+            localization: 'localization-3',
+            previousLocalization: 'localization-5',
+            movedInTurn: false,
+          },
+          unitBX,
+          unitBY,
+        ];
+
+        const oddTurn = 5; // priority player b
+
+        const paramsPlayerA: UpdateUnitsMovementParams = {
+          ...mockParamsBase,
+          currentMatchState: {
+            ...mockParamsBase.currentMatchState,
+            turns: oddTurn,
+          },
+          matchStateUpdate: {
+            unitsMovement: [
+              unitAXNewLocalization,
+              unitAYNewLocalization,
+              unitAZNewLocalization,
+            ],
+          },
+        };
+        console.log(
+          '------------------------------ EXEC 1 ---------------------------------------- ',
+        );
+        const unitsMovementAfterPlayerA = unitsService.updateUnitsMovement(
+          lod.cloneDeep(paramsPlayerA.currentMatchState),
+          paramsPlayerA.playerId,
+          lod.cloneDeep(paramsPlayerA.matchStateUpdate),
+          paramsPlayerA.players,
+        );
+        expect(unitsMovementAfterPlayerA).toStrictEqual(resultPlayerA);
+
+        const unitBXNewLocalization: MatchStateUnitsMovement = {
+          ...unitBX,
+          localization: 'localization-10',
+          movedInTurn: true,
+        };
+
+        const resultPlayerB: MatchStateUnitsMovement[] = [
+          {
+            ...unitAX,
+            previousLocalization: 'localization-1',
+          },
+          {
+            ...unitAY,
+            previousLocalization: 'localization-3',
+          },
+          {
+            ...unitAZ,
+            previousLocalization: 'localization-5',
+          },
+          {
+            ...unitBXNewLocalization,
+            localization: 'localization-10',
+            previousLocalization: 'localization-7',
+            movedInTurn: false,
+          },
+          unitBY,
+        ];
+
+        const paramsPlayerB: UpdateUnitsMovementParams = {
+          ...mockParamsBase,
+          playerId: playerB,
+          currentMatchState: {
+            ...mockParamsBase.currentMatchState,
+            unitsMovement: unitsMovementAfterPlayerA,
+            turns: oddTurn,
+          },
+          matchStateUpdate: {
+            unitsMovement: [unitBXNewLocalization],
+          },
+        };
+
+        console.log(
+          '------------------------------ EXEC 2 ---------------------------------------- ',
+        );
+        expect(
+          unitsService.updateUnitsMovement(
+            lod.cloneDeep(paramsPlayerB.currentMatchState),
+            paramsPlayerB.playerId,
+            lod.cloneDeep(paramsPlayerB.matchStateUpdate),
+            paramsPlayerB.players,
+          ),
+        ).toStrictEqual(resultPlayerB);
+      });
     });
   });
 });
