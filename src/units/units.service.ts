@@ -11,6 +11,7 @@ import {
   MatchStateUnitsMovement,
   MatchStateUpdate,
 } from 'src/match-states/dto/match-state.dto';
+import * as lod from 'lodash';
 
 @Injectable()
 export class UnitsService {
@@ -89,8 +90,30 @@ export class UnitsService {
     const priorityPlayer =
       currentMatchState.turns % 2 === 0 ? players[0] : players[1];
 
+    const unitsToUpdateOfCurrentPlayer = this.getUnitsFromCurrentPlayer(
+      matchStateUpdate,
+      playerId,
+    );
+
+    const currentUnitsUpdated = this.updateCurrentUnits(
+      unitsToUpdateOfCurrentPlayer,
+      currentMatchState,
+    );
+
+    const updateCurrentUnitsWithConflict =
+      this.updateUnitsMovementFixingConflicts(
+        currentUnitsUpdated,
+        priorityPlayer,
+      );
+
+    return updateCurrentUnitsWithConflict;
+  }
+
+  private getUnitsFromCurrentPlayer(
+    matchStateUpdate: Pick<MatchStateUpdate, 'unitsMovement'>,
+    playerId: string,
+  ): MatchStateUnitsMovement[] {
     const unitsToUpdateOfCurrentPlayer: MatchStateUnitsMovement[] = [];
-    const unitsToAdd: MatchStateUnitsMovement[] = [];
 
     matchStateUpdate.unitsMovement.forEach((unitToUpdate) => {
       if (unitToUpdate.playerId != playerId) {
@@ -100,44 +123,90 @@ export class UnitsService {
       unitsToUpdateOfCurrentPlayer.push(unitToUpdate);
     });
 
+    return unitsToUpdateOfCurrentPlayer;
+  }
+
+  private updateCurrentUnits(
+    unitsToUpdateOfCurrentPlayer: MatchStateUnitsMovement[],
+    currentMatchState: Pick<MatchStateUpdate, 'unitsMovement'>,
+  ): MatchStateUnitsMovement[] {
+    const currentUnitsToUpdate: MatchStateUnitsMovement[] = [];
+    const unitsToAdd: MatchStateUnitsMovement[] = [];
+
     unitsToUpdateOfCurrentPlayer.forEach((unitToUpdate) => {
-      const unitInState = currentMatchState.unitsMovement.find(
+      const unitInCurrentState = currentMatchState.unitsMovement.find(
         (u) => u.id == unitToUpdate.id,
       );
 
-      if (!unitInState) {
+      if (!unitInCurrentState) {
         unitsToAdd.push({ ...unitToUpdate, movedInTurn: false });
         return;
       }
 
-      unitInState.previousLocalization = unitInState.localization;
-      unitInState.localization = unitToUpdate.localization;
+      unitInCurrentState.previousLocalization = unitInCurrentState.localization;
+      unitInCurrentState.localization = unitToUpdate.localization;
 
       // this is set to true on front, during the turn
-      unitInState.movedInTurn = false;
+      unitInCurrentState.movedInTurn = false;
+      currentUnitsToUpdate.push(unitInCurrentState);
     });
 
-    currentMatchState.unitsMovement.forEach((currentUnit) => {
-      const unitWithConflict = currentMatchState.unitsMovement.find((unit) => {
-        return (
-          unit.id != currentUnit.id &&
-          unit.localization == currentUnit.localization
-        );
+    return lod.uniqBy(
+      [
+        ...currentMatchState.unitsMovement,
+        ...currentUnitsToUpdate,
+        ...unitsToAdd,
+      ],
+      'id',
+    );
+  }
+
+  private updateUnitsMovementFixingConflicts(
+    unitsMovement: MatchStateUnitsMovement[],
+    priorityPlayer: string,
+  ): MatchStateUnitsMovement[] {
+    const unitsByLocalization: { [key: string]: MatchStateUnitsMovement[] } =
+      {};
+    const allLocalizations: string[] = [];
+
+    unitsMovement.forEach((unitMovement) => {
+      if (!unitsByLocalization[unitMovement.localization]) {
+        unitsByLocalization[unitMovement.localization] = [];
+      }
+
+      unitsByLocalization[unitMovement.localization].push(unitMovement);
+      allLocalizations.push(unitMovement.localization);
+    });
+
+    const uniqueLocalizations = lod.uniq(allLocalizations);
+    const unitsToReturn: MatchStateUnitsMovement[] = [];
+
+    uniqueLocalizations.forEach((localization) => {
+      const unitsInLocalization = unitsByLocalization[localization];
+
+      if (unitsInLocalization.length < 2) {
+        return;
+      }
+
+      unitsInLocalization.forEach((unitInLocalization) => {
+        if (unitInLocalization.playerId == priorityPlayer) {
+          return;
+        }
+
+        unitsToReturn.push(unitInLocalization);
       });
-
-      if (!unitWithConflict) {
-        return;
-      }
-
-      const isPriorityPlayer = currentUnit.playerId == priorityPlayer;
-
-      if (isPriorityPlayer) {
-        return;
-      }
-
-      currentUnit.localization = currentUnit.previousLocalization;
     });
 
-    return [...currentMatchState.unitsMovement, ...unitsToAdd];
+    unitsMovement.forEach((unitMovement) => {
+      const unitToReturn = unitsToReturn.find(
+        (unitToReturn) => unitToReturn.id == unitMovement.id,
+      );
+
+      if (unitToReturn) {
+        unitMovement.localization = unitMovement.previousLocalization;
+      }
+    });
+
+    return unitsMovement;
   }
 }
