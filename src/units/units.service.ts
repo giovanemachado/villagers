@@ -12,6 +12,8 @@ import {
   MatchStateUpdate,
 } from 'src/match-states/dto/match-state.dto';
 import * as lod from 'lodash';
+// TODO fix imports when file has tests (it failes for jest)
+import { ERROR_MESSAGE } from '../errors/messages';
 
 @Injectable()
 export class UnitsService {
@@ -178,7 +180,7 @@ export class UnitsService {
       if (safetyCounter > 500) {
         throw new InternalServerErrorException(
           { unitsMovement },
-          'ERROR_MESSAGE.unitMovementUpdateIsStuck',
+          ERROR_MESSAGE.unitMovementUpdateIsStuck,
         );
       }
       unitsMovement.forEach((unitMovement) => {
