@@ -164,10 +164,13 @@ export class MatchStatesService {
       });
 
       if (bothPlayersFinishedTurn) {
-        this.eventsGateway.emitEvent(EVENT_TYPES.BOTH_PLAYERS_ENDED_TURN, {
-          matchCode: match.code,
-          matchState,
-        });
+        this.eventsGateway.emitEventByMatch(
+          EVENT_TYPES.BOTH_PLAYERS_ENDED_TURN,
+          match.code,
+          {
+            matchState,
+          },
+        );
       }
 
       return matchState;

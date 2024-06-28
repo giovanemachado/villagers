@@ -76,10 +76,7 @@ export class MatchesService {
       }
 
       if (match.players.includes(playerId)) {
-        this.eventsGateway.emitEvent(EVENT_TYPES.JOIN_MATCH, {
-          matchCode: match.code,
-        });
-
+        this.eventsGateway.emitEventByMatch(EVENT_TYPES.JOIN_MATCH, match.code);
         return match;
       }
 
@@ -101,9 +98,7 @@ export class MatchesService {
       });
 
       if (matchUpdated.active) {
-        this.eventsGateway.emitEvent(EVENT_TYPES.JOIN_MATCH, {
-          matchCode: match.code,
-        });
+        this.eventsGateway.emitEventByMatch(EVENT_TYPES.JOIN_MATCH, match.code);
       }
 
       return matchUpdated;
@@ -136,9 +131,7 @@ export class MatchesService {
         },
       });
 
-      this.eventsGateway.emitEvent(EVENT_TYPES.FINISH_MATCH, {
-        matchCode: match.code,
-      });
+      this.eventsGateway.emitEventByMatch(EVENT_TYPES.FINISH_MATCH, match.code);
     } catch (error) {
       throw new UnprocessableEntityException(
         ERROR_MESSAGE.updateMatchFailed,
