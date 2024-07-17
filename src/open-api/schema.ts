@@ -51,6 +51,7 @@ export interface components {
       previousLocalization: string;
       playerId: string;
       movedInTurn: boolean;
+      reachableLocalizations: string[];
     };
     MatchState: {
       playersEndTurn: components['schemas']['MatchStatePlayerEndTurn'][];
@@ -75,6 +76,7 @@ export interface components {
     UnitMovement: {
       distance: number;
       initialLocalization: string;
+      initialReachableLocalizations: string[];
     };
     UnitData: {
       id: string;

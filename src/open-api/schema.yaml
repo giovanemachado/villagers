@@ -134,12 +134,17 @@ components:
           type: string
         movedInTurn:
           type: boolean
+        reachableLocalizations:
+          type: array
+          items:
+            type: string
       required:
         - id
         - localization
         - previousLocalization
         - playerId
         - movedInTurn
+        - reachableLocalizations
     MatchState:
       type: object
       properties:
@@ -203,9 +208,14 @@ components:
           type: number
         initialLocalization:
           type: string
+        initialReachableLocalizations:
+          type: array
+          items:
+            type: string
       required:
         - distance
         - initialLocalization
+        - initialReachableLocalizations
     UnitData:
       type: object
       properties:

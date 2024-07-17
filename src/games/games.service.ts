@@ -67,7 +67,7 @@ export class GamesService {
         if (!matchState) {
           matchState = await this.matchStatesService.createMatchState(
             match,
-            await this.getUnits(match),
+            await this.getUnits(match.players),
             prismaTransaction,
           );
         }
@@ -100,16 +100,13 @@ export class GamesService {
     return rows;
   }
 
-  async getUnits(match: MatchData): Promise<UnitData[]> {
+  async getUnits(players: string[]): Promise<UnitData[]> {
     const { units } = await this.staticDataService.getStaticResource(
       'maps',
       'initial-map.json',
     );
 
-    const unitsPerPlayer = this.unitsService.setUnitsToPlayers(
-      units,
-      match.players,
-    );
+    const unitsPerPlayer = this.unitsService.setUnitsToPlayers(units, players);
 
     return unitsPerPlayer;
   }

@@ -46,7 +46,10 @@ const generateSquareId = (row: number) => {
   return squareId;
 };
 
-const generateMap = (inputMapDefinition: string, unitService: UnitsService) => {
+const generateMap = async (
+  inputMapDefinition: string,
+  unitService: UnitsService,
+) => {
   let map_definition: SquareDefinitionData[][] | null = null;
 
   switch (inputMapDefinition) {
@@ -67,6 +70,8 @@ const generateMap = (inputMapDefinition: string, unitService: UnitsService) => {
   const rows: SquareData[][] = [];
   const units: UnitData[] = [];
 
+  const unitsInMap = await unitService.getUnitsInMap();
+
   map_definition.map((rows_definition, rows_index) => {
     const squares: SquareData[] = [];
     squareCount = 0;
@@ -85,6 +90,8 @@ const generateMap = (inputMapDefinition: string, unitService: UnitsService) => {
         );
         unit.id = generateUnitId(unit.class);
         unit.movement.initialLocalization = id;
+        unit.movement.initialReachableLocalizations =
+          unitService.getReachableLocalizationsForUnit(id, unitsInMap);
         unit.playerId = row_definition.playerId ?? '';
 
         units.push(unit);
@@ -126,7 +133,7 @@ async function bootstrap() {
 
   const unitService = app.get(UnitsService);
 
-  const { units, rows } = generateMap(inputMapDefinition, unitService);
+  const { units, rows } = await generateMap(inputMapDefinition, unitService);
 
   const fileName = `${address}-${new Date().getTime()}.${format}`;
 

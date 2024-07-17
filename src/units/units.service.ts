@@ -14,15 +14,19 @@ import {
 import * as lod from 'lodash';
 // TODO fix imports when file has tests (it failes for jest)
 import { ERROR_MESSAGE } from '../errors/messages';
+import { StaticDataService } from 'src/static-data/static-data.service';
 
 @Injectable()
 export class UnitsService {
+  constructor(private staticDataService: StaticDataService) {}
+
   generateStaticUnit(unitClass: UNIT_CLASS): UnitData {
     let unitTag: UNIT_CLASS = UNIT_CLASS.ARCHER;
     let unitCategory: UNIT_CATEGORY = UNIT_CATEGORY.MILITARY;
     const unitMovement: UnitMovement = {
       distance: 1,
       initialLocalization: '',
+      initialReachableLocalizations: [],
     };
 
     switch (unitClass) {
@@ -76,6 +80,19 @@ export class UnitsService {
     return units;
   }
 
+  async getUnitsInMap(players?: string[]): Promise<UnitData[]> {
+    const { units } = await this.staticDataService.getStaticResource(
+      'maps',
+      'initial-map.json',
+    );
+
+    if (players) {
+      return this.setUnitsToPlayers(units, players);
+    }
+
+    return units;
+  }
+
   /**
    * Units movement rules
    *  1. 2 Units can never be in the same localization
@@ -88,6 +105,7 @@ export class UnitsService {
     playerId: string,
     matchStateUpdate: Pick<MatchStateUpdate, 'unitsMovement'>,
     players: string[],
+    unitsInMap: UnitData[],
   ): MatchStateUnitsMovement[] {
     const priorityPlayer =
       currentMatchState.turns % 2 === 0 ? players[0] : players[1];
@@ -108,7 +126,12 @@ export class UnitsService {
         priorityPlayer,
       );
 
-    return updateCurrentUnitsWithConflict;
+    const unitsMovement = this.updateReachableUnitsInUnitsMovement(
+      updateCurrentUnitsWithConflict,
+      unitsInMap,
+    );
+
+    return unitsMovement;
   }
 
   private getUnitsFromCurrentPlayer(
@@ -236,5 +259,159 @@ export class UnitsService {
     });
 
     return unitsToReturn;
+  }
+
+  updateReachableUnitsInUnitsMovement(
+    unitsMovement: MatchStateUnitsMovement[],
+    unitsInMap: UnitData[],
+  ) {
+    const unitsInStore: UnitData[] = Array.from(unitsInMap);
+
+    unitsMovement.forEach((unitMovement) => {
+      unitMovement.reachableLocalizations = this.getCanBeReached(
+        unitsMovement,
+        unitMovement.id,
+        unitsInMap,
+        unitsInStore,
+      );
+    });
+
+    return unitsMovement;
+  }
+
+  private getCanBeReached(
+    unitsMovement: MatchStateUnitsMovement[],
+    unitId: string,
+    unitsInMap: UnitData[],
+    unitsInStore: UnitData[],
+  ): string[] {
+    const unitInStoreIndex = this.getUnitDataIndex(unitsInMap, unitId);
+
+    const unitInStoreIndexD = this.getUnitIndex(unitsMovement, unitId);
+    const currentLocalization = unitsMovement[unitInStoreIndexD].localization;
+
+    const { distance } = unitsInStore[unitInStoreIndex].movement;
+
+    const { rowId, colId } = this.getLocalizationIds(currentLocalization);
+
+    const leftMovement = this.createSquareId(rowId, colId - distance);
+    const rightMovement = this.createSquareId(rowId, colId + distance);
+    const upMovement = this.createSquareId(rowId - distance, colId);
+    const downMovement = this.createSquareId(rowId + distance, colId);
+
+    const gateUnitReachable = unitsInStore.find(
+      (unit) =>
+        unit.class === UNIT_CLASS.GATE &&
+        [leftMovement, rightMovement, upMovement, downMovement].includes(
+          unit.movement.initialLocalization,
+        ),
+    );
+
+    let upMovementGate = '';
+    let downMovementGate = '';
+
+    if (gateUnitReachable) {
+      const { rowId, colId } = this.getLocalizationIds(
+        gateUnitReachable.movement.initialLocalization,
+      );
+      upMovementGate = this.createSquareId(rowId - 1, colId);
+      downMovementGate = this.createSquareId(rowId + 1, colId);
+    }
+
+    return [
+      leftMovement,
+      rightMovement,
+      upMovement,
+      downMovement,
+      upMovementGate,
+      downMovementGate,
+    ];
+  }
+
+  // TODO remove duplicated code from above getCanBeReached method
+  getReachableLocalizationsForUnit(
+    unitId: string,
+    unitsInMap: UnitData[],
+  ): string[] {
+    const unitInStoreIndex = this.getUnitDataIndex(unitsInMap, unitId);
+
+    const currentLocalization = unitsInMap.find((u) => u.id == unitId)?.movement
+      .initialLocalization;
+
+    if (!currentLocalization) {
+      throw 'failed'; // TODO improve error
+    }
+
+    const { distance } = unitsInMap[unitInStoreIndex].movement;
+
+    const { rowId, colId } = this.getLocalizationIds(currentLocalization);
+
+    const leftMovement = this.createSquareId(rowId, colId - distance);
+    const rightMovement = this.createSquareId(rowId, colId + distance);
+    const upMovement = this.createSquareId(rowId - distance, colId);
+    const downMovement = this.createSquareId(rowId + distance, colId);
+
+    const gateUnitReachable = unitsInMap.find(
+      (unit) =>
+        unit.class === UNIT_CLASS.GATE &&
+        [leftMovement, rightMovement, upMovement, downMovement].includes(
+          unit.movement.initialLocalization,
+        ),
+    );
+
+    let upMovementGate = '';
+    let downMovementGate = '';
+
+    if (gateUnitReachable) {
+      const { rowId, colId } = this.getLocalizationIds(
+        gateUnitReachable.movement.initialLocalization,
+      );
+      upMovementGate = this.createSquareId(rowId - 1, colId);
+      downMovementGate = this.createSquareId(rowId + 1, colId);
+    }
+
+    return [
+      leftMovement,
+      rightMovement,
+      upMovement,
+      downMovement,
+      upMovementGate,
+      downMovementGate,
+    ];
+  }
+
+  private getUnitIndex(
+    units: MatchStateUnitsMovement[],
+    unitId: string,
+  ): number {
+    const unitIndex = units.findIndex((unit) => unit.id === unitId);
+
+    if (unitIndex == -1) {
+      throw 'No unitIndex';
+    }
+
+    return unitIndex;
+  }
+
+  private getUnitDataIndex = (units: UnitData[], unitId: string): number => {
+    const unitIndex = units.findIndex((unit) => unit.id === unitId);
+
+    if (unitIndex == -1) {
+      throw 'No unitDataIndex';
+    }
+
+    return unitIndex;
+  };
+
+  private getLocalizationIds(localization: string) {
+    const ids = localization.split('_')[1].split('-');
+    const rowId = +ids[0];
+    const colId = +ids[1];
+
+    return { rowId, colId };
+  }
+
+  private createSquareId(rowId: number, colId: number) {
+    return `square_${rowId}-${colId}`;
   }
 }

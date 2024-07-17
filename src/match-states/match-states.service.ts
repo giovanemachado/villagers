@@ -67,13 +67,15 @@ export class MatchStatesService {
     const prismaClient = prismaTransaction ?? this.prismaService;
 
     const unitsConverted: MatchStateUnitsMovement[] = units.map(
-      (u: UnitData) => {
+      (unitData: UnitData) => {
         return {
-          id: u.id,
-          localization: u.movement.initialLocalization,
-          previousLocalization: u.movement.initialLocalization,
-          playerId: u.playerId,
+          id: unitData.id,
+          localization: unitData.movement.initialLocalization,
+          previousLocalization: unitData.movement.initialLocalization,
+          playerId: unitData.playerId,
           movedInTurn: false,
+          reachableLocalizations:
+            unitData.movement.initialReachableLocalizations,
         };
       },
     );
@@ -142,6 +144,8 @@ export class MatchStatesService {
         );
       }
 
+      const unitsInMap = await this.unitsService.getUnitsInMap(match.players);
+
       const matchState = await this.prismaService.matchState.update({
         where: {
           id: currentMatchState.id,
@@ -154,6 +158,7 @@ export class MatchStatesService {
             playerId,
             matchStateUpdate,
             match.players,
+            unitsInMap,
           ) as any, // this receives a InputJsonValue[] from prisma
           money: this.updateMoney(
             currentMatchState,
