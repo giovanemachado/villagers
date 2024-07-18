@@ -6,6 +6,8 @@ import {
 } from 'src/match-states/dto/match-state.dto';
 import { UnitsService } from '../units.service';
 import * as lod from 'lodash';
+import { StaticDataService } from '../../static-data/static-data.service';
+import { UNIT_CATEGORY, UNIT_CLASS } from '../dto/unit-data.dto';
 
 type UpdateUnitsMovementParams = {
   currentMatchState: Pick<MatchState, 'unitsMovement' | 'turns'>;
@@ -15,55 +17,121 @@ type UpdateUnitsMovementParams = {
 };
 
 describe('UnitsService', () => {
+  let staticDataService: StaticDataService;
   let unitsService: UnitsService;
 
   beforeEach(() => {
-    unitsService = new UnitsService();
+    staticDataService = new StaticDataService();
+    unitsService = new UnitsService(staticDataService);
   });
 
   describe('updateUnitsMovement', () => {
+    // All reachableLocalizations in this test section are not valid, and it doesnt test anything, just a mock. see reachableLocalizations tests
     const playerA = 'player-a';
     const playerB = 'player-b';
 
+    const localization = 'localization';
+    const square = 'square';
+
+    const localizationsMock = {
+      zero: `${localization}_0-0`,
+      one: `${localization}_1-0`,
+      two: `${localization}_2-0`,
+      three: `${localization}_3-0`,
+      four: `${localization}_4-0`,
+      five: `${localization}_5-0`,
+      six: `${localization}_6-0`,
+      seven: `${localization}_7-0`,
+      eight: `${localization}_8-0`,
+      nine: `${localization}_9-0`,
+      ten: `${localization}_10-0`,
+      eleven: `${localization}_11-0`,
+    };
+
+    const squaresMock = {
+      zero: `${square}_0-0`,
+      one: `${square}_1-0`,
+      two: `${square}_2-0`,
+      three: `${square}_3-0`,
+      four: `${square}_4-0`,
+      five: `${square}_5-0`,
+      six: `${square}_6-0`,
+      seven: `${square}_7-0`,
+      nine: `${square}_9-0`,
+      ten: `${square}_10-0`,
+      eleven: `${square}_11-0`,
+    };
+
     const mockUnitMovementBase: MatchStateUnitsMovement = {
       id: 'unit-x', // x, y, z
-      localization: 'localization-1',
-      previousLocalization: 'localization-1',
+      localization: localizationsMock.one,
+      previousLocalization: localizationsMock.one,
       playerId: 'player-a', // a,  b
       movedInTurn: false,
+      reachableLocalizations: [],
     };
 
     const unitAX: MatchStateUnitsMovement = {
       ...mockUnitMovementBase,
       id: 'unit-ax',
-      localization: 'localization-1',
-      previousLocalization: 'localization-0',
+      localization: localizationsMock.one,
+      previousLocalization: localizationsMock.zero,
+      reachableLocalizations: [
+        squaresMock.one,
+        squaresMock.one,
+        squaresMock.one,
+        squaresMock.one,
+      ],
     };
     const unitAY: MatchStateUnitsMovement = {
       ...mockUnitMovementBase,
       id: 'unit-ay',
-      localization: 'localization-3',
-      previousLocalization: 'localization-2',
+      localization: localizationsMock.three,
+      previousLocalization: localizationsMock.two,
+      reachableLocalizations: [
+        squaresMock.three,
+        squaresMock.three,
+        squaresMock.three,
+        squaresMock.three,
+      ],
     };
     const unitAZ: MatchStateUnitsMovement = {
       ...mockUnitMovementBase,
       id: 'unit-az',
-      localization: 'localization-5',
-      previousLocalization: 'localization-4',
+      localization: localizationsMock.five,
+      previousLocalization: localizationsMock.four,
+      reachableLocalizations: [
+        squaresMock.five,
+        squaresMock.five,
+        squaresMock.five,
+        squaresMock.five,
+      ],
     };
     const unitBX: MatchStateUnitsMovement = {
       ...mockUnitMovementBase,
       id: 'unit-bx',
       playerId: playerB,
-      localization: 'localization-7',
-      previousLocalization: 'localization-6',
+      localization: localizationsMock.seven,
+      previousLocalization: localizationsMock.six,
+      reachableLocalizations: [
+        squaresMock.seven,
+        squaresMock.seven,
+        squaresMock.seven,
+        squaresMock.seven,
+      ],
     };
     const unitBY: MatchStateUnitsMovement = {
       ...mockUnitMovementBase,
       id: 'unit-by',
       playerId: playerB,
-      localization: 'localization-9',
-      previousLocalization: 'localization-8',
+      localization: localizationsMock.nine,
+      previousLocalization: localizationsMock.eight,
+      reachableLocalizations: [
+        squaresMock.nine,
+        squaresMock.nine,
+        squaresMock.nine,
+        squaresMock.nine,
+      ],
     };
 
     const mockParamsBase: {
@@ -80,27 +148,50 @@ describe('UnitsService', () => {
       matchStateUpdate: { unitsMovement: [] },
       players: [playerA, playerB],
     };
+    const unitInMapMock = {
+      category: UNIT_CATEGORY.MILITARY,
+      playerId: 'playerId',
+      class: UNIT_CLASS.ARCHER,
+      movement: {
+        distance: 0,
+        initialLocalization: 'some_1-2',
+        initialReachableLocalizations: [],
+      },
+    };
+
+    const unitsInMapMock = [
+      {
+        id: unitAX.id,
+        ...unitInMapMock,
+      },
+      {
+        id: unitAY.id,
+        ...unitInMapMock,
+      },
+      {
+        id: unitAZ.id,
+        ...unitInMapMock,
+      },
+      {
+        id: unitBX.id,
+        ...unitInMapMock,
+      },
+      {
+        id: unitBY.id,
+        ...unitInMapMock,
+      },
+    ];
 
     describe('no units are moving to the same spot', () => {
       it('Player A move his units', () => {
         const unitAXNewLocalization: MatchStateUnitsMovement = {
           ...unitAX,
-          localization: 'localization-2',
+          localization: localizationsMock.two,
           movedInTurn: true,
         };
         const unitAYNewLocalization: MatchStateUnitsMovement = {
           ...unitAY,
-          localization: 'localization-4',
-          movedInTurn: true,
-        };
-        const unitBXNewLocalization: MatchStateUnitsMovement = {
-          ...unitBX,
-          localization: 'localization-10',
-          movedInTurn: true,
-        };
-        const unitBYNewLocalization: MatchStateUnitsMovement = {
-          ...unitBY,
-          localization: 'localization-11',
+          localization: localizationsMock.four,
           movedInTurn: true,
         };
         const paramsPlayerA: UpdateUnitsMovementParams = {
@@ -109,25 +200,30 @@ describe('UnitsService', () => {
             unitsMovement: [unitAXNewLocalization, unitAYNewLocalization],
           },
         };
-        const paramsPlayerB: UpdateUnitsMovementParams = {
-          ...mockParamsBase,
-          playerId: playerB,
-          matchStateUpdate: {
-            unitsMovement: [unitBXNewLocalization, unitBYNewLocalization],
-          },
-        };
         const resultPlayerA: MatchStateUnitsMovement[] = [
           {
             ...unitAXNewLocalization,
-            localization: 'localization-2',
-            previousLocalization: 'localization-1',
+            localization: localizationsMock.two,
+            previousLocalization: localizationsMock.one,
             movedInTurn: false,
+            reachableLocalizations: [
+              squaresMock.two,
+              squaresMock.two,
+              squaresMock.two,
+              squaresMock.two,
+            ],
           },
           {
             ...unitAYNewLocalization,
-            localization: 'localization-4',
-            previousLocalization: 'localization-3',
+            localization: localizationsMock.four,
+            previousLocalization: localizationsMock.three,
             movedInTurn: false,
+            reachableLocalizations: [
+              squaresMock.four,
+              squaresMock.four,
+              squaresMock.four,
+              squaresMock.four,
+            ],
           },
           unitAZ,
           unitBX,
@@ -147,6 +243,7 @@ describe('UnitsService', () => {
             paramsPlayerA.playerId,
             paramsPlayerAMatchStateUpdate,
             paramsPlayerA.players,
+            unitsInMapMock,
           ),
         ).toStrictEqual(resultPlayerA);
       });
@@ -154,12 +251,12 @@ describe('UnitsService', () => {
       it('Player B move his units', () => {
         const unitBXNewLocalization: MatchStateUnitsMovement = {
           ...unitBX,
-          localization: 'localization-10',
+          localization: localizationsMock.ten,
           movedInTurn: true,
         };
         const unitBYNewLocalization: MatchStateUnitsMovement = {
           ...unitBY,
-          localization: 'localization-11',
+          localization: localizationsMock.eleven,
           movedInTurn: true,
         };
         const paramsPlayerB: UpdateUnitsMovementParams = {
@@ -176,15 +273,27 @@ describe('UnitsService', () => {
           unitAZ,
           {
             ...unitBXNewLocalization,
-            localization: 'localization-10',
-            previousLocalization: 'localization-7',
+            localization: localizationsMock.ten,
+            previousLocalization: localizationsMock.seven,
             movedInTurn: false,
+            reachableLocalizations: [
+              squaresMock.ten,
+              squaresMock.ten,
+              squaresMock.ten,
+              squaresMock.ten,
+            ],
           },
           {
             ...unitBYNewLocalization,
-            localization: 'localization-11',
-            previousLocalization: 'localization-9',
+            localization: localizationsMock.eleven,
+            previousLocalization: localizationsMock.nine,
             movedInTurn: false,
+            reachableLocalizations: [
+              squaresMock.eleven,
+              squaresMock.eleven,
+              squaresMock.eleven,
+              squaresMock.eleven,
+            ],
           },
         ];
 
@@ -201,6 +310,7 @@ describe('UnitsService', () => {
             paramsPlayerB.playerId,
             paramsPlayerBMatchStateUpdate,
             paramsPlayerB.players,
+            unitsInMapMock,
           ),
         ).toStrictEqual(resultPlayerB);
       });
@@ -208,12 +318,12 @@ describe('UnitsService', () => {
       it('Player A doesnt move any unit', () => {
         const unitAXNewLocalization: MatchStateUnitsMovement = {
           ...unitAX,
-          localization: 'localization-2',
+          localization: localizationsMock.two,
           movedInTurn: true,
         };
         const unitAYNewLocalization: MatchStateUnitsMovement = {
           ...unitAY,
-          localization: 'localization-4',
+          localization: localizationsMock.four,
           movedInTurn: true,
         };
         const paramsPlayerA: UpdateUnitsMovementParams = {
@@ -244,6 +354,7 @@ describe('UnitsService', () => {
             paramsPlayerA.playerId,
             paramsPlayerANoMoveMatchStateUpdate,
             paramsPlayerA.players,
+            unitsInMapMock,
           ),
         ).toStrictEqual(resultPlayerANoMoves);
       });
@@ -251,22 +362,22 @@ describe('UnitsService', () => {
       it('Player A try move units in Bs turn (aka via API Player B moves As units, not possible via UI)', () => {
         const unitAXNewLocalization: MatchStateUnitsMovement = {
           ...unitAX,
-          localization: 'localization-2',
+          localization: localizationsMock.two,
           movedInTurn: true,
         };
         const unitAYNewLocalization: MatchStateUnitsMovement = {
           ...unitAY,
-          localization: 'localization-4',
+          localization: localizationsMock.four,
           movedInTurn: true,
         };
         const unitBXNewLocalization: MatchStateUnitsMovement = {
           ...unitBX,
-          localization: 'localization-10',
+          localization: localizationsMock.ten,
           movedInTurn: true,
         };
         const unitBYNewLocalization: MatchStateUnitsMovement = {
           ...unitBY,
-          localization: 'localization-11',
+          localization: localizationsMock.eleven,
           movedInTurn: true,
         };
         const paramsPlayerA: UpdateUnitsMovementParams = {
@@ -303,6 +414,7 @@ describe('UnitsService', () => {
             paramsPlayerA.playerId,
             paramsPlayerANotHisTurnMatchStateUpdate,
             paramsPlayerA.players,
+            unitsInMapMock,
           ),
         ).toStrictEqual(resultPlayerAMovesInBsTurn);
       });
@@ -312,28 +424,40 @@ describe('UnitsService', () => {
       it('dont move units from player without priority if conflicts', () => {
         const unitAXNewLocalization: MatchStateUnitsMovement = {
           ...unitAX,
-          localization: 'localization-7',
+          localization: localizationsMock.seven,
           movedInTurn: true,
         };
 
         const unitAYNewLocalization: MatchStateUnitsMovement = {
           ...unitAY,
-          localization: 'localization-9',
+          localization: localizationsMock.nine,
           movedInTurn: true,
         };
 
         const resultPlayerA: MatchStateUnitsMovement[] = [
           {
             ...unitAXNewLocalization,
-            localization: 'localization-1',
-            previousLocalization: 'localization-1',
+            localization: localizationsMock.one,
+            previousLocalization: localizationsMock.one,
             movedInTurn: false,
+            reachableLocalizations: [
+              squaresMock.one,
+              squaresMock.one,
+              squaresMock.one,
+              squaresMock.one,
+            ],
           },
           {
             ...unitAYNewLocalization,
-            localization: 'localization-3',
-            previousLocalization: 'localization-3',
+            localization: localizationsMock.three,
+            previousLocalization: localizationsMock.three,
             movedInTurn: false,
+            reachableLocalizations: [
+              squaresMock.three,
+              squaresMock.three,
+              squaresMock.three,
+              squaresMock.three,
+            ],
           },
           unitAZ,
           unitBX,
@@ -360,6 +484,7 @@ describe('UnitsService', () => {
             paramsPlayerA.playerId,
             lod.cloneDeep(paramsPlayerA.matchStateUpdate),
             paramsPlayerA.players,
+            unitsInMapMock,
           ),
         ).toStrictEqual(resultPlayerA);
       });
@@ -367,28 +492,40 @@ describe('UnitsService', () => {
       it('Player A move two units to free positions, then Player B move its units to the same positions with priority', () => {
         const unitAXNewLocalization: MatchStateUnitsMovement = {
           ...unitAX,
-          localization: 'localization-10',
+          localization: localizationsMock.ten,
           movedInTurn: true,
         };
 
         const unitAYNewLocalization: MatchStateUnitsMovement = {
           ...unitAY,
-          localization: 'localization-11',
+          localization: localizationsMock.eleven,
           movedInTurn: true,
         };
 
         const resultPlayerA: MatchStateUnitsMovement[] = [
           {
             ...unitAXNewLocalization,
-            localization: 'localization-10',
-            previousLocalization: 'localization-1',
+            localization: localizationsMock.ten,
+            previousLocalization: localizationsMock.one,
             movedInTurn: false,
+            reachableLocalizations: [
+              squaresMock.ten,
+              squaresMock.ten,
+              squaresMock.ten,
+              squaresMock.ten,
+            ],
           },
           {
             ...unitAYNewLocalization,
-            localization: 'localization-11',
-            previousLocalization: 'localization-3',
+            localization: localizationsMock.eleven,
+            previousLocalization: localizationsMock.three,
             movedInTurn: false,
+            reachableLocalizations: [
+              squaresMock.eleven,
+              squaresMock.eleven,
+              squaresMock.eleven,
+              squaresMock.eleven,
+            ],
           },
           unitAZ,
           unitBX,
@@ -413,42 +550,55 @@ describe('UnitsService', () => {
           paramsPlayerA.playerId,
           lod.cloneDeep(paramsPlayerA.matchStateUpdate),
           paramsPlayerA.players,
+          unitsInMapMock,
         );
         expect(unitsMovementAfterPlayerA).toStrictEqual(resultPlayerA);
 
         const unitBXNewLocalization: MatchStateUnitsMovement = {
           ...unitBX,
-          localization: 'localization-10',
+          localization: localizationsMock.ten,
           movedInTurn: true,
         };
 
         const unitBYNewLocalization: MatchStateUnitsMovement = {
           ...unitBY,
-          localization: 'localization-11',
+          localization: localizationsMock.eleven,
           movedInTurn: true,
         };
 
         const resultPlayerB: MatchStateUnitsMovement[] = [
           {
             ...unitAX,
-            previousLocalization: 'localization-1',
+            previousLocalization: localizationsMock.one,
           },
           {
             ...unitAY,
-            previousLocalization: 'localization-3',
+            previousLocalization: localizationsMock.three,
           },
           unitAZ,
           {
             ...unitBXNewLocalization,
-            localization: 'localization-10',
-            previousLocalization: 'localization-7',
+            localization: localizationsMock.ten,
+            previousLocalization: localizationsMock.seven,
             movedInTurn: false,
+            reachableLocalizations: [
+              squaresMock.ten,
+              squaresMock.ten,
+              squaresMock.ten,
+              squaresMock.ten,
+            ],
           },
           {
             ...unitBYNewLocalization,
-            localization: 'localization-11',
-            previousLocalization: 'localization-9',
+            localization: localizationsMock.eleven,
+            previousLocalization: localizationsMock.nine,
             movedInTurn: false,
+            reachableLocalizations: [
+              squaresMock.eleven,
+              squaresMock.eleven,
+              squaresMock.eleven,
+              squaresMock.eleven,
+            ],
           },
         ];
 
@@ -471,6 +621,7 @@ describe('UnitsService', () => {
             paramsPlayerB.playerId,
             lod.cloneDeep(paramsPlayerB.matchStateUpdate),
             paramsPlayerB.players,
+            unitsInMapMock,
           ),
         ).toStrictEqual(resultPlayerB);
       });
@@ -478,40 +629,58 @@ describe('UnitsService', () => {
       it('Player A move one unit to an ocuppied (by Bs units movement) position, and another to first units position (both need to go back)', () => {
         const unitAXNewLocalization: MatchStateUnitsMovement = {
           ...unitAX,
-          localization: 'localization-10',
+          localization: localizationsMock.ten,
           movedInTurn: true,
         };
 
         const unitAYNewLocalization: MatchStateUnitsMovement = {
           ...unitAY,
-          localization: 'localization-1',
+          localization: localizationsMock.one,
           movedInTurn: true,
         };
 
         const unitAZNewLocalization: MatchStateUnitsMovement = {
           ...unitAZ,
-          localization: 'localization-3',
+          localization: localizationsMock.three,
           movedInTurn: true,
         };
 
         const resultPlayerA: MatchStateUnitsMovement[] = [
           {
             ...unitAXNewLocalization,
-            localization: 'localization-10',
-            previousLocalization: 'localization-1',
+            localization: localizationsMock.ten,
+            previousLocalization: localizationsMock.one,
             movedInTurn: false,
+            reachableLocalizations: [
+              squaresMock.ten,
+              squaresMock.ten,
+              squaresMock.ten,
+              squaresMock.ten,
+            ],
           },
           {
             ...unitAYNewLocalization,
-            localization: 'localization-1',
-            previousLocalization: 'localization-3',
+            localization: localizationsMock.one,
+            previousLocalization: localizationsMock.three,
             movedInTurn: false,
+            reachableLocalizations: [
+              squaresMock.one,
+              squaresMock.one,
+              squaresMock.one,
+              squaresMock.one,
+            ],
           },
           {
             ...unitAZNewLocalization,
-            localization: 'localization-3',
-            previousLocalization: 'localization-5',
+            localization: localizationsMock.three,
+            previousLocalization: localizationsMock.five,
             movedInTurn: false,
+            reachableLocalizations: [
+              squaresMock.three,
+              squaresMock.three,
+              squaresMock.three,
+              squaresMock.three,
+            ],
           },
           unitBX,
           unitBY,
@@ -541,33 +710,40 @@ describe('UnitsService', () => {
           paramsPlayerA.playerId,
           lod.cloneDeep(paramsPlayerA.matchStateUpdate),
           paramsPlayerA.players,
+          unitsInMapMock,
         );
         expect(unitsMovementAfterPlayerA).toStrictEqual(resultPlayerA);
 
         const unitBXNewLocalization: MatchStateUnitsMovement = {
           ...unitBX,
-          localization: 'localization-10',
+          localization: localizationsMock.ten,
           movedInTurn: true,
         };
 
         const resultPlayerB: MatchStateUnitsMovement[] = [
           {
             ...unitAX,
-            previousLocalization: 'localization-1',
+            previousLocalization: localizationsMock.one,
           },
           {
             ...unitAY,
-            previousLocalization: 'localization-3',
+            previousLocalization: localizationsMock.three,
           },
           {
             ...unitAZ,
-            previousLocalization: 'localization-5',
+            previousLocalization: localizationsMock.five,
           },
           {
             ...unitBXNewLocalization,
-            localization: 'localization-10',
-            previousLocalization: 'localization-7',
+            localization: localizationsMock.ten,
+            previousLocalization: localizationsMock.seven,
             movedInTurn: false,
+            reachableLocalizations: [
+              squaresMock.ten,
+              squaresMock.ten,
+              squaresMock.ten,
+              squaresMock.ten,
+            ],
           },
           unitBY,
         ];
@@ -594,6 +770,7 @@ describe('UnitsService', () => {
             paramsPlayerB.playerId,
             lod.cloneDeep(paramsPlayerB.matchStateUpdate),
             paramsPlayerB.players,
+            unitsInMapMock,
           ),
         ).toStrictEqual(resultPlayerB);
       });

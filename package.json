@@ -18,7 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "g-map": "npx ts-node ./dist/src/static-data/generate-map.js",
+    "g-map": "nest build && npx ts-node ./dist/src/static-data/generate-map.js",
     "g-schema": "npx openapi-typescript ./src/open-api/schema.yaml -o ./src/open-api/schema.ts && yarn g-enum",
     "g-enum": "npx ts-node ./src/open-api/add-enums-to-schema.ts && eslint --fix \"./src/open-api/schema.ts\"",
     "p-generate": "npx prisma generate",

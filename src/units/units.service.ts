@@ -14,7 +14,7 @@ import {
 import * as lod from 'lodash';
 // TODO fix imports when file has tests (it failes for jest)
 import { ERROR_MESSAGE } from '../errors/messages';
-import { StaticDataService } from 'src/static-data/static-data.service';
+import { StaticDataService } from '../static-data/static-data.service';
 
 @Injectable()
 export class UnitsService {
@@ -325,7 +325,7 @@ export class UnitsService {
       downMovement,
       upMovementGate,
       downMovementGate,
-    ];
+    ].filter((u) => !!u);
   }
 
   // TODO remove duplicated code from above getCanBeReached method
@@ -377,7 +377,7 @@ export class UnitsService {
       downMovement,
       upMovementGate,
       downMovementGate,
-    ];
+    ].filter((u) => !!u);
   }
 
   private getUnitIndex(

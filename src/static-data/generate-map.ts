@@ -88,10 +88,11 @@ const generateMap = async (
         unit = unitService.generateStaticUnit(
           row_definition.unitDefinitionClass,
         );
-        unit.id = generateUnitId(unit.class);
+        const unitId = generateUnitId(unit.class);
+        unit.id = unitId;
         unit.movement.initialLocalization = id;
         unit.movement.initialReachableLocalizations =
-          unitService.getReachableLocalizationsForUnit(id, unitsInMap);
+          unitService.getReachableLocalizationsForUnit(unitId, unitsInMap);
         unit.playerId = row_definition.playerId ?? '';
 
         units.push(unit);
@@ -129,17 +130,21 @@ const showStructure = (generatedMap: SquareData[][]): string => {
 };
 
 async function bootstrap() {
-  const app = await NestFactory.createApplicationContext(AppModule);
+  try {
+    const app = await NestFactory.createApplicationContext(AppModule);
 
-  const unitService = app.get(UnitsService);
+    const unitService = app.get(UnitsService);
 
-  const { units, rows } = await generateMap(inputMapDefinition, unitService);
+    const { units, rows } = await generateMap(inputMapDefinition, unitService);
 
-  const fileName = `${address}-${new Date().getTime()}.${format}`;
+    const fileName = `${address}-${new Date().getTime()}.${format}`;
 
-  fs.writeFileSync(fileName, JSON.stringify({ rows, units }));
+    fs.writeFileSync(fileName, JSON.stringify({ rows, units }));
 
-  await app.close();
+    await app.close();
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 bootstrap();
