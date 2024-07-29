@@ -146,6 +146,24 @@ export class MatchStatesService {
 
       const unitsInMap = await this.unitsService.getUnitsInMap(match.players);
 
+      const unitsMovement = this.unitsService.updateUnitsMovement(
+        currentMatchState,
+        playerId,
+        matchStateUpdate,
+        match.players,
+        unitsInMap,
+      );
+
+      let updatedUnitsAfterCombat = unitsMovement;
+
+      if (bothPlayersFinishedTurn) {
+        updatedUnitsAfterCombat = this.unitsService.resolveUnitsCombat(
+          unitsMovement,
+          match.players,
+          currentMatchState.turns,
+        );
+      }
+
       const matchState = await this.prismaService.matchState.update({
         where: {
           id: currentMatchState.id,
@@ -153,13 +171,7 @@ export class MatchStatesService {
         data: {
           playersEndTurn: playersEndTurnUpdated,
           turns: this.updateTurns(currentMatchState, bothPlayersFinishedTurn),
-          unitsMovement: this.unitsService.updateUnitsMovement(
-            currentMatchState,
-            playerId,
-            matchStateUpdate,
-            match.players,
-            unitsInMap,
-          ) as any, // this receives a InputJsonValue[] from prisma
+          unitsMovement: updatedUnitsAfterCombat as any, // this receives a InputJsonValue[] from prisma
           money: this.updateMoney(
             currentMatchState,
             playerId,

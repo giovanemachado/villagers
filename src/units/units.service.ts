@@ -107,27 +107,28 @@ export class UnitsService {
     players: string[],
     unitsInMap: UnitData[],
   ): MatchStateUnitsMovement[] {
-    const priorityPlayer =
-      currentMatchState.turns % 2 === 0 ? players[0] : players[1];
+    const priorityPlayer = this.getPriorityPlayerInTurn(
+      currentMatchState.turns,
+      players,
+    );
 
-    const unitsToUpdateOfCurrentPlayer = this.getUnitsFromCurrentPlayer(
+    const currentPlayerUnitsForUpdate = this.getUnitsFromCurrentPlayer(
       matchStateUpdate,
       playerId,
     );
 
-    const currentUnitsUpdated = this.updateCurrentUnits(
-      unitsToUpdateOfCurrentPlayer,
+    const updatedUnits = this.updateUnitsLocalization(
+      currentPlayerUnitsForUpdate,
       currentMatchState,
     );
 
-    const updateCurrentUnitsWithConflict =
-      this.updateUnitsMovementFixingConflicts(
-        currentUnitsUpdated,
-        priorityPlayer,
-      );
+    const updatedUnitsWithoutConflicts = this.resolveUnitsLocalizationConflicts(
+      updatedUnits,
+      priorityPlayer,
+    );
 
-    const unitsMovement = this.updateReachableUnitsInUnitsMovement(
-      updateCurrentUnitsWithConflict,
+    const unitsMovement = this.updateReachableLocalizationsInUnits(
+      updatedUnitsWithoutConflicts,
       unitsInMap,
     );
 
@@ -138,20 +139,20 @@ export class UnitsService {
     matchStateUpdate: Pick<MatchStateUpdate, 'unitsMovement'>,
     playerId: string,
   ): MatchStateUnitsMovement[] {
-    const unitsToUpdateOfCurrentPlayer: MatchStateUnitsMovement[] = [];
+    const unitsForUpdate: MatchStateUnitsMovement[] = [];
 
-    matchStateUpdate.unitsMovement.forEach((unitToUpdate) => {
-      if (unitToUpdate.playerId != playerId) {
+    matchStateUpdate.unitsMovement.forEach((unitForUpdate) => {
+      if (unitForUpdate.playerId != playerId) {
         return;
       }
 
-      unitsToUpdateOfCurrentPlayer.push(unitToUpdate);
+      unitsForUpdate.push(unitForUpdate);
     });
 
-    return unitsToUpdateOfCurrentPlayer;
+    return unitsForUpdate;
   }
 
-  private updateCurrentUnits(
+  private updateUnitsLocalization(
     unitsToUpdateOfCurrentPlayer: MatchStateUnitsMovement[],
     currentMatchState: Pick<MatchStateUpdate, 'unitsMovement'>,
   ): MatchStateUnitsMovement[] {
@@ -186,13 +187,13 @@ export class UnitsService {
     );
   }
 
-  private updateUnitsMovementFixingConflicts(
+  private resolveUnitsLocalizationConflicts(
     unitsMovement: MatchStateUnitsMovement[],
     priorityPlayer: string,
   ): MatchStateUnitsMovement[] {
     let safetyCounter = 0;
 
-    let unitsToReturn: MatchStateUnitsMovement[] = this.checkForUnitsToReturn(
+    let unitsToReturn: MatchStateUnitsMovement[] = this.getUnitsForFallback(
       unitsMovement,
       priorityPlayer,
     );
@@ -216,13 +217,13 @@ export class UnitsService {
         }
       });
 
-      unitsToReturn = this.checkForUnitsToReturn(unitsMovement, priorityPlayer);
+      unitsToReturn = this.getUnitsForFallback(unitsMovement, priorityPlayer);
     }
 
     return unitsMovement;
   }
 
-  private checkForUnitsToReturn(
+  private getUnitsForFallback(
     unitsMovement: MatchStateUnitsMovement[],
     priorityPlayer: string,
   ): MatchStateUnitsMovement[] {
@@ -261,7 +262,7 @@ export class UnitsService {
     return unitsToReturn;
   }
 
-  updateReachableUnitsInUnitsMovement(
+  updateReachableLocalizationsInUnits(
     unitsMovement: MatchStateUnitsMovement[],
     unitsInMap: UnitData[],
   ) {
@@ -326,6 +327,10 @@ export class UnitsService {
       upMovementGate,
       downMovementGate,
     ].filter((u) => !!u);
+  }
+
+  private getPriorityPlayerInTurn(turns: number, players: string[]) {
+    return turns % 2 === 0 ? players[0] : players[1];
   }
 
   // TODO remove duplicated code from above getCanBeReached method
@@ -413,5 +418,25 @@ export class UnitsService {
 
   private createSquareId(rowId: number, colId: number) {
     return `square_${rowId}-${colId}`;
+  }
+
+  resolveUnitsCombat(
+    updatedUnitsWithoutConflicts: MatchStateUnitsMovement[],
+    players: string[],
+    turns: number,
+  ): MatchStateUnitsMovement[] {
+    const priorityPlayer = this.getPriorityPlayerInTurn(turns, players);
+
+    priorityPlayer;
+
+    const survivorUnits = updatedUnitsWithoutConflicts.filter(
+      (unitMovement) => {
+        unitMovement;
+
+        return true;
+      },
+    );
+
+    return survivorUnits;
   }
 }
