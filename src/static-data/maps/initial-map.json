@@ -171,399 +171,591 @@
   ],
   "units": [
     {
-      "id": "spearman-20",
+      "id": "spearman-0",
       "class": "spearman",
       "playerId": "a",
       "category": "military",
       "movement": {
         "distance": 1,
         "initialLocalization": "square_2-0",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_2--1",
+          "square_2-1",
+          "square_1-0",
+          "square_3-0"
+        ]
       }
     },
     {
-      "id": "castle-21",
+      "id": "castle-1",
       "class": "castle",
       "playerId": "a",
       "category": "structure",
       "movement": {
         "distance": 0,
         "initialLocalization": "square_2-1",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_2-1",
+          "square_2-1",
+          "square_2-1",
+          "square_2-1"
+        ]
       }
     },
     {
-      "id": "spearman-22",
+      "id": "spearman-2",
       "class": "spearman",
       "playerId": "a",
       "category": "military",
       "movement": {
         "distance": 1,
         "initialLocalization": "square_2-2",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_2-1",
+          "square_2-3",
+          "square_1-2",
+          "square_3-2"
+        ]
       }
     },
     {
-      "id": "spearman-25",
+      "id": "spearman-3",
       "class": "spearman",
       "playerId": "a",
       "category": "military",
       "movement": {
         "distance": 1,
         "initialLocalization": "square_2-5",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_2-4",
+          "square_2-6",
+          "square_1-5",
+          "square_3-5"
+        ]
       }
     },
     {
-      "id": "archer-26",
+      "id": "archer-4",
       "class": "archer",
       "playerId": "a",
       "category": "military",
       "movement": {
         "distance": 1,
         "initialLocalization": "square_2-6",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_2-5",
+          "square_2-7",
+          "square_1-6",
+          "square_3-6"
+        ]
       }
     },
     {
-      "id": "spearman-27",
+      "id": "spearman-5",
       "class": "spearman",
       "playerId": "a",
       "category": "military",
       "movement": {
         "distance": 1,
         "initialLocalization": "square_2-7",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_2-6",
+          "square_2-8",
+          "square_1-7",
+          "square_3-7"
+        ]
       }
     },
     {
-      "id": "horseman-28",
+      "id": "horseman-6",
       "class": "horseman",
       "playerId": "a",
       "category": "military",
       "movement": {
         "distance": 1,
         "initialLocalization": "square_2-8",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_2-7",
+          "square_2-9",
+          "square_1-8",
+          "square_3-8"
+        ]
       }
     },
     {
-      "id": "horseman-29",
+      "id": "horseman-7",
       "class": "horseman",
       "playerId": "a",
       "category": "military",
       "movement": {
         "distance": 1,
         "initialLocalization": "square_2-9",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_2-8",
+          "square_2-10",
+          "square_1-9",
+          "square_3-9"
+        ]
       }
     },
     {
-      "id": "wall-40",
+      "id": "wall-8",
       "class": "wall",
       "playerId": "a",
       "category": "structure",
       "movement": {
         "distance": 0,
         "initialLocalization": "square_4-0",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_4-0",
+          "square_4-0",
+          "square_4-0",
+          "square_4-0"
+        ]
       }
     },
     {
-      "id": "wall-41",
+      "id": "wall-9",
       "class": "wall",
       "playerId": "a",
       "category": "structure",
       "movement": {
         "distance": 0,
         "initialLocalization": "square_4-1",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_4-1",
+          "square_4-1",
+          "square_4-1",
+          "square_4-1"
+        ]
       }
     },
     {
-      "id": "gate-42",
+      "id": "gate-10",
       "class": "gate",
       "playerId": "a",
       "category": "structure",
       "movement": {
         "distance": 0,
         "initialLocalization": "square_4-2",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_4-2",
+          "square_4-2",
+          "square_4-2",
+          "square_4-2",
+          "square_3-2",
+          "square_5-2"
+        ]
       }
     },
     {
-      "id": "wall-43",
+      "id": "wall-11",
       "class": "wall",
       "playerId": "a",
       "category": "structure",
       "movement": {
         "distance": 0,
         "initialLocalization": "square_4-3",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_4-3",
+          "square_4-3",
+          "square_4-3",
+          "square_4-3"
+        ]
       }
     },
     {
-      "id": "gate-44",
+      "id": "gate-12",
       "class": "gate",
       "playerId": "a",
       "category": "structure",
       "movement": {
         "distance": 0,
         "initialLocalization": "square_4-4",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_4-4",
+          "square_4-4",
+          "square_4-4",
+          "square_4-4",
+          "square_3-4",
+          "square_5-4"
+        ]
       }
     },
     {
-      "id": "wall-45",
+      "id": "wall-13",
       "class": "wall",
       "playerId": "a",
       "category": "structure",
       "movement": {
         "distance": 0,
         "initialLocalization": "square_4-5",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_4-5",
+          "square_4-5",
+          "square_4-5",
+          "square_4-5"
+        ]
       }
     },
     {
-      "id": "wall-46",
+      "id": "wall-14",
       "class": "wall",
       "playerId": "a",
       "category": "structure",
       "movement": {
         "distance": 0,
         "initialLocalization": "square_4-6",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_4-6",
+          "square_4-6",
+          "square_4-6",
+          "square_4-6"
+        ]
       }
     },
     {
-      "id": "gate-47",
+      "id": "gate-15",
       "class": "gate",
       "playerId": "a",
       "category": "structure",
       "movement": {
         "distance": 0,
         "initialLocalization": "square_4-7",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_4-7",
+          "square_4-7",
+          "square_4-7",
+          "square_4-7",
+          "square_3-7",
+          "square_5-7"
+        ]
       }
     },
     {
-      "id": "wall-48",
+      "id": "wall-16",
       "class": "wall",
       "playerId": "a",
       "category": "structure",
       "movement": {
         "distance": 0,
         "initialLocalization": "square_4-8",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_4-8",
+          "square_4-8",
+          "square_4-8",
+          "square_4-8"
+        ]
       }
     },
     {
-      "id": "wall-49",
+      "id": "wall-17",
       "class": "wall",
       "playerId": "a",
       "category": "structure",
       "movement": {
         "distance": 0,
         "initialLocalization": "square_4-9",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_4-9",
+          "square_4-9",
+          "square_4-9",
+          "square_4-9"
+        ]
       }
     },
     {
-      "id": "wall-90",
+      "id": "wall-18",
       "class": "wall",
       "playerId": "b",
       "category": "structure",
       "movement": {
         "distance": 0,
         "initialLocalization": "square_9-0",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_9-0",
+          "square_9-0",
+          "square_9-0",
+          "square_9-0"
+        ]
       }
     },
     {
-      "id": "wall-91",
+      "id": "wall-19",
       "class": "wall",
       "playerId": "b",
       "category": "structure",
       "movement": {
         "distance": 0,
         "initialLocalization": "square_9-1",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_9-1",
+          "square_9-1",
+          "square_9-1",
+          "square_9-1"
+        ]
       }
     },
     {
-      "id": "gate-92",
+      "id": "gate-20",
       "class": "gate",
       "playerId": "b",
       "category": "structure",
       "movement": {
         "distance": 0,
         "initialLocalization": "square_9-2",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_9-2",
+          "square_9-2",
+          "square_9-2",
+          "square_9-2",
+          "square_8-2",
+          "square_10-2"
+        ]
       }
     },
     {
-      "id": "wall-93",
+      "id": "wall-21",
       "class": "wall",
       "playerId": "b",
       "category": "structure",
       "movement": {
         "distance": 0,
         "initialLocalization": "square_9-3",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_9-3",
+          "square_9-3",
+          "square_9-3",
+          "square_9-3"
+        ]
       }
     },
     {
-      "id": "gate-94",
+      "id": "gate-22",
       "class": "gate",
       "playerId": "b",
       "category": "structure",
       "movement": {
         "distance": 0,
         "initialLocalization": "square_9-4",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_9-4",
+          "square_9-4",
+          "square_9-4",
+          "square_9-4",
+          "square_8-4",
+          "square_10-4"
+        ]
       }
     },
     {
-      "id": "wall-95",
+      "id": "wall-23",
       "class": "wall",
       "playerId": "b",
       "category": "structure",
       "movement": {
         "distance": 0,
         "initialLocalization": "square_9-5",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_9-5",
+          "square_9-5",
+          "square_9-5",
+          "square_9-5"
+        ]
       }
     },
     {
-      "id": "wall-96",
+      "id": "wall-24",
       "class": "wall",
       "playerId": "b",
       "category": "structure",
       "movement": {
         "distance": 0,
         "initialLocalization": "square_9-6",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_9-6",
+          "square_9-6",
+          "square_9-6",
+          "square_9-6"
+        ]
       }
     },
     {
-      "id": "gate-97",
+      "id": "gate-25",
       "class": "gate",
       "playerId": "b",
       "category": "structure",
       "movement": {
         "distance": 0,
         "initialLocalization": "square_9-7",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_9-7",
+          "square_9-7",
+          "square_9-7",
+          "square_9-7",
+          "square_8-7",
+          "square_10-7"
+        ]
       }
     },
     {
-      "id": "wall-98",
+      "id": "wall-26",
       "class": "wall",
       "playerId": "b",
       "category": "structure",
       "movement": {
         "distance": 0,
         "initialLocalization": "square_9-8",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_9-8",
+          "square_9-8",
+          "square_9-8",
+          "square_9-8"
+        ]
       }
     },
     {
-      "id": "wall-99",
+      "id": "wall-27",
       "class": "wall",
       "playerId": "b",
       "category": "structure",
       "movement": {
         "distance": 0,
         "initialLocalization": "square_9-9",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_9-9",
+          "square_9-9",
+          "square_9-9",
+          "square_9-9"
+        ]
       }
     },
     {
-      "id": "spearman-110",
+      "id": "spearman-28",
       "class": "spearman",
       "playerId": "b",
       "category": "military",
       "movement": {
         "distance": 1,
         "initialLocalization": "square_11-0",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_11--1",
+          "square_11-1",
+          "square_10-0",
+          "square_12-0"
+        ]
       }
     },
     {
-      "id": "castle-111",
+      "id": "castle-29",
       "class": "castle",
       "playerId": "b",
       "category": "structure",
       "movement": {
         "distance": 0,
         "initialLocalization": "square_11-1",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_11-1",
+          "square_11-1",
+          "square_11-1",
+          "square_11-1"
+        ]
       }
     },
     {
-      "id": "spearman-112",
+      "id": "spearman-30",
       "class": "spearman",
       "playerId": "b",
       "category": "military",
       "movement": {
         "distance": 1,
         "initialLocalization": "square_11-2",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_11-1",
+          "square_11-3",
+          "square_10-2",
+          "square_12-2"
+        ]
       }
     },
     {
-      "id": "spearman-115",
+      "id": "spearman-31",
       "class": "spearman",
       "playerId": "b",
       "category": "military",
       "movement": {
         "distance": 1,
         "initialLocalization": "square_11-5",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_11-4",
+          "square_11-6",
+          "square_10-5",
+          "square_12-5"
+        ]
       }
     },
     {
-      "id": "archer-116",
+      "id": "archer-32",
       "class": "archer",
       "playerId": "b",
       "category": "military",
       "movement": {
         "distance": 1,
         "initialLocalization": "square_11-6",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_11-5",
+          "square_11-7",
+          "square_10-6",
+          "square_12-6"
+        ]
       }
     },
     {
-      "id": "spearman-117",
+      "id": "spearman-33",
       "class": "spearman",
       "playerId": "b",
       "category": "military",
       "movement": {
         "distance": 1,
         "initialLocalization": "square_11-7",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_11-6",
+          "square_11-8",
+          "square_10-7",
+          "square_12-7"
+        ]
       }
     },
     {
-      "id": "horseman-118",
+      "id": "horseman-34",
       "class": "horseman",
       "playerId": "b",
       "category": "military",
       "movement": {
         "distance": 1,
         "initialLocalization": "square_11-8",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_11-7",
+          "square_11-9",
+          "square_10-8",
+          "square_12-8"
+        ]
       }
     },
     {
-      "id": "horseman-119",
+      "id": "horseman-35",
       "class": "horseman",
       "playerId": "b",
       "category": "military",
       "movement": {
         "distance": 1,
         "initialLocalization": "square_11-9",
-        "initialReachableLocalizations": []
+        "initialReachableLocalizations": [
+          "square_11-8",
+          "square_11-10",
+          "square_10-9",
+          "square_12-9"
+        ]
       }
     }
   ]

@@ -9,6 +9,7 @@ import { UNIT_CLASS, UnitData } from 'src/units/dto/unit-data.dto';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from 'src/app.module';
 import { UnitsService } from 'src/units/units.service';
+import * as lod from 'lodash';
 
 const mapDefinitions = [MAPS.INITIAL];
 let inputMapDefinition = '';
@@ -94,8 +95,6 @@ const generateMap = async (
         unit.playerId = row_definition.playerId ?? '';
 
         units.push(unit);
-      } else {
-        unitCount++;
       }
 
       squares.push({ id, type });
@@ -104,14 +103,16 @@ const generateMap = async (
     rows.push(squares);
   });
 
-  // not working properly
-  //   const unitsWithReachable = units.map(
-  //     (u) =>
-  //       (u.movement.initialReachableLocalizations =
-  //         unitService.getReachableLocalizationsForUnit(u.id, units)),
-  //   );
+  const unitsInMap = lod.cloneDeep(units);
+  const unitsWithReachable = units.map((unit) => {
+    unit.movement.initialReachableLocalizations =
+      unitService.getReachableLocalizationsForUnit(unit.id, unitsInMap);
+    return unit;
+  });
 
-  return { rows, units };
+  console.log(JSON.stringify(unitsWithReachable));
+
+  return { rows, units: unitsWithReachable };
 };
 
 const showStructure = (generatedMap: SquareData[][]): string => {
