@@ -70,8 +70,6 @@ const generateMap = async (
   const rows: SquareData[][] = [];
   const units: UnitData[] = [];
 
-  const unitsInMap = await unitService.getUnitsInMap();
-
   map_definition.map((rows_definition, rows_index) => {
     const squares: SquareData[] = [];
     squareCount = 0;
@@ -91,11 +89,13 @@ const generateMap = async (
         const unitId = generateUnitId(unit.class);
         unit.id = unitId;
         unit.movement.initialLocalization = id;
-        unit.movement.initialReachableLocalizations =
-          unitService.getReachableLocalizationsForUnit(unitId, unitsInMap);
+        unit.movement.initialReachableLocalizations = [];
+        // unitService.getReachableLocalizationsForUnit(unitId, unitsInMap);
         unit.playerId = row_definition.playerId ?? '';
 
         units.push(unit);
+      } else {
+        unitCount++;
       }
 
       squares.push({ id, type });
@@ -103,6 +103,13 @@ const generateMap = async (
 
     rows.push(squares);
   });
+
+  // not working properly
+  //   const unitsWithReachable = units.map(
+  //     (u) =>
+  //       (u.movement.initialReachableLocalizations =
+  //         unitService.getReachableLocalizationsForUnit(u.id, units)),
+  //   );
 
   return { rows, units };
 };

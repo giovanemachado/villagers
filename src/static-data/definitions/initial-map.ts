@@ -19,8 +19,19 @@ const wallInSquare: SquareDefinitionData = {
 const spearInSquare: SquareDefinitionData = {
   unitDefinitionClass: UNIT_CLASS.SPEARMAN,
 };
+const archerInSquare: SquareDefinitionData = {
+  unitDefinitionClass: UNIT_CLASS.ARCHER,
+};
+const horseInSquare: SquareDefinitionData = {
+  unitDefinitionClass: UNIT_CLASS.HORSEMAN,
+};
 
 const defaultRow: SquareDefinitionData[] = [
+  defaultSquare,
+  defaultSquare,
+  defaultSquare,
+  defaultSquare,
+  defaultSquare,
   defaultSquare,
   defaultSquare,
   defaultSquare,
@@ -34,6 +45,11 @@ const castleRow: SquareDefinitionData[] = [
   spearInSquare,
   defaultSquare,
   defaultSquare,
+  spearInSquare,
+  archerInSquare,
+  spearInSquare,
+  horseInSquare,
+  horseInSquare,
 ];
 
 const gatesRow: SquareDefinitionData[] = [
@@ -42,10 +58,16 @@ const gatesRow: SquareDefinitionData[] = [
   gateInSquare,
   wallInSquare,
   gateInSquare,
+  wallInSquare,
+  wallInSquare,
+  gateInSquare,
+  wallInSquare,
+  wallInSquare,
 ];
 
 export const initial_map_definition: SquareDefinitionData[][] = [
   defaultRow,
+  defaultRow,
   castleRow.map((square) => {
     if (square.unitDefinitionClass) {
       square.playerId = PLAYER_CODE.A;
@@ -53,6 +75,7 @@ export const initial_map_definition: SquareDefinitionData[][] = [
 
     return { ...square };
   }),
+  defaultRow,
   gatesRow.map((square) => {
     if (square.unitDefinitionClass) {
       square.playerId = PLAYER_CODE.A;
@@ -63,6 +86,7 @@ export const initial_map_definition: SquareDefinitionData[][] = [
   defaultRow,
   defaultRow,
   defaultRow,
+  defaultRow,
   gatesRow.map((square) => {
     if (square.unitDefinitionClass) {
       square.playerId = PLAYER_CODE.B;
@@ -70,6 +94,7 @@ export const initial_map_definition: SquareDefinitionData[][] = [
 
     return { ...square };
   }),
+  defaultRow,
   castleRow.map((square) => {
     if (square.unitDefinitionClass) {
       square.playerId = PLAYER_CODE.B;
@@ -77,5 +102,6 @@ export const initial_map_definition: SquareDefinitionData[][] = [
 
     return { ...square };
   }),
+  defaultRow,
   defaultRow,
 ];

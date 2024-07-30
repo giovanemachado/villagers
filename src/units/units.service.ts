@@ -402,6 +402,7 @@ export class UnitsService {
     const unitIndex = units.findIndex((unit) => unit.id === unitId);
 
     if (unitIndex == -1) {
+      console.log(units, unitId);
       throw 'No unitDataIndex';
     }
 
@@ -427,16 +428,65 @@ export class UnitsService {
   ): MatchStateUnitsMovement[] {
     const priorityPlayer = this.getPriorityPlayerInTurn(turns, players);
 
-    priorityPlayer;
+    const localizations: string[][] = [];
+
+    updatedUnitsWithoutConflicts.forEach((unitMovement) => {
+      if (unitMovement.playerId != priorityPlayer) {
+        return;
+      }
+
+      const unitClass = unitMovement.id.split('-')[0]; // TODO get class
+
+      // TODO remove structures in a better way
+      if (
+        unitClass == UNIT_CLASS.CASTLE ||
+        unitClass == UNIT_CLASS.WALL ||
+        unitClass == UNIT_CLASS.GATE
+      ) {
+        return;
+      }
+
+      localizations.push(
+        this.getAroundLocalizations(1, unitMovement.localization), // TODO get actual distance here
+      );
+    });
+
+    const uniqueLocalizations = lod.uniq(lod.flatten(localizations));
+
+    const killedUnitsIds = updatedUnitsWithoutConflicts
+      .filter((unitMovement) => {
+        const isPriorityPlayerUnits = unitMovement.playerId == priorityPlayer;
+        const isInKilledLocalizations =
+          uniqueLocalizations.includes(unitMovement.localization) ||
+          uniqueLocalizations.includes(unitMovement.previousLocalization);
+
+        const unitIsKillableClass =
+          unitMovement.id.split('-')[0] == UNIT_CLASS.SPEARMAN;
+
+        return (
+          !isPriorityPlayerUnits &&
+          isInKilledLocalizations &&
+          unitIsKillableClass
+        );
+      })
+      .map((u) => u.id);
 
     const survivorUnits = updatedUnitsWithoutConflicts.filter(
-      (unitMovement) => {
-        unitMovement;
-
-        return true;
-      },
+      (u) => !killedUnitsIds.includes(u.id),
     );
 
     return survivorUnits;
+  }
+
+  private getAroundLocalizations(distance: number, localization: string) {
+    // TODO use this method to get reachable pos
+    const { rowId, colId } = this.getLocalizationIds(localization);
+
+    const leftMovement = this.createSquareId(rowId, colId - distance);
+    const rightMovement = this.createSquareId(rowId, colId + distance);
+    const upMovement = this.createSquareId(rowId - distance, colId);
+    const downMovement = this.createSquareId(rowId + distance, colId);
+
+    return lod.uniq([leftMovement, rightMovement, upMovement, downMovement]);
   }
 }
