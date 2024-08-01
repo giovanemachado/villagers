@@ -2,6 +2,7 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import {
   UNIT_CATEGORY,
   UNIT_CLASS,
+  UnitCombatInformation,
   UnitData,
   UnitMovement,
 } from './dto/unit-data.dto';
@@ -428,10 +429,42 @@ export class UnitsService {
   ): MatchStateUnitsMovement[] {
     const priorityPlayer = this.getPriorityPlayerInTurn(turns, players);
 
-    const localizations: string[][] = [];
+    const combatInformationOfPriorityPlayer: UnitCombatInformation[] =
+      this.getCombatInformation(updatedUnitsWithoutConflicts, priorityPlayer);
 
-    updatedUnitsWithoutConflicts.forEach((unitMovement) => {
-      if (unitMovement.playerId != priorityPlayer) {
+    const killedUnits: UnitCombatInformation[] = [];
+
+    updatedUnitsWithoutConflicts.forEach((killerUnit) => {
+      const unitsKilled = this.getKilledUnitsPerUnit(
+        killerUnit,
+        combatInformationOfPriorityPlayer,
+        priorityPlayer,
+      );
+
+      if (unitsKilled) {
+        killedUnits.push(unitsKilled);
+      }
+    });
+
+    const killedUnitsIds = killedUnits.map((killedUnit) => {
+      return killedUnit.id;
+    });
+
+    const survivorUnits = updatedUnitsWithoutConflicts.filter(
+      (survivorUnit) => !killedUnitsIds.includes(survivorUnit.id),
+    );
+
+    return survivorUnits;
+  }
+
+  private getCombatInformation(
+    unitsMovement: MatchStateUnitsMovement[],
+    playerId: string,
+  ): UnitCombatInformation[] {
+    const combatInformation: UnitCombatInformation[] = [];
+
+    unitsMovement.forEach((unitMovement) => {
+      if (unitMovement.playerId != playerId) {
         return;
       }
 
@@ -446,36 +479,66 @@ export class UnitsService {
         return;
       }
 
-      localizations.push(
-        this.getAroundLocalizations(1, unitMovement.localization), // TODO get actual distance here
+      combatInformation.push(
+        {
+          localization: this.getAroundLocalizations(
+            1,
+            unitMovement.localization,
+          ),
+          class: unitClass,
+          id: unitMovement.id,
+        }, // TODO get actual distance here
       );
     });
 
-    const uniqueLocalizations = lod.uniq(lod.flatten(localizations));
+    return lod.flatten(combatInformation);
+  }
 
-    const killedUnitsIds = updatedUnitsWithoutConflicts
-      .filter((unitMovement) => {
-        const isPriorityPlayerUnits = unitMovement.playerId == priorityPlayer;
+  private getKilledUnitsPerUnit(
+    killerUnit: MatchStateUnitsMovement,
+    unitCombatInformation: UnitCombatInformation[],
+    priorityPlayer: string,
+  ): UnitCombatInformation | undefined {
+    const isPriorityPlayerUnits = killerUnit.playerId == priorityPlayer;
+
+    const isInKilledLocalizationsByKillerClass = unitCombatInformation.find(
+      (mightBeKilledUnit) => {
         const isInKilledLocalizations =
-          uniqueLocalizations.includes(unitMovement.localization) ||
-          uniqueLocalizations.includes(unitMovement.previousLocalization);
+          mightBeKilledUnit.localization.includes(killerUnit.localization) ||
+          mightBeKilledUnit.localization.includes(
+            killerUnit.previousLocalization,
+          );
 
-        const unitIsKillableClass =
-          unitMovement.id.split('-')[0] == UNIT_CLASS.SPEARMAN;
+        const killerUnitClass = killerUnit.id.split('-')[0];
 
-        return (
-          !isPriorityPlayerUnits &&
-          isInKilledLocalizations &&
-          unitIsKillableClass
-        );
-      })
-      .map((u) => u.id);
+        const archerKilled =
+          mightBeKilledUnit.class == UNIT_CLASS.ARCHER &&
+          (killerUnitClass == UNIT_CLASS.ARCHER ||
+            killerUnitClass == UNIT_CLASS.HORSEMAN);
 
-    const survivorUnits = updatedUnitsWithoutConflicts.filter(
-      (u) => !killedUnitsIds.includes(u.id),
+        const horsermanKilled =
+          mightBeKilledUnit.class == UNIT_CLASS.HORSEMAN &&
+          (killerUnitClass == UNIT_CLASS.HORSEMAN ||
+            killerUnitClass == UNIT_CLASS.SPEARMAN);
+
+        const spearManKilled =
+          mightBeKilledUnit.class == UNIT_CLASS.SPEARMAN &&
+          (killerUnitClass == UNIT_CLASS.SPEARMAN ||
+            killerUnitClass == UNIT_CLASS.ARCHER);
+
+        const isKilledByClass =
+          archerKilled || horsermanKilled || spearManKilled;
+
+        return isInKilledLocalizations && isKilledByClass;
+      },
     );
 
-    return survivorUnits;
+    if (
+      !isPriorityPlayerUnits &&
+      isInKilledLocalizationsByKillerClass != null
+    ) {
+      return isInKilledLocalizationsByKillerClass;
+    }
   }
 
   private getAroundLocalizations(distance: number, localization: string) {
