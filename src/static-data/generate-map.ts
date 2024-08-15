@@ -9,6 +9,7 @@ import { UNIT_CLASS, UnitData } from 'src/units/dto/unit-data.dto';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from 'src/app.module';
 import { UnitsService } from 'src/units/units.service';
+import * as lod from 'lodash';
 
 const mapDefinitions = [MAPS.INITIAL];
 let inputMapDefinition = '';
@@ -70,8 +71,6 @@ const generateMap = async (
   const rows: SquareData[][] = [];
   const units: UnitData[] = [];
 
-  const unitsInMap = await unitService.getUnitsInMap();
-
   map_definition.map((rows_definition, rows_index) => {
     const squares: SquareData[] = [];
     squareCount = 0;
@@ -91,8 +90,8 @@ const generateMap = async (
         const unitId = generateUnitId(unit.class);
         unit.id = unitId;
         unit.movement.initialLocalization = id;
-        unit.movement.initialReachableLocalizations =
-          unitService.getReachableLocalizationsForUnit(unitId, unitsInMap);
+        unit.movement.initialReachableLocalizations = [];
+        // unitService.getReachableLocalizationsForUnit(unitId, unitsInMap);
         unit.playerId = row_definition.playerId ?? '';
 
         units.push(unit);
@@ -104,7 +103,16 @@ const generateMap = async (
     rows.push(squares);
   });
 
-  return { rows, units };
+  const unitsInMap = lod.cloneDeep(units);
+  const unitsWithReachable = units.map((unit) => {
+    unit.movement.initialReachableLocalizations =
+      unitService.getReachableLocalizationsForUnit(unit.id, unitsInMap);
+    return unit;
+  });
+
+  console.log(JSON.stringify(unitsWithReachable));
+
+  return { rows, units: unitsWithReachable };
 };
 
 const showStructure = (generatedMap: SquareData[][]): string => {

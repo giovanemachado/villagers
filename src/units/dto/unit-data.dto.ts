@@ -26,16 +26,8 @@ export class UnitData {
   movement: UnitMovement;
 }
 
-// TODO update to include health, soon
-// export class UnitCombat {
-//   hp: number;
-//   damage: number;
-// }
-
-// export class UnitClass {
-//   category: UNIT_CATEGORY;
-//   class: UNIT_CLASS;
-//   cost: number;
-//   combat: UnitCombat;
-//   movement: UnitMovement;
-// }
+export class UnitCombatInformation {
+  localization: string[];
+  class: string;
+  id: string;
+}
