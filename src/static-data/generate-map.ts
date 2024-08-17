@@ -10,8 +10,9 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from 'src/app.module';
 import { UnitsService } from 'src/units/units.service';
 import * as lod from 'lodash';
+import { combat_test_map_definition } from './definitions/combat-test-map';
 
-const mapDefinitions = [MAPS.INITIAL];
+const mapDefinitions = [MAPS.INITIAL, MAPS.COMBAT_TEST];
 let inputMapDefinition = '';
 const squareIdTag = 'square';
 const address = './src/static-data/maps/map';
@@ -57,10 +58,17 @@ const generateMap = async (
     case MAPS.INITIAL:
       map_definition = initial_map_definition;
       break;
+    case MAPS.COMBAT_TEST:
+      map_definition = combat_test_map_definition;
+      break;
   }
 
   if (inputMapDefinition == 'MAPS.INITIAL') {
     map_definition = initial_map_definition;
+  }
+
+  if (inputMapDefinition == 'MAPS.COMBAT_TEST') {
+    map_definition = combat_test_map_definition;
   }
 
   if (!map_definition) {

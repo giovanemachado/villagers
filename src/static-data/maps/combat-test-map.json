@@ -1,0 +1,328 @@
+{
+  "rows": [
+    [
+      { "id": "square_0-0", "type": "grass" },
+      { "id": "square_0-1", "type": "grass" },
+      { "id": "square_0-2", "type": "grass" },
+      { "id": "square_0-3", "type": "grass" }
+    ],
+    [
+      { "id": "square_1-0", "type": "grass" },
+      { "id": "square_1-1", "type": "grass" },
+      { "id": "square_1-2", "type": "grass" },
+      { "id": "square_1-3", "type": "grass" }
+    ],
+    [
+      { "id": "square_2-0", "type": "grass" },
+      { "id": "square_2-1", "type": "grass" },
+      { "id": "square_2-2", "type": "grass" },
+      { "id": "square_2-3", "type": "grass" }
+    ],
+    [
+      { "id": "square_3-0", "type": "grass" },
+      { "id": "square_3-1", "type": "grass" },
+      { "id": "square_3-2", "type": "grass" },
+      { "id": "square_3-3", "type": "grass" }
+    ],
+    [
+      { "id": "square_4-0", "type": "grass" },
+      { "id": "square_4-1", "type": "grass" },
+      { "id": "square_4-2", "type": "grass" },
+      { "id": "square_4-3", "type": "grass" }
+    ],
+    [
+      { "id": "square_5-0", "type": "grass" },
+      { "id": "square_5-1", "type": "grass" },
+      { "id": "square_5-2", "type": "grass" },
+      { "id": "square_5-3", "type": "grass" }
+    ],
+    [
+      { "id": "square_6-0", "type": "grass" },
+      { "id": "square_6-1", "type": "grass" },
+      { "id": "square_6-2", "type": "grass" },
+      { "id": "square_6-3", "type": "grass" }
+    ]
+  ],
+  "units": [
+    {
+      "id": "archer-0",
+      "class": "archer",
+      "playerId": "a",
+      "category": "military",
+      "movement": {
+        "distance": 1,
+        "initialLocalization": "square_0-0",
+        "initialReachableLocalizations": [
+          "square_0--1",
+          "square_0-1",
+          "square_-1-0",
+          "square_1-0",
+          "square_0-0",
+          "square_2-0"
+        ]
+      }
+    },
+    {
+      "id": "castle-1",
+      "class": "castle",
+      "playerId": "a",
+      "category": "structure",
+      "movement": {
+        "distance": 0,
+        "initialLocalization": "square_0-1",
+        "initialReachableLocalizations": [
+          "square_0-1",
+          "square_0-1",
+          "square_0-1",
+          "square_0-1"
+        ]
+      }
+    },
+    {
+      "id": "spearman-2",
+      "class": "spearman",
+      "playerId": "a",
+      "category": "military",
+      "movement": {
+        "distance": 1,
+        "initialLocalization": "square_0-2",
+        "initialReachableLocalizations": [
+          "square_0-1",
+          "square_0-3",
+          "square_-1-2",
+          "square_1-2",
+          "square_0-2",
+          "square_2-2"
+        ]
+      }
+    },
+    {
+      "id": "horseman-3",
+      "class": "horseman",
+      "playerId": "a",
+      "category": "military",
+      "movement": {
+        "distance": 1,
+        "initialLocalization": "square_0-3",
+        "initialReachableLocalizations": [
+          "square_0-2",
+          "square_0-4",
+          "square_-1-3",
+          "square_1-3",
+          "square_0-3",
+          "square_2-3"
+        ]
+      }
+    },
+    {
+      "id": "gate-4",
+      "class": "gate",
+      "playerId": "a",
+      "category": "structure",
+      "movement": {
+        "distance": 0,
+        "initialLocalization": "square_1-0",
+        "initialReachableLocalizations": [
+          "square_1-0",
+          "square_1-0",
+          "square_1-0",
+          "square_1-0",
+          "square_0-0",
+          "square_2-0"
+        ]
+      }
+    },
+    {
+      "id": "wall-5",
+      "class": "wall",
+      "playerId": "a",
+      "category": "structure",
+      "movement": {
+        "distance": 0,
+        "initialLocalization": "square_1-1",
+        "initialReachableLocalizations": [
+          "square_1-1",
+          "square_1-1",
+          "square_1-1",
+          "square_1-1"
+        ]
+      }
+    },
+    {
+      "id": "gate-6",
+      "class": "gate",
+      "playerId": "a",
+      "category": "structure",
+      "movement": {
+        "distance": 0,
+        "initialLocalization": "square_1-2",
+        "initialReachableLocalizations": [
+          "square_1-2",
+          "square_1-2",
+          "square_1-2",
+          "square_1-2",
+          "square_0-2",
+          "square_2-2"
+        ]
+      }
+    },
+    {
+      "id": "gate-7",
+      "class": "gate",
+      "playerId": "a",
+      "category": "structure",
+      "movement": {
+        "distance": 0,
+        "initialLocalization": "square_1-3",
+        "initialReachableLocalizations": [
+          "square_1-3",
+          "square_1-3",
+          "square_1-3",
+          "square_1-3",
+          "square_0-3",
+          "square_2-3"
+        ]
+      }
+    },
+    {
+      "id": "gate-8",
+      "class": "gate",
+      "playerId": "b",
+      "category": "structure",
+      "movement": {
+        "distance": 0,
+        "initialLocalization": "square_5-0",
+        "initialReachableLocalizations": [
+          "square_5-0",
+          "square_5-0",
+          "square_5-0",
+          "square_5-0",
+          "square_4-0",
+          "square_6-0"
+        ]
+      }
+    },
+    {
+      "id": "wall-9",
+      "class": "wall",
+      "playerId": "b",
+      "category": "structure",
+      "movement": {
+        "distance": 0,
+        "initialLocalization": "square_5-1",
+        "initialReachableLocalizations": [
+          "square_5-1",
+          "square_5-1",
+          "square_5-1",
+          "square_5-1"
+        ]
+      }
+    },
+    {
+      "id": "gate-10",
+      "class": "gate",
+      "playerId": "b",
+      "category": "structure",
+      "movement": {
+        "distance": 0,
+        "initialLocalization": "square_5-2",
+        "initialReachableLocalizations": [
+          "square_5-2",
+          "square_5-2",
+          "square_5-2",
+          "square_5-2",
+          "square_4-2",
+          "square_6-2"
+        ]
+      }
+    },
+    {
+      "id": "gate-11",
+      "class": "gate",
+      "playerId": "b",
+      "category": "structure",
+      "movement": {
+        "distance": 0,
+        "initialLocalization": "square_5-3",
+        "initialReachableLocalizations": [
+          "square_5-3",
+          "square_5-3",
+          "square_5-3",
+          "square_5-3",
+          "square_4-3",
+          "square_6-3"
+        ]
+      }
+    },
+    {
+      "id": "archer-12",
+      "class": "archer",
+      "playerId": "b",
+      "category": "military",
+      "movement": {
+        "distance": 1,
+        "initialLocalization": "square_6-0",
+        "initialReachableLocalizations": [
+          "square_6--1",
+          "square_6-1",
+          "square_5-0",
+          "square_7-0",
+          "square_4-0",
+          "square_6-0"
+        ]
+      }
+    },
+    {
+      "id": "castle-13",
+      "class": "castle",
+      "playerId": "b",
+      "category": "structure",
+      "movement": {
+        "distance": 0,
+        "initialLocalization": "square_6-1",
+        "initialReachableLocalizations": [
+          "square_6-1",
+          "square_6-1",
+          "square_6-1",
+          "square_6-1"
+        ]
+      }
+    },
+    {
+      "id": "spearman-14",
+      "class": "spearman",
+      "playerId": "b",
+      "category": "military",
+      "movement": {
+        "distance": 1,
+        "initialLocalization": "square_6-2",
+        "initialReachableLocalizations": [
+          "square_6-1",
+          "square_6-3",
+          "square_5-2",
+          "square_7-2",
+          "square_4-2",
+          "square_6-2"
+        ]
+      }
+    },
+    {
+      "id": "horseman-15",
+      "class": "horseman",
+      "playerId": "b",
+      "category": "military",
+      "movement": {
+        "distance": 1,
+        "initialLocalization": "square_6-3",
+        "initialReachableLocalizations": [
+          "square_6-2",
+          "square_6-4",
+          "square_5-3",
+          "square_7-3",
+          "square_4-3",
+          "square_6-3"
+        ]
+      }
+    }
+  ]
+}

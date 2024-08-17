@@ -22,6 +22,8 @@ import { MatchData } from 'src/matches/dto/match-data.dto';
 import { MatchAndMatchState } from './types/match-and-match-state.type';
 import { convertToMatchAndMatchState } from './utils/convert-to-match-and-match-state';
 import { UnitData } from 'src/units/dto/unit-data.dto';
+import { MovementsService } from 'src/units/movements.service';
+import { CombatsService } from 'src/units/combats.service';
 
 @Injectable()
 export class MatchStatesService {
@@ -31,6 +33,8 @@ export class MatchStatesService {
     private matchService: MatchesService,
     private eventsGateway: EventsGateway,
     private unitsService: UnitsService,
+    private movementsService: MovementsService,
+    private combatsService: CombatsService,
   ) {}
 
   async getMatchState(code: string): Promise<MatchState | null> {
@@ -135,7 +139,7 @@ export class MatchStatesService {
         playersEndTurnUpdated,
       );
 
-      // Reset the turns, see updatePlayerEndTurn
+      // Reset turns, see updatePlayerEndTurn
       if (bothPlayersFinishedTurn) {
         playersEndTurnUpdated = this.updatePlayerEndTurn(
           currentMatchState,
@@ -146,8 +150,8 @@ export class MatchStatesService {
 
       const unitsInMap = await this.unitsService.getUnitsInMap(match.players);
 
-      const unitsMovement = this.unitsService.updateUnitsMovement(
-        currentMatchState,
+      const unitsMovement = this.movementsService.updateUnitsMovement(
+        currentMatchState as any,
         playerId,
         matchStateUpdate,
         match.players,
@@ -157,7 +161,7 @@ export class MatchStatesService {
       let updatedUnitsAfterCombat = unitsMovement;
 
       if (bothPlayersFinishedTurn) {
-        updatedUnitsAfterCombat = this.unitsService.resolveUnitsCombat(
+        updatedUnitsAfterCombat = this.combatsService.resolveUnitsCombat(
           unitsMovement,
           match.players,
           currentMatchState.turns,
