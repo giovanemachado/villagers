@@ -113,6 +113,10 @@ export class MatchStatesService {
     return matchState as unknown as MatchState;
   }
 
+  /**
+   * This method is called twice per turn, one for each player. The second player triggers
+   * specific updates and pass the turn.
+   */
   async updateMatchState(
     code: string,
     playerId: string,
@@ -139,15 +143,6 @@ export class MatchStatesService {
         playersEndTurnUpdated,
       );
 
-      // Reset turns, see updatePlayerEndTurn
-      if (bothPlayersFinishedTurn) {
-        playersEndTurnUpdated = this.updatePlayerEndTurn(
-          currentMatchState,
-          playerId,
-          true,
-        );
-      }
-
       const unitsInMap = await this.unitsService.getUnitsInMap(match.players);
 
       const unitsMovement = this.movementsService.updateUnitsMovement(
@@ -165,6 +160,12 @@ export class MatchStatesService {
           unitsMovement,
           match.players,
           currentMatchState.turns,
+        );
+
+        playersEndTurnUpdated = this.updatePlayerEndTurn(
+          currentMatchState,
+          playerId,
+          true,
         );
       }
 

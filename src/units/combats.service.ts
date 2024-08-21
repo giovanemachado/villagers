@@ -15,25 +15,18 @@ export class CombatsService {
   ): MatchStateUnitsMovement[] {
     const priorityPlayer = this.getPriorityPlayerInTurn(turns, players);
 
-    const combatInformationOfPriorityPlayer: UnitCombatInformation[] =
-      this.getCombatInformation(updatedUnitsWithoutConflicts, priorityPlayer);
-
-    const killedUnits: UnitCombatInformation[] = [];
+    const killedUnitsIds: string[] = [];
 
     updatedUnitsWithoutConflicts.forEach((killerUnit) => {
-      const unitsKilled = this.getKilledUnitsPerUnit(
+      const killedUnitId = this.checkIfUnitIsKilledByOthers(
         killerUnit,
-        combatInformationOfPriorityPlayer,
         priorityPlayer,
+        updatedUnitsWithoutConflicts,
       );
 
-      if (unitsKilled) {
-        killedUnits.push(unitsKilled);
+      if (killedUnitId) {
+        killedUnitsIds.push(killedUnitId);
       }
-    });
-
-    const killedUnitsIds = killedUnits.map((killedUnit) => {
-      return killedUnit.id;
     });
 
     const survivorUnits = updatedUnitsWithoutConflicts.filter(
@@ -41,6 +34,47 @@ export class CombatsService {
     );
 
     return survivorUnits;
+  }
+
+  private checkIfUnitIsKilledByOthers(
+    mightBeKilledUnit: MatchStateUnitsMovement,
+    priorityPlayer: string,
+    updatedUnitsWithoutConflicts: MatchStateUnitsMovement[],
+  ): string | undefined {
+    let killedUnitId: any;
+
+    for (const possibleKillerUnit of updatedUnitsWithoutConflicts) {
+      if (killedUnitId != undefined) {
+        break;
+      }
+
+      if (possibleKillerUnit.id == mightBeKilledUnit.id) {
+        continue;
+      }
+
+      const killerUnitClass = possibleKillerUnit.id.split('-')[0];
+      const classesThatCanBeKilled = this.classesThisUnitCanKill(
+        killerUnitClass as UNIT_CLASS,
+        possibleKillerUnit.playerId == priorityPlayer,
+      );
+
+      const mightBeKilledUnitClass = mightBeKilledUnit.id.split('-')[0];
+
+      const isInKilledLocalizations = this.getAroundLocalizations(
+        1,
+        possibleKillerUnit.localization,
+      ).includes(mightBeKilledUnit.localization);
+
+      if (
+        isInKilledLocalizations &&
+        classesThatCanBeKilled.includes(mightBeKilledUnitClass as UNIT_CLASS)
+      ) {
+        killedUnitId = mightBeKilledUnit.id;
+        break;
+      }
+    }
+
+    return killedUnitId;
   }
 
   private getCombatInformation(
@@ -80,53 +114,6 @@ export class CombatsService {
     return lod.flatten(combatInformation);
   }
 
-  private getKilledUnitsPerUnit(
-    killerUnit: MatchStateUnitsMovement,
-    unitCombatInformation: UnitCombatInformation[],
-    priorityPlayer: string,
-  ): UnitCombatInformation | undefined {
-    const isPriorityPlayerUnits = killerUnit.playerId == priorityPlayer;
-
-    const isInKilledLocalizationsByKillerClass = unitCombatInformation.find(
-      (mightBeKilledUnit) => {
-        const isInKilledLocalizations =
-          mightBeKilledUnit.localization.includes(killerUnit.localization) ||
-          mightBeKilledUnit.localization.includes(
-            killerUnit.previousLocalization,
-          );
-
-        const killerUnitClass = killerUnit.id.split('-')[0];
-
-        const archerKilled =
-          mightBeKilledUnit.class == UNIT_CLASS.ARCHER &&
-          (killerUnitClass == UNIT_CLASS.ARCHER ||
-            killerUnitClass == UNIT_CLASS.HORSEMAN);
-
-        const horsermanKilled =
-          mightBeKilledUnit.class == UNIT_CLASS.HORSEMAN &&
-          (killerUnitClass == UNIT_CLASS.HORSEMAN ||
-            killerUnitClass == UNIT_CLASS.SPEARMAN);
-
-        const spearManKilled =
-          mightBeKilledUnit.class == UNIT_CLASS.SPEARMAN &&
-          (killerUnitClass == UNIT_CLASS.SPEARMAN ||
-            killerUnitClass == UNIT_CLASS.ARCHER);
-
-        const isKilledByClass =
-          archerKilled || horsermanKilled || spearManKilled;
-
-        return isInKilledLocalizations && isKilledByClass;
-      },
-    );
-
-    if (
-      !isPriorityPlayerUnits &&
-      isInKilledLocalizationsByKillerClass != null
-    ) {
-      return isInKilledLocalizationsByKillerClass;
-    }
-  }
-
   private getAroundLocalizations(distance: number, localization: string) {
     // TODO use this method to get reachable pos
     const { rowId, colId } = this.unitsService.getLocalizationIds(localization);
@@ -154,5 +141,30 @@ export class CombatsService {
   // TODO duplicated from units service
   private getPriorityPlayerInTurn(turns: number, players: string[]) {
     return turns % 2 === 0 ? players[0] : players[1];
+  }
+
+  private classesThisUnitCanKill(
+    unitClass: UNIT_CLASS,
+    isPriorityTurn: boolean,
+  ): UNIT_CLASS[] {
+    let classesThisUnitCanKill = [];
+
+    if (unitClass == UNIT_CLASS.ARCHER) {
+      classesThisUnitCanKill.push(UNIT_CLASS.SPEARMAN);
+    }
+
+    if (unitClass == UNIT_CLASS.SPEARMAN) {
+      classesThisUnitCanKill.push(UNIT_CLASS.HORSEMAN);
+    }
+
+    if (unitClass == UNIT_CLASS.HORSEMAN) {
+      classesThisUnitCanKill.push(UNIT_CLASS.ARCHER);
+    }
+
+    if (isPriorityTurn) {
+      classesThisUnitCanKill.push(unitClass);
+    }
+
+    return classesThisUnitCanKill;
   }
 }

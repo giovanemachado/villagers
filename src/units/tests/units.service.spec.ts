@@ -8,6 +8,7 @@ import { UnitsService } from '../units.service';
 import * as lod from 'lodash';
 import { StaticDataService } from '../../static-data/static-data.service';
 import { UNIT_CATEGORY, UNIT_CLASS } from '../dto/unit-data.dto';
+import { localizationsMock, squaresMock, playerB, playerA } from './mocks';
 
 type UpdateUnitsMovementParams = {
   currentMatchState: Pick<MatchState, 'unitsMovement' | 'turns'>;
@@ -26,42 +27,6 @@ describe('UnitsService', () => {
   });
 
   describe('updateUnitsMovement', () => {
-    // All reachableLocalizations in this test section are not valid, and it doesnt test anything, just a mock. see reachableLocalizations tests
-    const playerA = 'player-a';
-    const playerB = 'player-b';
-
-    const localization = 'localization';
-    const square = 'square';
-
-    const localizationsMock = {
-      zero: `${localization}_0-0`,
-      one: `${localization}_1-0`,
-      two: `${localization}_2-0`,
-      three: `${localization}_3-0`,
-      four: `${localization}_4-0`,
-      five: `${localization}_5-0`,
-      six: `${localization}_6-0`,
-      seven: `${localization}_7-0`,
-      eight: `${localization}_8-0`,
-      nine: `${localization}_9-0`,
-      ten: `${localization}_10-0`,
-      eleven: `${localization}_11-0`,
-    };
-
-    const squaresMock = {
-      zero: `${square}_0-0`,
-      one: `${square}_1-0`,
-      two: `${square}_2-0`,
-      three: `${square}_3-0`,
-      four: `${square}_4-0`,
-      five: `${square}_5-0`,
-      six: `${square}_6-0`,
-      seven: `${square}_7-0`,
-      nine: `${square}_9-0`,
-      ten: `${square}_10-0`,
-      eleven: `${square}_11-0`,
-    };
-
     const mockUnitMovementBase: MatchStateUnitsMovement = {
       id: 'unit-x', // x, y, z
       localization: localizationsMock.one,

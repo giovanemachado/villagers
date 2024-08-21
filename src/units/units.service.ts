@@ -11,7 +11,8 @@ import {
   MatchStateUpdate,
 } from 'src/match-states/dto/match-state.dto';
 import { StaticDataService } from '../static-data/static-data.service';
-import { MAPS } from 'src/static-data/types/maps.enum';
+// TODO fix imports when file has tests (it failes for jest)
+import { MAPS } from '../static-data/types/maps.enum';
 
 @Injectable()
 export class UnitsService {
@@ -148,7 +149,6 @@ export class UnitsService {
     const unitIndex = units.findIndex((unit) => unit.id === unitId);
 
     if (unitIndex == -1) {
-      console.log(units, unitId);
       throw 'No unitDataIndex';
     }
 
