@@ -4,11 +4,11 @@ import {
   MatchStateUpdate,
   MatchStateUnitsMovement,
 } from 'src/match-states/dto/match-state.dto';
-import { UNIT_CLASS, UnitData } from 'src/units/dto/unit-data.dto';
 import * as lod from 'lodash';
 // TODO fix imports when file has tests (it failes for jest)
+import { UNIT_CLASS, UnitData } from '../units/dto/unit-data.dto';
 import { ERROR_MESSAGE } from '../errors/messages';
-import { UnitsService } from 'src/units/units.service';
+import { UnitsService } from '../units/units.service';
 
 @Injectable()
 export class MovementsService {
