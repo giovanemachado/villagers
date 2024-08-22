@@ -14,6 +14,8 @@ import { UnitData } from 'src/units/dto/unit-data.dto';
 import { SquareData } from 'src/maps/dto/square-data.dto';
 import { MatchData } from 'src/matches/dto/match-data.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+// TODO fix imports when file has tests (it failes for jest)
+import { MAPS } from '../static-data/types/maps.enum';
 
 @Injectable()
 export class GamesService {
@@ -92,18 +94,22 @@ export class GamesService {
   }
 
   async getMap(): Promise<SquareData[][]> {
+    const mapName = MAPS.COMBAT_TEST;
+
     const { rows } = await this.staticDataService.getStaticResource(
       'maps',
-      'initial-map.json',
+      `${mapName}.json`,
     );
 
     return rows;
   }
 
   async getUnits(players: string[]): Promise<UnitData[]> {
+    const mapName = MAPS.COMBAT_TEST;
+
     const { units } = await this.staticDataService.getStaticResource(
       'maps',
-      'initial-map.json',
+      `${mapName}.json`,
     );
 
     const unitsPerPlayer = this.unitsService.setUnitsToPlayers(units, players);
