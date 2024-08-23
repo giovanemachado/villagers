@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { MatchStateUnitsMovement } from 'src/match-states/dto/match-state.dto';
-import { UnitCombatInformation, UNIT_CLASS } from './dto/unit-data.dto';
+import { UNIT_CLASS } from './dto/unit-data.dto';
 import * as lod from 'lodash';
 import { UnitsService } from './units.service';
 
@@ -48,17 +48,22 @@ export class CombatsService {
         break;
       }
 
-      if (possibleKillerUnit.id == mightBeKilledUnit.id) {
+      const killerUnitClass = possibleKillerUnit.id.split('-')[0];
+      const mightBeKilledUnitClass = mightBeKilledUnit.id.split('-')[0];
+
+      if (
+        possibleKillerUnit.id == mightBeKilledUnit.id ||
+        possibleKillerUnit.playerId == mightBeKilledUnit.playerId ||
+        this.isStructure(killerUnitClass) ||
+        this.isStructure(mightBeKilledUnitClass)
+      ) {
         continue;
       }
 
-      const killerUnitClass = possibleKillerUnit.id.split('-')[0];
       const classesThatCanBeKilled = this.classesThisUnitCanKill(
         killerUnitClass as UNIT_CLASS,
         possibleKillerUnit.playerId == priorityPlayer,
       );
-
-      const mightBeKilledUnitClass = mightBeKilledUnit.id.split('-')[0];
 
       const isInKilledLocalizations = this.getAroundLocalizations(
         1,
@@ -75,43 +80,6 @@ export class CombatsService {
     }
 
     return killedUnitId;
-  }
-
-  private getCombatInformation(
-    unitsMovement: MatchStateUnitsMovement[],
-    playerId: string,
-  ): UnitCombatInformation[] {
-    const combatInformation: UnitCombatInformation[] = [];
-
-    unitsMovement.forEach((unitMovement) => {
-      if (unitMovement.playerId != playerId) {
-        return;
-      }
-
-      const unitClass = unitMovement.id.split('-')[0]; // TODO get class
-
-      // TODO remove structures in a better way
-      if (
-        unitClass == UNIT_CLASS.CASTLE ||
-        unitClass == UNIT_CLASS.WALL ||
-        unitClass == UNIT_CLASS.GATE
-      ) {
-        return;
-      }
-
-      combatInformation.push(
-        {
-          localization: this.getAroundLocalizations(
-            1,
-            unitMovement.localization,
-          ),
-          class: unitClass,
-          id: unitMovement.id,
-        }, // TODO get actual distance here
-      );
-    });
-
-    return lod.flatten(combatInformation);
   }
 
   private getAroundLocalizations(distance: number, localization: string) {
@@ -147,7 +115,7 @@ export class CombatsService {
     unitClass: UNIT_CLASS,
     isPriorityTurn: boolean,
   ): UNIT_CLASS[] {
-    let classesThisUnitCanKill = [];
+    const classesThisUnitCanKill = [];
 
     if (unitClass == UNIT_CLASS.ARCHER) {
       classesThisUnitCanKill.push(UNIT_CLASS.SPEARMAN);
@@ -166,5 +134,21 @@ export class CombatsService {
     }
 
     return classesThisUnitCanKill;
+  }
+
+  private isStructure(unitClass: string): boolean {
+    if (!(<any>Object).values(UNIT_CLASS).includes(unitClass)) {
+      throw new UnprocessableEntityException('Unknown unit class');
+    }
+
+    if (
+      unitClass == UNIT_CLASS.CASTLE ||
+      unitClass == UNIT_CLASS.WALL ||
+      unitClass == UNIT_CLASS.GATE
+    ) {
+      return true;
+    }
+
+    return false;
   }
 }

@@ -11,7 +11,7 @@ import {
   MatchStateUpdate,
 } from 'src/match-states/dto/match-state.dto';
 import { StaticDataService } from '../static-data/static-data.service';
-// TODO fix imports when file has tests (it failes for jest)
+// TODO fix imports when file has tests (it fails for jest)
 import { MAPS } from '../static-data/types/maps.enum';
 
 @Injectable()

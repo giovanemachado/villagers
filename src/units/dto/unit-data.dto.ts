@@ -25,9 +25,3 @@ export class UnitData {
   class: UNIT_CLASS;
   movement: UnitMovement;
 }
-
-export class UnitCombatInformation {
-  localization: string[];
-  class: string;
-  id: string;
-}

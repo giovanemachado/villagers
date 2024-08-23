@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { MatchStateUnitsMovement } from 'src/match-states/dto/match-state.dto';
 import { UnitsService } from '../units.service';
 import { StaticDataService } from '../../static-data/static-data.service';
@@ -26,6 +27,12 @@ describe('CombatsService', () => {
     const horsemanBH = `${UNITDATA_CLASS.HORSEMAN}-bh`;
     const spearmanBS = `${UNITDATA_CLASS.SPEARMAN}-bs`;
     const archerBA = `${UNITDATA_CLASS.ARCHER}-ba`;
+    const castleAX = `${UNITDATA_CLASS.CASTLE}-ax`;
+    const castleBX = `${UNITDATA_CLASS.CASTLE}-bx`;
+    const wallAX = `${UNITDATA_CLASS.WALL}-ax`;
+    const wallBX = `${UNITDATA_CLASS.WALL}-bx`;
+    const gateAX = `${UNITDATA_CLASS.GATE}-ax`;
+    const gateBX = `${UNITDATA_CLASS.GATE}-bx`;
 
     const unitsIds = [archerAX, archerBX, spearmanAY, spearmanBY];
 
@@ -56,7 +63,7 @@ describe('CombatsService', () => {
       },
     ];
 
-    // TODO adicionar mais uns exemplos aqui
+    // TODO add more examples
     it.each([
       {
         matchStateUnitsMovement: noMovements,
@@ -72,6 +79,166 @@ describe('CombatsService', () => {
       },
     ])(
       'should not kill units if there is no touch - $description',
+      ({ matchStateUnitsMovement, turns, expected }) => {
+        const result = combatsService.resolveUnitsCombat(
+          matchStateUnitsMovement,
+          players,
+          turns,
+        );
+
+        expect(result).toStrictEqual(expected);
+      },
+    );
+
+    const nearStructureUnits: MatchStateUnitsMovement[] = [
+      {
+        id: castleAX,
+        localization: `${square}_2-0`,
+        previousLocalization: localizationsMock.one,
+        playerId: playerA,
+        movedInTurn: false,
+        reachableLocalizations: [],
+      },
+      {
+        id: unitsIds[1],
+        localization: localizationsMock.three,
+        previousLocalization: localizationsMock.two,
+        playerId: playerB,
+        movedInTurn: false,
+        reachableLocalizations: [],
+      },
+    ];
+
+    const nearStructureUnitsWithAPriorityResult: MatchStateUnitsMovement[] = [
+      {
+        id: castleAX,
+        localization: `${square}_2-0`,
+        previousLocalization: localizationsMock.one,
+        playerId: playerA,
+        movedInTurn: false,
+        reachableLocalizations: [],
+      },
+      {
+        id: unitsIds[1],
+        localization: localizationsMock.three,
+        previousLocalization: localizationsMock.two,
+        playerId: playerB,
+        movedInTurn: false,
+        reachableLocalizations: [],
+      },
+    ];
+
+    const nearStructureUnitsWithBPriorityResult =
+      nearStructureUnitsWithAPriorityResult;
+
+    const nearStructureUnitsFromSameTeam: MatchStateUnitsMovement[] = [
+      {
+        id: spearmanAS,
+        localization: `${square}_2-0`,
+        previousLocalization: localizationsMock.one,
+        playerId: playerA,
+        movedInTurn: false,
+        reachableLocalizations: [],
+      },
+      {
+        id: wallAX,
+        localization: localizationsMock.three,
+        previousLocalization: localizationsMock.two,
+        playerId: playerA,
+        movedInTurn: false,
+        reachableLocalizations: [],
+      },
+      {
+        id: gateAX,
+        localization: localizationsMock.one,
+        previousLocalization: localizationsMock.two,
+        playerId: playerA,
+        movedInTurn: false,
+        reachableLocalizations: [],
+      },
+    ];
+
+    const nearStructureUnitsFromSameTeamWithAPriorityResult: MatchStateUnitsMovement[] =
+      nearStructureUnitsFromSameTeam;
+    const nearStructureUnitsFromSameTeamWithBPriorityResult: MatchStateUnitsMovement[] =
+      nearStructureUnitsFromSameTeam;
+
+    // RLM stands for Real Life Movement, aka copy and paste from a bug in the game so we have at least 1 test on it
+    const RLMSpearmanMove: MatchStateUnitsMovement[] = [
+      {
+        id: 'gate-10',
+        playerId: playerA,
+        movedInTurn: false,
+        localization: 'square_5-2',
+        previousLocalization: 'square_5-2',
+        reachableLocalizations: [],
+      },
+      {
+        id: 'gate-11',
+        playerId: playerA,
+        movedInTurn: false,
+        localization: 'square_5-3',
+        previousLocalization: 'square_5-3',
+        reachableLocalizations: [],
+      },
+      {
+        id: 'spearman-14',
+        playerId: playerA,
+        movedInTurn: false,
+        localization: 'square_4-2',
+        previousLocalization: 'square_6-2',
+        reachableLocalizations: [],
+      },
+    ];
+
+    const RLMSpearmanMoveWithAPriorityResult = RLMSpearmanMove;
+    const RLMSpearmanMoveWithBPriorityResult = RLMSpearmanMove;
+
+    it.each([
+      {
+        matchStateUnitsMovement: nearStructureUnits,
+        turns: turnPriorityA,
+        expected: nearStructureUnitsWithAPriorityResult,
+        description:
+          'castle vs archer, castle player priority, no kills expected',
+      },
+      {
+        matchStateUnitsMovement: nearStructureUnits,
+        turns: turnPriorityB,
+        expected: nearStructureUnitsWithBPriorityResult,
+        description:
+          'castle vs archer, archer player priority, no kills expected',
+      },
+      {
+        matchStateUnitsMovement: nearStructureUnitsFromSameTeam,
+        turns: turnPriorityA,
+        expected: nearStructureUnitsFromSameTeamWithAPriorityResult,
+        description:
+          'spearman vs gate and wall, same teams, prio, no kills expected',
+      },
+      {
+        matchStateUnitsMovement: nearStructureUnitsFromSameTeam,
+        turns: turnPriorityB,
+        expected: nearStructureUnitsFromSameTeamWithBPriorityResult,
+        description:
+          'spearman vs gate and wall, same teams, no-prio, no kills expected',
+      },
+      {
+        matchStateUnitsMovement: RLMSpearmanMove,
+        turns: turnPriorityA,
+        expected: RLMSpearmanMoveWithAPriorityResult,
+        description:
+          'spearman moves through gate, same teams, prio, no kills expected',
+      },
+      {
+        matchStateUnitsMovement: RLMSpearmanMove,
+        turns: turnPriorityB,
+        expected: RLMSpearmanMoveWithBPriorityResult,
+        description:
+          'spearman moves through gate, same teams, no-prio, no kills expected',
+      },
+    ])(
+      'should not envolve structure units in combat - $description',
       ({ matchStateUnitsMovement, turns, expected }) => {
         const result = combatsService.resolveUnitsCombat(
           matchStateUnitsMovement,
